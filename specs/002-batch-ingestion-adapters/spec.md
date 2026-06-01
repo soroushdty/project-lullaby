@@ -29,6 +29,11 @@ related: [SPEC-001]
 
 ### Session 2026-06-01
 
+- Q: Where are primary keys for per-table deduplication defined? → A: In the SPEC-001 data dictionary (`schemas/data-dictionary.md`); adapters read dedup keys from the schema object at runtime — no keys hardcoded in adapter logic.
+- Q: What is the `load()` type signature on the ABC to preserve type safety across adapter subclasses? → A: Generic ABC — `class BatchAdapter(Generic[C])` with `load(config: C) -> dict[str, pd.DataFrame]`; each concrete adapter is `BatchAdapter[XConfig]`.
+- Q: How should HTTP 429 (rate-limit) responses be handled by API adapters? → A: Respect `Retry-After` header, pause for the specified duration, and retry without consuming a `max_attempts` slot.
+- Q: Does the remote link adapter need to handle Google Drive OAuth, or only direct-download URLs? → A: Direct-download URLs only (no OAuth). Google Drive "anyone with link" exports produce a plain HTTPS URL; the adapter is a simple authenticated-free HTTPS fetcher.
+- Q: What must adapters log? → A: INFO on load start and end (adapter name, table count, row counts per table); ERROR on each raised exception (exception type, adapter name, sanitized message — no secrets, tokens, connection strings, or file paths containing credentials).
 - Q: What is the common interface all adapters must implement? -> A: A `BatchAdapter` ABC with a single `load() -> dict[str, pd.DataFrame]` method that returns frames keyed by canonical table name, ready for the SPEC-001 validation engine.
 - Q: How does normalization work — do adapters map raw columns to canonical names, or does a separate layer do that? -> A: Each adapter is responsible for emitting canonical-column DataFrames; column mapping is adapter-internal. The output contract is the LullabySchema canonical shape.
 - Q: What does idempotency mean for re-uploads — last-write-wins or deduplicate-by-key? -> A: Re-running the same upload/ingest produces the same canonical output without error; duplicate rows are deduplicated by primary key before handing off to validation. No side effects on repeated runs.
@@ -146,6 +151,7 @@ Any adapter failure produces an actionable error and no partial output is accept
 - Empty tables (zero data rows but valid headers) must be accepted and returned as empty DataFrames — not rejected.
 - Cloud blobs with key prefixes (subdirectories) must be traversed to find matching CSV/XLSX files.
 - GraphQL introspection must not be required; the adapter must work with a supplied query document only.
+- HTTP 429 with a `Retry-After` header must pause for the declared interval and retry without counting against `max_attempts`; if `Retry-After` is absent, fall back to a configurable default wait (default: 60 s).
 - REDCap exports with repeated instruments must be flattened to row-per-event before canonical mapping.
 
 ---
@@ -154,9 +160,9 @@ Any adapter failure produces an actionable error and no partial output is accept
 
 ### Functional Requirements
 
-- **FR-001**: ALL adapters MUST implement a common `BatchAdapter` ABC with a single `load(config: AdapterConfig) -> dict[str, pd.DataFrame]` method.
+- **FR-001**: ALL adapters MUST implement `BatchAdapter[C]`, a generic ABC (`class BatchAdapter(Generic[C])`) with a single `load(config: C) -> dict[str, pd.DataFrame]` method, where `C` is bound to `AdapterConfig`. Each concrete adapter declares its own config type (e.g. `class S3Adapter(BatchAdapter[S3Config])`).
 - **FR-002**: The file upload adapter MUST support CSV (UTF-8, UTF-8-BOM) and XLSX (one sheet per canonical table name).
-- **FR-003**: The remote link adapter MUST support publicly accessible HTTP/HTTPS URLs returning supported file types; Google Drive direct-download links are the primary target.
+- **FR-003**: The remote link adapter MUST support publicly accessible HTTP/HTTPS URLs returning supported file types; Google Drive "anyone with link" direct-download exports are the primary target. OAuth is explicitly out of scope — if a URL redirects to an auth/login page, the adapter MUST raise `ConnectorError` with a message indicating authentication is required.
 - **FR-004**: The AWS S3 adapter MUST authenticate via standard boto3 credential chain and support path-style and virtual-hosted-style bucket URLs.
 - **FR-005**: The Azure Blob adapter MUST authenticate via connection string or `DefaultAzureCredential` and support container/blob prefix paths.
 - **FR-006**: The GCS adapter MUST authenticate via Application Default Credentials and support `gs://` URIs.
@@ -167,10 +173,10 @@ Any adapter failure produces an actionable error and no partial output is accept
 - **FR-011**: Dropbox/OneDrive share-link and generic fallback adapters MUST be defined as `BatchAdapter` stubs with `NotImplementedError` and documented interface contracts in `contracts/`.
 - **FR-012**: Any adapter detecting a schema mismatch (renamed or missing required column) MUST raise `SchemaMismatchError` naming the table, expected column, and found columns — before returning any data.
 - **FR-013**: Partial loads are forbidden: if any table fails, the adapter MUST raise and return no frames.
-- **FR-014**: Connector outages and auth failures MUST be surfaced as `ConnectorError` or `AuthConfigError` respectively; adapters MUST retry transient errors with exponential backoff (configurable `max_attempts`, default 3); auth failures MUST NOT be retried.
+- **FR-014**: Connector outages and auth failures MUST be surfaced as `ConnectorError` or `AuthConfigError` respectively; adapters MUST retry transient errors (5xx, network timeouts) with exponential backoff (configurable `max_attempts`, default 3); auth failures MUST NOT be retried. HTTP 429 responses MUST be handled separately: the adapter MUST pause for the duration specified in the `Retry-After` response header (or a configurable default if the header is absent) and retry WITHOUT consuming a `max_attempts` slot.
 - **FR-015**: Unsupported file types and encoding errors MUST be caught at the read boundary and raised as `UnsupportedFormatError` or `EncodingError` before any parsing proceeds.
 - **FR-016**: Unit mismatches MUST be detected or declared via adapter config; silent coercion is forbidden. Known mismatches (e.g. °F → °C) MUST be converted and flagged. Unknown mismatches MUST raise `UnitAmbiguityError`.
-- **FR-017**: Re-running any adapter with the same source and config MUST produce identical output (idempotent); duplicate rows MUST be deduplicated by primary key before validation hand-off.
+- **FR-017**: Re-running any adapter with the same source and config MUST produce identical output (idempotent); duplicate rows MUST be deduplicated by primary key before validation hand-off. Primary keys are read from the SPEC-001 `LullabySchema` data dictionary at runtime (`schemas/data-dictionary.md`) — adapters MUST NOT hardcode key column names.
 - **FR-018**: All adapter outputs MUST be validated by the SPEC-001 engine before acceptance; adapters do not bypass validation.
 - **FR-019**: CI MUST run all adapters across three testability tiers: local-no-accounts (file, MySQL, REST/GraphQL mock), local-emulator (MinIO/LocalStack, Azurite, fake-gcs-server, local HTTP), and recorded fixtures (REDCap).
 
@@ -178,12 +184,13 @@ Any adapter failure produces an actionable error and no partial output is accept
 - **NFR-001**: Each adapter is a standalone Python class; no adapter imports from another adapter.
 - **NFR-002**: Adapter config is a typed dataclass or Pydantic model — no untyped dicts as public API.
 - **NFR-003**: Secrets (tokens, connection strings) are read from environment variables; they MUST NOT appear in logs or error messages.
+- **NFR-004**: Every adapter MUST emit structured log lines using the standard `logging` module: INFO at load start (`adapter=X starting load`) and load end (`adapter=X loaded N tables, row counts: {table: N, ...}`); ERROR on each raised exception (`adapter=X raised ExceptionType: <sanitized message>`). Sanitized messages MUST strip any secret values, connection string components, and file paths that could contain credentials before logging.
 
 ---
 
 ## Key Entities
 
-- **BatchAdapter**: ABC with `load(config) -> dict[str, pd.DataFrame]`. Implemented by all nine built adapters.
+- **BatchAdapter**: Generic ABC `BatchAdapter(Generic[C])` with `load(config: C) -> dict[str, pd.DataFrame]`. Each of the nine adapters is a concrete `BatchAdapter[XConfig]` subclass.
 - **AdapterConfig**: Typed base config; each adapter subclasses with its own fields (path, URL, credentials ref, unit declarations).
 - **SchemaMismatchError**: Raised when source columns don't match canonical requirements. Fields: `table`, `missing_columns`, `found_columns`.
 - **ConnectorError**: Raised on network/cloud outage after max retries. Fields: `adapter`, `cause`, `attempts`.
