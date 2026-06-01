@@ -55,7 +55,8 @@ def extract_spec_id(spec_value: str) -> str | None:
     if match:
         return normalize_spec_id(match.group(1))
 
-    path_match = re.search(r"/specs/([^/)\s]+)", spec_value)
+    # Match both '/specs/<id>' and 'specs/<id>' occurrences
+    path_match = re.search(r"(?:/|\b)specs/([^/\)\s]+)", spec_value)
     if path_match:
         return normalize_spec_id(path_match.group(1))
 
