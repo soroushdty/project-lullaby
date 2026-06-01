@@ -25,20 +25,7 @@ Targets:
     +3 -1
 ```
 
-Example
--------
-Date: 2026-05-31
-Spec: https://example.com/specs/speckit-001 (or docs/specs/speckit-001.md)
-Summary: Introduces `speckit` metadata format and changelog policy.
-Rationale: Standardize provenance of design decisions and ensure traceable links from implementation to spec.
-Impact:
-  - Broke/Changed requirements: no
-  - Docs/Constitution changes: added `SPECKIT.md` describing spec format
-Targets:
-  - SPECKIT.md: added new spec file (initial content)
-    @@ -0,0 +1,120 @@
-    +... (file added)
-
+ 
 Notes
 -----
 - Keep entries concise and factual. Prefer linking to the authoritative spec document.
