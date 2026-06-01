@@ -1,7 +1,14 @@
 """Shared pytest fixtures and alternate-schema test fixtures."""
+from __future__ import annotations
+
+import os
+
 import pandera as pa
+import pytest
 
 from src.schemas.base import SchemaContract, TableContract
+
+os.environ.setdefault("MPLCONFIGDIR", "/tmp/project-lullaby-matplotlib")
 
 
 class MinimalConformingSchema(SchemaContract):
@@ -41,3 +48,13 @@ class MinimalConformingSchema(SchemaContract):
             from src.schemas.base import SchemaTableMissingError
             raise SchemaTableMissingError(table_name)
         return {"id": {"type": "str", "description": "item identifier"}}
+
+
+@pytest.fixture
+def visualization_paths(tmp_path):
+    """Temporary report, manifest, and output paths for visualization tests."""
+    return {
+        "report": tmp_path / "artifacts" / "validation-report.json",
+        "manifest": tmp_path / "outputs" / "figures" / "manifest.json",
+        "output_root": tmp_path / "outputs" / "figures",
+    }

@@ -69,6 +69,23 @@ Stable business meaning consumed by dashboard code instead of raw source column 
 - Optional roles produce structured warnings when unresolved.
 - Multiple matching columns are errors unless the registry declares a priority winner.
 
+## Physiologic Bounds
+
+Initial bounds for visualization validation use conservative adult postpartum monitoring
+ranges. Values outside hard impossible bounds are range violations. Values outside
+capture-worthy bounds but inside hard bounds are preserved and flagged for review.
+
+| Role | Hard impossible bounds | Capture-worthy bounds |
+|------|------------------------|-----------------------|
+| `vital.systolic_bp` | `<50` or `>260` mmHg | `<90` or `>180` mmHg |
+| `vital.diastolic_bp` | `<30` or `>160` mmHg | `<50` or `>120` mmHg |
+| `vital.heart_rate` | `<25` or `>240` bpm | `<50` or `>140` bpm |
+| `vital.respiratory_rate` | `<5` or `>60` breaths/min | `<10` or `>30` breaths/min |
+| `vital.skin_temperature_c` | `<25` or `>45` C | `<34` or `>39` C |
+| `vital.ambient_temperature_c` | `<-20` or `>60` C | `<0` or `>40` C |
+| `vital.heat_index_c` | `<0` or `>70` C | `>35` C |
+| `vital.sensor_wear_hours` | `<0` or `>24` hours | `<8` hours |
+
 ## RoleResolution
 
 Result of resolving one role against one DataFrame.
