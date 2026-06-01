@@ -22,7 +22,12 @@ coverage/
 
 # Generated validation output
 artifacts/
-outputs/
+outputs/*
+!outputs/figures/
+outputs/figures/*
+!outputs/figures/manifest.json
+!outputs/figures/eda/
+!outputs/figures/eda/*.png
 
 # Editor/OS
 .DS_Store

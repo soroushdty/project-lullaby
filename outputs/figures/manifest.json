@@ -1,0 +1,103 @@
+{
+  "entries": [
+    {
+      "artifact_id": "eda_core_01_cohort_overview",
+      "created_at_utc": "2026-06-01T17:01:07.240745+00:00",
+      "deterministic": true,
+      "inputs": [
+        "participants",
+        "clinical_outcomes"
+      ],
+      "optional_roles_used": [
+        "participant.age",
+        "participant.pih_severity",
+        "participant.has_ac"
+      ],
+      "path": "outputs/figures/eda/01_cohort_overview.png",
+      "required_roles": [
+        "participant.id"
+      ],
+      "spec": "SPEC-006",
+      "title": "Cohort Overview",
+      "warnings": []
+    },
+    {
+      "artifact_id": "eda_core_02_outcome_prevalence",
+      "created_at_utc": "2026-06-01T17:01:07.254646+00:00",
+      "deterministic": true,
+      "inputs": [
+        "clinical_outcomes",
+        "participants"
+      ],
+      "optional_roles_used": [
+        "outcome.ed_visit",
+        "outcome.hospitalized",
+        "outcome.heat_illness"
+      ],
+      "path": "outputs/figures/eda/02_outcome_prevalence.png",
+      "required_roles": [
+        "outcome.participant_id",
+        "outcome.cv_event"
+      ],
+      "spec": "SPEC-006",
+      "title": "Outcome Prevalence and Class Imbalance",
+      "warnings": []
+    },
+    {
+      "artifact_id": "eda_core_03_distribution_outliers",
+      "created_at_utc": "2026-06-01T17:01:07.255012+00:00",
+      "deterministic": true,
+      "inputs": [
+        "daily_vitals",
+        "participants"
+      ],
+      "optional_roles_used": [
+        "vital.systolic_bp",
+        "vital.diastolic_bp",
+        "vital.heart_rate",
+        "vital.respiratory_rate",
+        "vital.skin_temperature_c",
+        "vital.weight_kg",
+        "vital.body_water_pct",
+        "vital.sleep_hours",
+        "vital.steps"
+      ],
+      "path": "outputs/figures/eda/03_distribution_outliers.png",
+      "required_roles": [
+        "vital.participant_id",
+        "vital.date"
+      ],
+      "spec": "SPEC-006",
+      "title": "Distributions and Capture-Worthy Outliers",
+      "warnings": []
+    },
+    {
+      "artifact_id": "eda_core_04_alert_engagement_funnel",
+      "created_at_utc": "2026-06-01T17:01:07.255167+00:00",
+      "deterministic": true,
+      "inputs": [
+        "alerts",
+        "staff_contacts",
+        "participants"
+      ],
+      "optional_roles_used": [
+        "alert.trigger_reasons",
+        "alert.called_nurse",
+        "contact.completed"
+      ],
+      "path": "outputs/figures/eda/04_alert_engagement_funnel.png",
+      "required_roles": [
+        "alert.id",
+        "alert.participant_id",
+        "alert.level",
+        "contact.type"
+      ],
+      "spec": "SPEC-006",
+      "title": "Alerts and Engagement Funnel",
+      "warnings": []
+    }
+  ],
+  "manifest_path": "outputs/figures/manifest.json",
+  "schema_version": "1.0.0",
+  "warnings": []
+}
