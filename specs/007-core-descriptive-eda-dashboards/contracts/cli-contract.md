@@ -42,8 +42,8 @@ python -m src.visualization.generate_eda --data-dir data/raw --out-dir outputs/f
 
 ## Failure Behavior
 
-- Exit code is non-zero for missing required input tables, missing required semantic roles,
-  invalid required boolean-like tokens, or hard schema range violations.
+- Exit code is non-zero for missing required input tables, missing required semantic roles, or
+  invalid required boolean-like tokens.
 - Error text identifies the entity, source path, and role where possible.
 - The command fails before writing affected PNG artifacts or manifest entries.
 - Optional roles do not fail the command unless they are promoted to required by the requested
