@@ -1,3 +1,20 @@
+---
+id:            # e.g. CHK-001
+title:         # human title
+status:        draft
+version:       0.1.0
+created:       # YYYY-MM-DD
+updated:       # YYYY-MM-DD
+author:        
+depends_on:    []
+implements:    []
+supersedes:    null
+superseded_by: null
+related:       []
+---
+
+<!-- Conforms to Project Lullaby Constitution v1.0.0 -->
+
 # [CHECKLIST TYPE] Checklist: [FEATURE NAME]
 
 **Purpose**: [Brief description of what this checklist covers]

@@ -1,0 +1,44 @@
+name: changelog-policy
+
+on:
+  pull_request:
+    branches:
+      - main
+      - master
+
+jobs:
+  validate-changelog:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Extract optional spec id and merge date
+        id: meta
+        shell: bash
+        run: |
+          BODY="${{ github.event.pull_request.body }}"
+          TITLE="${{ github.event.pull_request.title }}"
+          COMBINED="$TITLE\n$BODY"
+          SPEC_ID=$(echo "$COMBINED" | grep -Eoi '(spec[-_ ]?[0-9]+|speckit[-_ ]?[0-9]+|[0-9]{3}-[a-z0-9-]+)' | head -n1 || true)
+          MERGE_DATE="${{ github.event.pull_request.merged_at }}"
+          echo "spec_id=$SPEC_ID" >> "$GITHUB_OUTPUT"
+          echo "merge_date=$MERGE_DATE" >> "$GITHUB_OUTPUT"
+
+      - name: Validate changelog policy
+        shell: bash
+        run: |
+          ARGS=(--changelog CHANGELOG.md --spec-dir specs)
+          if [[ -n "${{ steps.meta.outputs.spec_id }}" ]]; then
+            ARGS+=(--spec-id "${{ steps.meta.outputs.spec_id }}")
+          fi
+          if [[ -n "${{ steps.meta.outputs.merge_date }}" ]]; then
+            ARGS+=(--merge-date "${{ steps.meta.outputs.merge_date }}")
+          fi
+          python3 tools/changelog_validator.py "${ARGS[@]}"
