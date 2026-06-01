@@ -1,0 +1,201 @@
+participant_id,age,race_ethnicity,insurance,gravida,para,prior_csection,prior_pih,prior_gdm,ga_delivery_weeks,delivery_type,pih_severity,on_antihypertensives,gestational_diabetes,pre_pregnancy_bmi,prior_cv_history,fhx_hypertension,fhx_preeclampsia,fhx_stroke,fhx_early_cv_disease,has_ac,household_size,bhls_health_literacy,mspss_social_support,epds_depression,pass_anxiety,enrollment_date,delivery_date,observation_start_date
+LUL-2000,30,White,Medicaid,1,0,0,0,0,36,Vaginal,Moderate PIH,0,0,31.5,0,1,0,0,1,0,3,5,28,7,8,2025-05-18,2025-06-02,2025-06-02
+LUL-2001,27,Hispanic/Latino,AHCCCS,3,2,0,0,1,36,Vaginal,Moderate PIH,1,0,26.5,0,0,1,0,0,1,5,9,46,13,20,2025-05-16,2025-05-31,2025-05-31
+LUL-2002,31,Black/African American,AHCCCS,2,1,1,0,0,36,Vaginal,Moderate PIH,1,0,36.0,0,1,1,0,0,0,7,7,39,15,28,2025-04-04,2025-06-11,2025-06-11
+LUL-2003,18,Black/African American,Private,2,1,0,1,1,37,C-section,Moderate PIH,0,0,29.5,0,1,0,1,0,1,4,7,61,3,2,2025-05-09,2025-06-09,2025-06-09
+LUL-2004,22,Other,AHCCCS,3,0,0,0,0,33,Vaginal,Mild PIH,1,0,31.3,0,1,1,1,0,1,5,6,50,8,32,2025-05-12,2025-06-02,2025-06-02
+LUL-2005,33,Native American,Private,2,1,0,0,0,36,Vaginal,Mild PIH,1,0,28.8,0,0,0,0,0,0,4,4,58,10,27,2025-04-19,2025-06-01,2025-06-01
+LUL-2006,23,Black/African American,AHCCCS,3,1,1,0,1,40,Vaginal,HELLP syndrome,1,0,32.5,0,1,0,0,0,0,2,7,53,0,35,2025-05-01,2025-06-12,2025-06-12
+LUL-2007,22,Hispanic/Latino,Uninsured,1,0,0,0,1,36,Vaginal,Moderate PIH,0,0,28.4,0,1,0,0,0,1,4,12,57,9,34,2025-04-13,2025-06-05,2025-06-05
+LUL-2008,35,Hispanic/Latino,Uninsured,4,0,0,0,1,38,C-section,Mild PIH,1,1,29.6,0,0,0,0,0,0,4,10,54,11,27,2025-04-13,2025-05-25,2025-05-25
+LUL-2009,21,Hispanic/Latino,Uninsured,2,0,0,1,0,40,Vaginal,Mild PIH,1,1,23.9,0,0,0,0,0,0,2,11,56,5,10,2025-05-03,2025-05-26,2025-05-26
+LUL-2010,24,Hispanic/Latino,AHCCCS,2,1,1,0,0,36,C-section,Severe preeclampsia,1,0,26.1,0,0,0,1,0,1,4,7,76,4,11,2025-04-07,2025-05-25,2025-05-25
+LUL-2011,24,Black/African American,AHCCCS,3,2,0,0,1,35,Vaginal,Moderate PIH,1,1,28.0,0,0,1,0,0,1,3,9,46,13,12,2025-04-05,2025-06-06,2025-06-06
+LUL-2012,33,Other,Uninsured,4,0,0,0,0,36,C-section,Mild PIH,0,0,26.4,0,0,0,0,0,1,3,4,51,5,22,2025-04-24,2025-06-14,2025-06-14
+LUL-2013,25,White,Medicaid,3,1,1,0,0,41,C-section,Mild PIH,1,0,29.3,0,0,0,0,0,0,3,11,56,13,40,2025-04-11,2025-06-06,2025-06-06
+LUL-2014,36,White,Other,2,0,0,0,0,35,C-section,Mild PIH,0,0,31.3,0,0,0,0,0,0,3,11,47,10,6,2025-04-22,2025-06-06,2025-06-06
+LUL-2015,41,Black/African American,AHCCCS,3,0,0,0,0,39,Vaginal,Severe preeclampsia,0,0,20.3,0,1,0,0,0,1,1,8,46,14,40,2025-05-05,2025-06-01,2025-06-01
+LUL-2016,21,White,Private,1,0,0,0,0,40,C-section,Severe preeclampsia,1,0,26.6,0,1,1,0,0,1,2,12,53,9,29,2025-05-01,2025-06-02,2025-06-02
+LUL-2017,36,White,AHCCCS,4,1,0,0,0,35,Vaginal,Moderate PIH,1,0,34.0,0,1,0,0,0,0,4,7,61,12,30,2025-05-01,2025-06-04,2025-06-04
+LUL-2018,21,White,AHCCCS,1,0,0,0,0,37,Vaginal,Mild PIH,1,0,27.0,0,1,1,0,0,1,5,8,40,17,20,2025-04-13,2025-06-05,2025-06-05
+LUL-2019,33,Hispanic/Latino,Medicaid,3,0,0,0,0,38,Vaginal,Severe preeclampsia,1,0,33.8,0,1,0,0,1,1,3,10,46,6,20,2025-05-10,2025-06-08,2025-06-08
+LUL-2020,29,Hispanic/Latino,Other,2,0,0,0,0,36,C-section,Severe preeclampsia,1,0,25.6,0,0,0,0,0,1,3,9,50,13,33,2025-04-23,2025-05-30,2025-05-30
+LUL-2021,30,White,Uninsured,3,1,0,0,0,38,Vaginal,Mild PIH,0,0,30.0,0,1,1,0,0,1,1,10,44,10,62,2025-04-28,2025-06-13,2025-06-13
+LUL-2022,22,Other,Medicaid,1,0,0,1,0,40,Vaginal,Severe preeclampsia,1,0,33.2,0,1,0,0,0,1,2,12,57,0,19,2025-04-19,2025-06-06,2025-06-06
+LUL-2023,28,Hispanic/Latino,Uninsured,1,0,0,1,0,37,Vaginal,Severe preeclampsia,0,0,23.1,0,0,1,0,1,1,4,9,60,12,31,2025-05-08,2025-06-04,2025-06-04
+LUL-2024,29,Black/African American,Medicaid,2,1,0,0,0,39,Vaginal,Mild PIH,0,0,24.7,0,1,0,1,0,1,3,7,40,17,21,2025-04-16,2025-05-25,2025-05-25
+LUL-2025,21,Native American,Uninsured,2,1,1,0,0,38,C-section,Moderate PIH,1,0,31.0,0,1,0,0,1,1,2,11,58,13,12,2025-05-07,2025-06-08,2025-06-08
+LUL-2026,34,Black/African American,Medicaid,2,0,0,0,0,37,Vaginal,Severe preeclampsia,0,0,25.1,0,1,0,0,0,1,4,9,61,13,26,2025-05-18,2025-05-26,2025-05-26
+LUL-2027,30,White,Medicaid,2,1,1,1,0,39,C-section,Moderate PIH,0,0,31.1,0,0,0,0,0,1,5,6,53,5,24,2025-04-26,2025-06-14,2025-06-14
+LUL-2028,33,Hispanic/Latino,Private,2,1,0,0,1,35,C-section,Moderate PIH,0,0,28.5,1,0,1,0,0,1,2,10,44,10,33,2025-05-05,2025-06-02,2025-06-02
+LUL-2029,26,Hispanic/Latino,AHCCCS,6,1,1,0,1,36,C-section,Moderate PIH,0,0,30.5,0,1,0,0,0,0,2,7,36,9,21,2025-04-19,2025-06-14,2025-06-14
+LUL-2030,26,Black/African American,Uninsured,2,1,1,0,0,37,Vaginal,Severe preeclampsia,1,0,23.4,0,1,0,1,0,0,6,6,47,7,20,2025-04-06,2025-06-06,2025-06-06
+LUL-2031,30,Black/African American,Uninsured,2,0,0,1,0,37,Vaginal,Moderate PIH,1,0,35.0,0,0,0,0,0,1,1,9,51,4,14,2025-05-14,2025-05-27,2025-05-27
+LUL-2032,22,White,Uninsured,2,1,0,0,0,38,Vaginal,Moderate PIH,1,0,28.1,0,1,1,0,0,1,3,3,37,2,26,2025-04-10,2025-06-12,2025-06-12
+LUL-2033,25,Native American,Uninsured,1,0,0,0,0,39,C-section,Moderate PIH,0,0,34.9,0,0,1,0,1,0,4,11,46,7,14,2025-04-30,2025-06-09,2025-06-09
+LUL-2034,24,Other,Medicaid,2,0,0,0,1,40,Vaginal,Severe preeclampsia,1,0,35.4,0,0,0,0,1,1,3,13,61,4,32,2025-05-04,2025-06-05,2025-06-05
+LUL-2035,34,Hispanic/Latino,Medicaid,3,1,1,0,0,36,Vaginal,Moderate PIH,1,0,37.3,0,0,1,1,0,1,2,12,48,2,12,2025-05-15,2025-05-27,2025-05-27
+LUL-2036,39,White,Medicaid,2,0,0,0,0,36,C-section,Severe preeclampsia,1,0,30.5,0,0,0,0,0,1,4,6,39,5,26,2025-05-11,2025-06-10,2025-06-10
+LUL-2037,26,Native American,Private,1,0,0,0,0,40,Vaginal,Severe preeclampsia,0,1,31.1,0,1,0,0,0,0,3,11,55,15,16,2025-05-03,2025-06-09,2025-06-09
+LUL-2038,28,White,Uninsured,1,0,0,1,0,33,Vaginal,Moderate PIH,1,0,34.8,0,0,0,0,0,0,1,6,59,8,22,2025-04-29,2025-05-25,2025-05-25
+LUL-2039,37,Native American,AHCCCS,1,0,0,0,0,39,C-section,Moderate PIH,0,1,31.9,0,1,0,1,0,0,5,8,77,11,17,2025-05-10,2025-06-10,2025-06-10
+LUL-2040,26,Black/African American,Medicaid,3,2,0,1,0,39,C-section,Severe preeclampsia,0,0,31.1,0,1,0,0,1,1,4,7,61,15,44,2025-05-05,2025-05-31,2025-05-31
+LUL-2041,21,White,Medicaid,1,0,0,0,0,38,Vaginal,Severe preeclampsia,1,0,28.8,0,0,0,0,0,0,4,10,61,7,29,2025-04-11,2025-05-26,2025-05-26
+LUL-2042,23,Hispanic/Latino,AHCCCS,2,0,0,0,0,36,Vaginal,Moderate PIH,0,0,32.9,0,0,0,0,0,1,2,10,57,11,16,2025-04-22,2025-06-08,2025-06-08
+LUL-2043,23,Black/African American,Medicaid,3,2,0,0,0,40,Vaginal,Severe preeclampsia,1,0,29.8,0,1,0,0,0,1,5,7,51,6,32,2025-05-02,2025-05-30,2025-05-30
+LUL-2044,25,Hispanic/Latino,Private,2,1,0,0,1,34,Vaginal,Moderate PIH,1,0,28.7,0,1,0,0,0,0,4,8,52,7,16,2025-04-04,2025-06-01,2025-06-01
+LUL-2045,22,Black/African American,AHCCCS,2,1,1,0,0,36,Vaginal,Mild PIH,0,0,31.4,0,0,0,0,0,1,2,8,49,6,22,2025-05-17,2025-05-27,2025-05-27
+LUL-2046,22,Hispanic/Latino,Private,3,0,0,0,0,37,Vaginal,Moderate PIH,1,1,35.2,0,0,0,0,0,1,4,5,55,13,34,2025-05-16,2025-06-02,2025-06-02
+LUL-2047,25,Black/African American,Medicaid,3,1,0,0,1,38,Vaginal,Moderate PIH,0,0,29.2,0,1,0,0,0,0,5,11,55,13,11,2025-04-17,2025-06-13,2025-06-13
+LUL-2048,26,Hispanic/Latino,Other,4,2,1,0,0,38,C-section,Moderate PIH,1,0,28.1,0,1,1,0,0,1,5,8,53,19,21,2025-04-09,2025-06-02,2025-06-02
+LUL-2049,23,Native American,Other,3,2,1,1,0,36,C-section,Moderate PIH,0,1,35.5,0,1,0,0,0,0,6,9,59,6,16,2025-05-17,2025-05-31,2025-05-31
+LUL-2050,22,Other,Medicaid,3,1,1,0,0,36,Vaginal,Moderate PIH,0,0,28.3,0,0,0,0,0,0,3,6,50,6,42,2025-04-15,2025-06-02,2025-06-02
+LUL-2051,23,White,AHCCCS,2,0,0,0,0,39,C-section,Severe preeclampsia,1,0,36.9,0,0,0,0,0,1,5,11,46,6,15,2025-04-09,2025-06-01,2025-06-01
+LUL-2052,36,Other,AHCCCS,2,1,0,0,0,36,Vaginal,Mild PIH,0,1,30.5,0,1,1,0,0,0,5,8,61,4,18,2025-05-04,2025-06-06,2025-06-06
+LUL-2053,36,White,Medicaid,1,0,0,0,1,38,C-section,Severe preeclampsia,0,1,22.3,0,0,0,0,0,1,4,10,34,8,17,2025-04-07,2025-06-12,2025-06-12
+LUL-2054,38,Black/African American,AHCCCS,2,0,0,0,0,35,C-section,Severe preeclampsia,0,0,37.1,0,0,1,0,0,1,1,8,42,3,16,2025-04-20,2025-05-30,2025-05-30
+LUL-2055,26,Hispanic/Latino,Private,2,1,0,1,0,39,C-section,Mild PIH,0,0,35.4,0,0,0,0,0,1,3,4,33,7,45,2025-04-13,2025-06-05,2025-06-05
+LUL-2056,23,Black/African American,Private,2,1,1,0,0,37,C-section,Moderate PIH,0,0,21.7,0,1,0,0,0,1,7,4,46,14,24,2025-05-15,2025-05-29,2025-05-29
+LUL-2057,26,Black/African American,Other,1,0,0,0,0,36,Vaginal,Moderate PIH,1,0,29.2,0,0,0,0,0,1,4,11,60,20,32,2025-05-02,2025-06-01,2025-06-01
+LUL-2058,33,Black/African American,Uninsured,1,0,0,0,0,36,Vaginal,Mild PIH,1,1,23.0,0,0,0,0,0,0,5,6,50,11,32,2025-04-28,2025-06-11,2025-06-11
+LUL-2059,25,Native American,Medicaid,5,0,0,0,0,33,Vaginal,Severe preeclampsia,0,0,38.2,0,0,0,0,0,1,3,3,45,7,2,2025-04-26,2025-06-10,2025-06-10
+LUL-2060,39,Black/African American,Medicaid,3,1,0,0,0,33,C-section,Mild PIH,1,0,38.0,0,1,0,0,0,1,3,5,44,13,2,2025-04-25,2025-06-11,2025-06-11
+LUL-2061,34,White,AHCCCS,3,0,0,0,0,37,Vaginal,Mild PIH,0,0,34.4,0,1,0,1,0,1,4,3,48,5,19,2025-04-25,2025-06-05,2025-06-05
+LUL-2062,19,Hispanic/Latino,AHCCCS,1,0,0,1,0,33,C-section,Mild PIH,1,0,27.0,0,0,0,0,0,0,5,10,45,5,38,2025-05-04,2025-06-07,2025-06-07
+LUL-2063,28,Hispanic/Latino,Other,2,0,0,1,1,34,Vaginal,Moderate PIH,1,0,23.3,0,0,0,0,0,1,6,7,50,11,37,2025-04-21,2025-06-06,2025-06-06
+LUL-2064,18,White,Medicaid,3,0,0,0,0,38,Vaginal,Mild PIH,1,0,25.8,0,0,0,0,0,0,3,7,58,11,43,2025-04-16,2025-05-25,2025-05-25
+LUL-2065,30,Hispanic/Latino,Other,1,0,0,0,0,37,Vaginal,Severe preeclampsia,1,0,27.0,0,0,0,1,1,1,3,10,47,19,49,2025-05-18,2025-05-30,2025-05-30
+LUL-2066,24,Black/African American,Uninsured,1,0,0,1,0,37,C-section,Mild PIH,1,0,27.4,0,1,1,0,1,1,2,10,56,17,34,2025-05-14,2025-06-12,2025-06-12
+LUL-2067,41,Hispanic/Latino,Uninsured,3,2,0,1,0,37,Vaginal,Eclampsia,1,0,23.5,0,1,0,0,0,1,2,11,45,5,38,2025-04-16,2025-05-28,2025-05-28
+LUL-2068,21,White,Medicaid,2,0,0,0,1,36,Vaginal,Moderate PIH,0,0,31.0,0,1,0,0,0,1,4,10,62,16,25,2025-04-14,2025-05-30,2025-05-30
+LUL-2069,40,Hispanic/Latino,AHCCCS,1,0,0,0,1,37,Vaginal,Moderate PIH,0,0,28.0,0,0,0,0,0,1,2,11,20,11,19,2025-04-11,2025-06-03,2025-06-03
+LUL-2070,32,Hispanic/Latino,Other,5,1,0,0,0,38,C-section,Moderate PIH,0,0,25.0,0,1,0,0,0,0,2,5,63,10,25,2025-04-05,2025-05-25,2025-05-25
+LUL-2071,25,Hispanic/Latino,Medicaid,3,2,1,0,0,38,C-section,Mild PIH,0,0,25.8,0,0,1,0,0,1,1,9,66,4,25,2025-05-03,2025-06-06,2025-06-06
+LUL-2072,22,Black/African American,Medicaid,2,0,0,1,0,37,Vaginal,Severe preeclampsia,0,0,32.6,0,1,0,0,0,0,1,9,60,9,30,2025-04-07,2025-06-05,2025-06-05
+LUL-2073,19,Native American,AHCCCS,3,1,1,1,0,35,Vaginal,Mild PIH,1,0,28.3,0,0,0,0,0,0,2,10,49,9,41,2025-05-06,2025-06-04,2025-06-04
+LUL-2074,20,Black/African American,Uninsured,3,0,0,0,0,39,Vaginal,Moderate PIH,1,0,29.8,0,1,0,0,0,0,6,10,56,6,12,2025-04-09,2025-06-10,2025-06-10
+LUL-2075,22,Hispanic/Latino,Medicaid,3,2,1,0,0,34,Vaginal,Moderate PIH,0,0,33.1,0,0,1,0,0,1,5,14,18,6,26,2025-04-23,2025-06-02,2025-06-02
+LUL-2076,32,Black/African American,Medicaid,3,2,0,0,1,41,Vaginal,HELLP syndrome,1,1,30.3,0,0,0,0,0,1,4,13,43,8,42,2025-04-27,2025-06-06,2025-06-06
+LUL-2077,29,White,Medicaid,3,1,0,0,0,34,Vaginal,Severe preeclampsia,1,0,29.9,0,1,0,0,0,1,2,8,47,10,41,2025-04-14,2025-05-30,2025-05-30
+LUL-2078,24,Black/African American,Medicaid,4,1,0,0,0,34,C-section,Severe preeclampsia,1,0,34.0,0,1,0,0,0,0,4,9,52,5,6,2025-04-22,2025-06-08,2025-06-08
+LUL-2079,28,Hispanic/Latino,Medicaid,2,0,0,0,0,39,Vaginal,Severe preeclampsia,1,0,37.1,1,0,0,1,0,1,3,10,35,7,22,2025-04-20,2025-06-08,2025-06-08
+LUL-2080,31,Black/African American,AHCCCS,3,0,0,1,0,41,Vaginal,Mild PIH,1,0,19.8,0,1,0,1,0,1,2,11,43,15,19,2025-05-12,2025-06-04,2025-06-04
+LUL-2081,29,Black/African American,AHCCCS,1,0,0,0,0,37,Vaginal,HELLP syndrome,1,0,37.1,0,1,0,0,0,1,6,7,66,7,32,2025-04-30,2025-06-13,2025-06-13
+LUL-2082,24,White,Medicaid,2,0,0,0,0,36,Vaginal,Mild PIH,1,0,48.8,0,1,0,0,0,1,4,10,64,10,6,2025-04-27,2025-06-01,2025-06-01
+LUL-2083,32,Native American,Private,1,0,0,0,0,37,Vaginal,Severe preeclampsia,1,0,23.6,0,0,0,0,1,1,5,8,45,14,38,2025-04-17,2025-06-13,2025-06-13
+LUL-2084,29,Black/African American,Uninsured,3,1,0,0,0,38,Vaginal,Moderate PIH,0,0,34.3,0,0,0,0,0,1,3,9,50,10,14,2025-04-20,2025-05-25,2025-05-25
+LUL-2085,41,Hispanic/Latino,AHCCCS,1,0,0,1,0,36,C-section,Severe preeclampsia,0,0,27.6,0,0,0,0,0,1,1,7,47,10,30,2025-04-18,2025-05-25,2025-05-25
+LUL-2086,20,Hispanic/Latino,Medicaid,1,0,0,1,1,36,Vaginal,Mild PIH,0,0,32.5,0,1,0,0,0,1,3,6,52,8,12,2025-05-15,2025-06-10,2025-06-10
+LUL-2087,34,White,Medicaid,2,1,0,0,0,39,Vaginal,Severe preeclampsia,1,0,35.8,0,1,0,0,0,1,4,11,74,7,40,2025-04-14,2025-06-05,2025-06-05
+LUL-2088,40,White,Medicaid,1,0,0,0,1,36,Vaginal,Moderate PIH,1,0,35.4,0,0,0,0,0,0,2,6,75,5,26,2025-04-04,2025-06-04,2025-06-04
+LUL-2089,25,Hispanic/Latino,Other,1,0,0,0,0,37,Vaginal,Severe preeclampsia,1,0,27.2,0,0,1,0,0,1,4,9,56,18,36,2025-04-20,2025-06-04,2025-06-04
+LUL-2090,23,Black/African American,Medicaid,1,0,0,0,0,38,Vaginal,Severe preeclampsia,1,0,40.5,0,1,0,0,0,1,2,6,67,16,30,2025-04-07,2025-06-14,2025-06-14
+LUL-2091,27,Native American,Medicaid,2,0,0,0,0,39,Vaginal,Severe preeclampsia,0,1,19.7,0,1,0,0,0,0,3,6,64,15,51,2025-04-17,2025-06-01,2025-06-01
+LUL-2092,29,Black/African American,Medicaid,2,1,0,0,1,36,Vaginal,Mild PIH,0,0,34.6,0,0,0,0,0,0,2,9,72,19,19,2025-04-10,2025-06-05,2025-06-05
+LUL-2093,20,White,AHCCCS,2,0,0,0,0,36,Vaginal,Moderate PIH,1,1,20.2,0,0,0,0,0,1,3,7,66,13,33,2025-04-26,2025-06-12,2025-06-12
+LUL-2094,33,Hispanic/Latino,Other,2,0,0,0,0,38,Vaginal,Severe preeclampsia,0,0,28.0,0,0,0,0,0,0,4,7,36,12,40,2025-04-19,2025-05-25,2025-05-25
+LUL-2095,25,Black/African American,Uninsured,4,0,0,0,0,35,C-section,Mild PIH,1,0,23.1,0,0,0,0,0,1,2,7,54,14,21,2025-04-15,2025-06-04,2025-06-04
+LUL-2096,30,White,AHCCCS,3,0,0,0,0,37,C-section,Moderate PIH,1,0,23.6,0,0,0,0,0,1,2,6,46,9,26,2025-04-17,2025-05-26,2025-05-26
+LUL-2097,28,Hispanic/Latino,Uninsured,2,0,0,0,0,36,Vaginal,Severe preeclampsia,1,1,37.5,0,1,0,0,1,1,2,9,34,0,11,2025-04-22,2025-06-04,2025-06-04
+LUL-2098,37,White,Uninsured,2,0,0,0,0,37,C-section,Moderate PIH,1,0,39.0,0,1,0,1,0,1,5,10,65,13,18,2025-04-13,2025-06-14,2025-06-14
+LUL-2099,29,Hispanic/Latino,Medicaid,3,1,0,0,1,36,C-section,Moderate PIH,0,1,27.4,0,0,0,0,0,1,2,5,50,17,36,2025-05-06,2025-06-06,2025-06-06
+LUL-2100,23,Black/African American,Uninsured,2,1,0,0,0,35,C-section,Mild PIH,0,0,30.1,0,1,0,0,0,1,3,13,41,9,39,2025-04-30,2025-05-28,2025-05-28
+LUL-2101,28,Hispanic/Latino,Medicaid,3,1,0,0,0,37,Vaginal,Mild PIH,0,0,30.5,0,0,0,0,0,1,3,5,63,7,33,2025-05-04,2025-05-27,2025-05-27
+LUL-2102,26,Hispanic/Latino,Medicaid,4,1,1,0,1,38,Vaginal,Severe preeclampsia,0,1,28.1,0,0,0,0,0,0,5,11,62,5,14,2025-04-24,2025-05-27,2025-05-27
+LUL-2103,28,White,Uninsured,2,1,0,0,1,38,C-section,Moderate PIH,0,0,22.4,0,1,0,1,0,1,3,7,45,9,8,2025-04-05,2025-06-14,2025-06-14
+LUL-2104,21,Hispanic/Latino,AHCCCS,3,1,1,1,0,40,C-section,Mild PIH,0,0,30.6,0,0,1,0,0,1,2,7,41,11,34,2025-04-19,2025-05-25,2025-05-25
+LUL-2105,26,Hispanic/Latino,Medicaid,5,2,0,0,1,39,Vaginal,Moderate PIH,0,0,33.4,0,1,0,0,0,1,1,6,40,7,43,2025-04-07,2025-06-14,2025-06-14
+LUL-2106,27,Hispanic/Latino,Medicaid,2,0,0,0,0,36,Vaginal,Moderate PIH,0,0,29.3,0,0,0,0,1,1,5,6,54,11,37,2025-04-10,2025-06-07,2025-06-07
+LUL-2107,24,Hispanic/Latino,AHCCCS,2,0,0,0,0,35,C-section,Severe preeclampsia,0,0,26.8,0,1,0,0,1,1,3,3,70,10,18,2025-04-29,2025-05-28,2025-05-28
+LUL-2108,24,Hispanic/Latino,Uninsured,2,1,1,0,1,38,C-section,Severe preeclampsia,0,0,23.3,0,0,0,0,0,1,4,8,70,5,7,2025-04-08,2025-05-31,2025-05-31
+LUL-2109,38,Native American,Medicaid,3,0,0,0,0,38,C-section,Moderate PIH,1,1,37.7,0,0,0,0,0,1,4,8,66,7,6,2025-05-05,2025-05-25,2025-05-25
+LUL-2110,21,Other,AHCCCS,1,0,0,0,1,36,Vaginal,Moderate PIH,1,1,42.1,0,0,0,0,0,1,5,9,19,13,16,2025-04-13,2025-06-07,2025-06-07
+LUL-2111,21,Black/African American,Medicaid,5,0,0,0,0,36,C-section,Mild PIH,0,0,34.8,0,1,0,0,0,1,1,11,54,11,39,2025-04-28,2025-06-13,2025-06-13
+LUL-2112,22,Other,Medicaid,1,0,0,1,1,35,Vaginal,Severe preeclampsia,1,0,32.4,0,1,0,0,0,1,2,11,46,4,13,2025-04-28,2025-05-26,2025-05-26
+LUL-2113,27,Black/African American,AHCCCS,3,0,0,0,0,37,Vaginal,Moderate PIH,1,1,30.2,0,1,0,0,0,1,2,13,53,7,18,2025-05-04,2025-05-25,2025-05-25
+LUL-2114,22,Black/African American,Medicaid,6,1,0,0,0,38,Vaginal,Mild PIH,1,0,32.3,0,0,0,0,0,1,2,6,48,20,26,2025-04-13,2025-05-25,2025-05-25
+LUL-2115,20,Native American,Private,1,0,0,0,0,36,Vaginal,Mild PIH,0,1,32.2,0,0,0,1,0,1,4,11,60,16,41,2025-05-04,2025-05-30,2025-05-30
+LUL-2116,34,Hispanic/Latino,Uninsured,2,1,1,0,0,38,C-section,Moderate PIH,0,0,26.1,0,1,1,0,1,1,5,5,25,10,38,2025-04-30,2025-05-25,2025-05-25
+LUL-2117,22,Hispanic/Latino,Medicaid,1,0,0,0,0,35,Vaginal,Moderate PIH,1,0,25.9,0,1,0,0,0,0,1,12,74,20,18,2025-05-14,2025-05-31,2025-05-31
+LUL-2118,36,White,AHCCCS,3,1,0,1,0,38,Vaginal,Severe preeclampsia,1,0,26.8,0,1,0,0,0,1,2,5,61,13,39,2025-05-07,2025-05-31,2025-05-31
+LUL-2119,22,White,Private,1,0,0,0,0,37,Vaginal,Mild PIH,0,0,30.4,0,1,0,0,0,1,4,10,59,18,30,2025-04-16,2025-05-26,2025-05-26
+LUL-2120,24,Hispanic/Latino,AHCCCS,2,0,0,0,0,36,C-section,Severe preeclampsia,0,0,19.2,0,1,0,0,0,0,1,11,79,6,42,2025-04-08,2025-06-05,2025-06-05
+LUL-2121,27,White,Private,3,1,1,0,1,39,C-section,Mild PIH,1,0,33.3,0,1,0,0,1,0,3,8,65,8,35,2025-05-08,2025-05-28,2025-05-28
+LUL-2122,29,White,Medicaid,2,1,0,1,1,34,Vaginal,Severe preeclampsia,1,0,38.9,0,0,1,0,1,1,3,6,44,15,43,2025-04-05,2025-06-14,2025-06-14
+LUL-2123,21,Hispanic/Latino,Other,3,2,1,0,0,39,C-section,Moderate PIH,1,0,39.5,0,0,0,0,0,0,5,10,45,14,42,2025-05-02,2025-06-02,2025-06-02
+LUL-2124,22,Hispanic/Latino,AHCCCS,1,0,0,0,0,34,C-section,Mild PIH,1,0,27.8,0,0,0,0,0,1,5,8,32,5,29,2025-04-17,2025-06-01,2025-06-01
+LUL-2125,24,Black/African American,Uninsured,4,0,0,0,0,36,Vaginal,Mild PIH,0,1,40.0,0,0,1,0,0,1,2,6,52,8,38,2025-05-18,2025-06-13,2025-06-13
+LUL-2126,25,White,AHCCCS,2,1,0,0,0,36,C-section,Severe preeclampsia,0,0,29.8,0,0,0,0,0,0,4,8,40,13,30,2025-05-01,2025-06-04,2025-06-04
+LUL-2127,24,Hispanic/Latino,Medicaid,2,1,1,0,1,38,C-section,Moderate PIH,0,0,18.2,0,0,0,1,0,0,3,11,41,11,21,2025-05-05,2025-06-13,2025-06-13
+LUL-2128,21,Hispanic/Latino,Other,1,0,0,1,0,37,C-section,Mild PIH,0,1,26.1,0,1,1,0,0,1,3,9,68,9,23,2025-04-10,2025-05-26,2025-05-26
+LUL-2129,34,Black/African American,Uninsured,1,0,0,1,0,37,Vaginal,Severe preeclampsia,1,0,23.9,0,1,0,0,0,0,5,8,55,9,31,2025-04-07,2025-06-01,2025-06-01
+LUL-2130,19,White,AHCCCS,3,1,0,0,0,36,Vaginal,Mild PIH,1,0,27.0,0,0,0,0,0,0,6,10,56,7,30,2025-04-20,2025-06-14,2025-06-14
+LUL-2131,26,Hispanic/Latino,Other,2,1,0,0,0,37,Vaginal,Moderate PIH,1,0,35.4,1,1,1,0,0,0,3,6,33,6,15,2025-04-15,2025-06-01,2025-06-01
+LUL-2132,22,White,Uninsured,3,0,0,0,0,37,C-section,Moderate PIH,1,1,27.9,0,0,1,0,1,1,6,10,49,11,40,2025-05-10,2025-05-30,2025-05-30
+LUL-2133,24,Other,Uninsured,2,1,0,0,0,32,Vaginal,Moderate PIH,1,1,23.6,0,0,0,1,0,1,1,4,53,13,22,2025-05-18,2025-06-01,2025-06-01
+LUL-2134,34,Native American,Medicaid,1,0,0,0,0,37,Vaginal,Severe preeclampsia,1,0,30.5,0,1,0,0,1,1,4,8,52,18,31,2025-04-24,2025-06-08,2025-06-08
+LUL-2135,31,White,Medicaid,2,1,0,0,0,35,Vaginal,Moderate PIH,0,0,22.6,0,1,0,0,1,0,1,8,58,0,9,2025-05-13,2025-06-06,2025-06-06
+LUL-2136,22,White,Medicaid,4,1,1,0,0,39,C-section,Moderate PIH,0,0,36.6,0,0,0,0,0,0,3,8,46,9,9,2025-05-03,2025-06-03,2025-06-03
+LUL-2137,30,Hispanic/Latino,Medicaid,1,0,0,0,0,37,Vaginal,Mild PIH,1,0,24.3,0,0,0,0,0,0,5,8,59,12,36,2025-04-11,2025-06-01,2025-06-01
+LUL-2138,32,Black/African American,Medicaid,1,0,0,1,0,34,Vaginal,Mild PIH,1,0,37.2,1,1,0,0,0,1,1,14,55,15,29,2025-05-05,2025-06-07,2025-06-07
+LUL-2139,24,Black/African American,Private,1,0,0,0,0,38,Vaginal,HELLP syndrome,1,0,34.1,0,0,0,0,0,1,4,9,53,7,41,2025-04-29,2025-06-05,2025-06-05
+LUL-2140,35,Black/African American,AHCCCS,2,1,0,0,0,37,C-section,Moderate PIH,0,0,18.9,0,1,0,0,0,0,1,11,63,3,18,2025-05-16,2025-06-05,2025-06-05
+LUL-2141,30,Hispanic/Latino,Private,2,1,0,0,0,35,C-section,Severe preeclampsia,1,0,27.9,0,1,0,0,0,1,7,8,42,10,38,2025-05-15,2025-05-25,2025-05-25
+LUL-2142,32,Hispanic/Latino,Private,3,0,0,0,0,38,Vaginal,Mild PIH,0,0,28.2,1,1,1,0,0,1,3,6,29,6,45,2025-05-12,2025-05-26,2025-05-26
+LUL-2143,32,Black/African American,Private,3,1,0,0,0,35,Vaginal,Severe preeclampsia,1,0,20.4,0,1,0,0,0,1,2,6,54,14,12,2025-04-27,2025-06-14,2025-06-14
+LUL-2144,25,Hispanic/Latino,AHCCCS,2,0,0,0,0,37,C-section,Moderate PIH,0,0,24.5,0,0,0,0,0,1,5,8,59,9,22,2025-04-25,2025-06-08,2025-06-08
+LUL-2145,32,Hispanic/Latino,Other,2,1,0,0,0,37,C-section,Mild PIH,0,0,19.8,0,1,0,0,0,0,1,8,50,9,39,2025-05-10,2025-06-07,2025-06-07
+LUL-2146,24,Black/African American,AHCCCS,3,1,1,0,1,37,C-section,Mild PIH,1,0,34.0,0,0,0,0,1,0,2,3,52,15,55,2025-04-13,2025-05-29,2025-05-29
+LUL-2147,22,White,Uninsured,3,1,0,0,1,39,C-section,Severe preeclampsia,1,0,38.8,0,0,0,0,0,1,4,5,25,11,38,2025-05-03,2025-06-02,2025-06-02
+LUL-2148,24,Hispanic/Latino,AHCCCS,1,0,0,1,0,39,C-section,Mild PIH,0,1,27.8,0,1,1,1,0,0,4,11,39,5,21,2025-04-21,2025-06-04,2025-06-04
+LUL-2149,25,White,AHCCCS,1,0,0,0,0,34,C-section,Mild PIH,1,0,20.1,0,0,0,0,0,0,5,11,21,7,16,2025-04-09,2025-05-28,2025-05-28
+LUL-2150,29,Native American,Private,2,1,0,0,0,37,C-section,Moderate PIH,1,1,27.0,0,1,1,0,0,1,4,5,46,17,27,2025-04-16,2025-06-14,2025-06-14
+LUL-2151,18,Other,Medicaid,1,0,0,1,0,38,C-section,Mild PIH,0,0,31.6,0,0,1,0,0,0,4,10,51,13,48,2025-04-16,2025-06-07,2025-06-07
+LUL-2152,36,Black/African American,Private,4,1,0,0,0,37,Vaginal,Moderate PIH,1,0,31.8,0,1,0,0,0,1,5,7,43,12,24,2025-05-06,2025-06-11,2025-06-11
+LUL-2153,25,Hispanic/Latino,Medicaid,1,0,0,0,0,37,C-section,Mild PIH,0,0,25.7,0,0,0,0,0,1,1,5,39,6,31,2025-04-18,2025-05-27,2025-05-27
+LUL-2154,31,Hispanic/Latino,Medicaid,2,0,0,0,0,34,C-section,Mild PIH,1,0,21.0,0,0,0,0,0,1,2,11,55,11,27,2025-04-03,2025-06-13,2025-06-13
+LUL-2155,23,Hispanic/Latino,Medicaid,2,1,0,0,0,38,Vaginal,Severe preeclampsia,1,0,27.6,0,1,0,0,0,1,5,9,59,11,14,2025-05-01,2025-06-06,2025-06-06
+LUL-2156,33,Hispanic/Latino,Medicaid,4,0,0,0,0,33,Vaginal,Mild PIH,1,0,28.6,0,0,1,0,0,1,4,9,42,14,33,2025-04-10,2025-05-28,2025-05-28
+LUL-2157,31,White,AHCCCS,3,0,0,0,0,36,Vaginal,Moderate PIH,0,0,38.9,0,0,0,0,0,1,3,9,54,6,65,2025-05-05,2025-06-08,2025-06-08
+LUL-2158,25,Hispanic/Latino,Uninsured,1,0,0,0,0,39,C-section,Moderate PIH,1,1,26.5,0,1,0,0,0,1,6,8,41,10,33,2025-04-16,2025-06-08,2025-06-08
+LUL-2159,23,White,AHCCCS,2,1,1,0,0,35,C-section,Severe preeclampsia,1,0,21.9,0,0,0,0,0,1,6,7,29,1,21,2025-04-04,2025-06-09,2025-06-09
+LUL-2160,33,Hispanic/Latino,Private,1,0,0,1,0,38,Vaginal,Mild PIH,0,0,33.4,0,1,0,0,1,1,5,5,39,9,2,2025-04-16,2025-06-11,2025-06-11
+LUL-2161,24,Black/African American,AHCCCS,4,0,0,0,0,34,Vaginal,Mild PIH,1,1,30.7,0,1,0,0,0,0,3,4,71,14,21,2025-05-13,2025-06-06,2025-06-06
+LUL-2162,32,Hispanic/Latino,AHCCCS,1,0,0,1,1,36,Vaginal,Severe preeclampsia,0,0,19.5,1,1,0,0,0,0,6,7,58,10,15,2025-04-28,2025-05-31,2025-05-31
+LUL-2163,32,Hispanic/Latino,Medicaid,1,0,0,0,0,36,C-section,Mild PIH,0,0,23.3,0,1,0,0,0,1,3,9,30,6,22,2025-04-15,2025-06-12,2025-06-12
+LUL-2164,19,White,AHCCCS,4,1,0,0,0,37,C-section,Moderate PIH,0,0,27.1,0,1,0,0,0,1,3,3,38,7,16,2025-04-29,2025-06-02,2025-06-02
+LUL-2165,29,Black/African American,Medicaid,4,1,1,0,0,37,C-section,Severe preeclampsia,0,1,31.8,0,1,0,0,0,1,1,8,39,4,9,2025-05-16,2025-06-05,2025-06-05
+LUL-2166,24,White,AHCCCS,1,0,0,0,0,35,Vaginal,Moderate PIH,1,0,32.9,0,1,0,0,1,1,5,11,46,15,25,2025-04-03,2025-06-13,2025-06-13
+LUL-2167,30,White,AHCCCS,4,2,0,0,0,38,C-section,Mild PIH,0,0,24.2,0,0,0,0,0,0,5,4,29,15,38,2025-04-12,2025-06-06,2025-06-06
+LUL-2168,31,Black/African American,AHCCCS,2,0,0,1,0,36,Vaginal,Moderate PIH,0,0,21.7,0,1,1,0,0,0,2,6,58,14,38,2025-05-17,2025-05-28,2025-05-28
+LUL-2169,39,Hispanic/Latino,Medicaid,2,0,0,0,0,34,C-section,Mild PIH,1,0,25.4,0,1,0,0,0,1,5,8,40,8,6,2025-04-04,2025-06-14,2025-06-14
+LUL-2170,19,Hispanic/Latino,Other,4,0,0,1,0,38,Vaginal,Mild PIH,1,0,36.6,0,1,1,0,0,0,5,9,43,8,14,2025-05-02,2025-05-30,2025-05-30
+LUL-2171,24,White,AHCCCS,3,1,0,0,0,36,C-section,Severe preeclampsia,1,0,36.1,0,0,1,0,0,1,4,11,63,10,9,2025-05-15,2025-06-08,2025-06-08
+LUL-2172,27,Black/African American,AHCCCS,1,0,0,0,0,37,C-section,Moderate PIH,1,1,24.9,0,0,0,0,0,1,2,7,30,6,18,2025-05-09,2025-06-12,2025-06-12
+LUL-2173,32,Black/African American,Uninsured,2,0,0,1,0,38,C-section,Severe preeclampsia,1,0,28.0,0,0,0,0,1,0,5,8,56,7,20,2025-05-13,2025-05-26,2025-05-26
+LUL-2174,30,Native American,AHCCCS,1,0,0,0,0,38,Vaginal,Moderate PIH,1,0,35.1,0,1,1,0,0,1,1,8,62,12,32,2025-04-25,2025-05-29,2025-05-29
+LUL-2175,20,Black/African American,Uninsured,2,1,0,0,0,36,Vaginal,Moderate PIH,0,0,33.5,0,0,0,0,0,0,3,5,48,4,32,2025-04-14,2025-06-01,2025-06-01
+LUL-2176,32,Black/African American,Medicaid,2,0,0,0,0,39,Vaginal,Mild PIH,0,0,33.3,0,0,1,0,0,0,3,5,49,16,26,2025-04-06,2025-05-25,2025-05-25
+LUL-2177,36,Hispanic/Latino,Uninsured,2,1,0,1,0,37,C-section,Moderate PIH,1,1,36.6,0,0,0,0,1,1,4,6,41,14,16,2025-05-11,2025-06-12,2025-06-12
+LUL-2178,23,Black/African American,Medicaid,1,0,0,1,0,36,C-section,Mild PIH,1,0,27.6,0,0,0,0,1,1,4,5,56,9,26,2025-04-06,2025-06-11,2025-06-11
+LUL-2179,25,Hispanic/Latino,AHCCCS,4,2,0,1,0,34,Vaginal,Moderate PIH,0,0,29.1,0,1,0,0,0,1,1,11,56,12,48,2025-04-04,2025-05-25,2025-05-25
+LUL-2180,20,Hispanic/Latino,Medicaid,3,1,0,0,0,36,Vaginal,Moderate PIH,0,0,34.9,0,1,1,0,0,1,3,6,50,7,18,2025-05-18,2025-05-26,2025-05-26
+LUL-2181,21,White,Medicaid,3,0,0,0,0,39,Vaginal,Moderate PIH,0,1,24.3,1,0,0,0,0,1,4,6,50,12,30,2025-04-05,2025-05-29,2025-05-29
+LUL-2182,24,White,Uninsured,2,1,0,0,0,36,Vaginal,Moderate PIH,0,0,36.8,0,0,0,0,1,1,4,12,74,10,44,2025-05-12,2025-06-11,2025-06-11
+LUL-2183,27,Hispanic/Latino,Medicaid,2,0,0,0,0,39,Vaginal,Severe preeclampsia,0,0,32.1,0,0,0,0,0,0,4,10,52,13,27,2025-05-17,2025-05-31,2025-05-31
+LUL-2184,29,Black/African American,Medicaid,2,1,1,0,0,36,C-section,Mild PIH,1,0,27.7,0,1,0,1,0,0,2,10,56,8,40,2025-04-28,2025-06-09,2025-06-09
+LUL-2185,29,Black/African American,Medicaid,1,0,0,0,0,38,Vaginal,Severe preeclampsia,0,0,25.0,0,0,0,0,0,1,6,6,56,11,12,2025-04-17,2025-06-09,2025-06-09
+LUL-2186,29,White,AHCCCS,1,0,0,1,0,35,C-section,Moderate PIH,0,0,31.1,0,0,0,0,0,1,2,10,71,16,29,2025-04-29,2025-06-11,2025-06-11
+LUL-2187,21,Black/African American,AHCCCS,3,1,0,0,0,35,C-section,Severe preeclampsia,0,1,29.0,0,1,0,0,0,1,4,5,27,14,34,2025-05-07,2025-06-09,2025-06-09
+LUL-2188,21,White,Medicaid,1,0,0,1,0,36,Vaginal,Severe preeclampsia,1,0,18.8,0,1,0,1,0,0,4,6,50,7,24,2025-05-16,2025-05-27,2025-05-27
+LUL-2189,26,Hispanic/Latino,AHCCCS,4,0,0,0,0,39,C-section,Moderate PIH,0,1,26.4,0,0,0,0,0,1,2,8,58,10,32,2025-04-07,2025-06-13,2025-06-13
+LUL-2190,20,Hispanic/Latino,Uninsured,1,0,0,0,0,37,Vaginal,Mild PIH,1,0,30.2,0,1,0,0,0,0,3,12,54,10,20,2025-05-10,2025-05-30,2025-05-30
+LUL-2191,27,Hispanic/Latino,Private,2,0,0,0,0,36,Vaginal,Severe preeclampsia,1,0,27.3,0,0,0,0,0,0,3,7,41,10,23,2025-04-29,2025-06-02,2025-06-02
+LUL-2192,31,Hispanic/Latino,Private,3,1,0,0,0,40,Vaginal,Moderate PIH,0,0,34.4,0,1,0,0,0,1,4,7,64,13,33,2025-04-22,2025-06-01,2025-06-01
+LUL-2193,20,Hispanic/Latino,Uninsured,2,1,1,0,0,35,C-section,Moderate PIH,0,0,29.2,0,0,0,0,0,1,3,10,63,9,15,2025-05-03,2025-06-12,2025-06-12
+LUL-2194,31,Black/African American,AHCCCS,3,2,1,0,0,39,C-section,Mild PIH,1,1,25.5,0,1,1,0,0,0,3,6,71,7,17,2025-04-28,2025-06-05,2025-06-05
+LUL-2195,31,White,Private,1,0,0,1,0,36,Vaginal,Severe preeclampsia,1,0,28.3,0,1,1,0,0,0,5,9,30,11,21,2025-05-05,2025-06-07,2025-06-07
+LUL-2196,28,Hispanic/Latino,AHCCCS,4,3,0,0,0,39,Vaginal,Mild PIH,1,0,30.4,0,0,0,0,1,0,4,6,57,11,28,2025-04-28,2025-06-05,2025-06-05
+LUL-2197,34,Hispanic/Latino,Private,3,1,1,1,0,34,Vaginal,Mild PIH,0,0,27.8,0,1,0,0,0,1,3,12,65,12,45,2025-04-05,2025-05-30,2025-05-30
+LUL-2198,36,White,Private,2,0,0,0,1,38,C-section,Moderate PIH,1,1,31.3,0,0,0,0,0,1,1,6,40,4,12,2025-04-15,2025-06-08,2025-06-08
+LUL-2199,25,Hispanic/Latino,Medicaid,4,1,1,0,0,39,Vaginal,Mild PIH,1,0,27.4,0,1,0,0,0,1,5,13,55,2,3,2025-04-08,2025-06-09,2025-06-09
