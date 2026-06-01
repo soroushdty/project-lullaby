@@ -1,0 +1,6 @@
+[
+  {"record_id": "1", "participant_id": "LUL-001", "redcap_repeat_instrument": "", "age": "30", "site_code": "AZ-01"},
+  {"record_id": "2", "participant_id": "LUL-002", "redcap_repeat_instrument": "", "age": "28", "site_code": "AZ-01"},
+  {"record_id": "1", "participant_id": "LUL-001", "redcap_repeat_instrument": "daily_vitals", "event_ts": "2025-06-01", "heart_rate": "72"},
+  {"record_id": "1", "participant_id": "LUL-001", "redcap_repeat_instrument": "daily_vitals", "event_ts": "2025-06-02", "heart_rate": "74"}
+]

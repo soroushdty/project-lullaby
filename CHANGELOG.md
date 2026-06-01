@@ -33,6 +33,36 @@ Notes
 - For large specs that touch many files, include only the file paths and line counts; avoid pasting whole files into the changelog.
 - Use a single changelog entry per implemented spec. If multiple specs are implemented on the same date, add separate dated entries.
 
+## Changelog Entry: SPEC-002
+
+Date: 2026-06-01
+Spec: /specs/002-batch-ingestion-adapters/spec.md
+Summary: Implement nine BatchAdapter[C] adapters (file, S3, Azure Blob, GCS, remote link, MySQL, REDCap, REST, GraphQL) plus two stubs, shared retry/backoff via tenacity, unit conversion helpers, contract+unit+integration tests, Docker Compose for cloud emulators, and three-tier GitHub Actions CI workflow.
+Rationale: Project Lullaby requires a source-agnostic ingestion layer (P4) that normalises every data source into one canonical time-series schema, fails loudly on partial loads, and is testable without live cloud accounts.
+Impact:
+  - Broke/Changed requirements: no
+  - Docs/Constitution changes: none; plan, research, data-model, contracts, quickstart, tasks added under specs/002-batch-ingestion-adapters/
+Targets:
+  - src/ingestion/adapters/base.py | +165 -0
+  - src/ingestion/adapters/file_adapter.py | +80 -0
+  - src/ingestion/adapters/s3_adapter.py | +68 -0
+  - src/ingestion/adapters/azure_adapter.py | +72 -0
+  - src/ingestion/adapters/gcs_adapter.py | +62 -0
+  - src/ingestion/adapters/remote_link_adapter.py | +83 -0
+  - src/ingestion/adapters/mysql_adapter.py | +60 -0
+  - src/ingestion/adapters/redcap_adapter.py | +80 -0
+  - src/ingestion/adapters/rest_adapter.py | +72 -0
+  - src/ingestion/adapters/graphql_adapter.py | +86 -0
+  - src/ingestion/adapters/stubs.py | +45 -0
+  - src/ingestion/units.py | +35 -0
+  - tests/contract/test_adapter_contract.py | +90 -0
+  - tests/unit/test_adapters_unit.py | +115 -0
+  - tests/integration/test_adapters_local.py | +90 -0
+  - docker-compose.yml | +46 -0
+  - pyproject.toml | +32 -0
+  - .github/workflows/test-adapters.yml | +50 -0
+  - specs/002-batch-ingestion-adapters/ | +7 docs (plan, research, data-model, quickstart, 4 contracts, tasks)
+
 ## Changelog Entry: 001-canonical-schema-validation
 
 Date: 2026-06-01
@@ -75,4 +105,3 @@ Targets:
   - specs/000-changelog-creation/spec.md | +12 -0
   - tools/changelog_validator.py | +650 -0
   - .github/workflows/changelog-policy.yml | +120 -0
-

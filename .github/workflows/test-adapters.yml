@@ -1,0 +1,56 @@
+name: test-adapters
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  # Tier 1: no cloud accounts, no Docker
+  test-adapters-local:
+    name: Tier 1 – Local / No Accounts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          pip install pandas openpyxl requests tenacity pydantic pytest pytest-httpserver pandera
+      - name: Run tier-1 tests
+        run: pytest tests/unit tests/contract tests/integration/test_adapters_local.py -q
+
+  # Tier 2: cloud emulators via Docker Compose
+  test-adapters-emulated:
+    name: Tier 2 – Emulated (Docker Compose)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          pip install pandas openpyxl requests tenacity pydantic pytest pytest-httpserver \
+                      boto3 azure-storage-blob google-cloud-storage sqlalchemy pymysql pandera
+      - name: Start emulators
+        run: docker compose up -d --wait
+      - name: Run tier-2 tests
+        run: pytest tests/integration/test_adapters_emulated.py -q
+      - name: Stop emulators
+        if: always()
+        run: docker compose down
+
+  # Tier 3: REDCap recorded fixtures
+  test-adapters-fixtures:
+    name: Tier 3 – Recorded Fixtures
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: pip install pandas requests tenacity pydantic pytest pandera
+      - name: Run tier-3 tests
+        run: pytest tests/integration/test_adapters_fixtures.py -q
