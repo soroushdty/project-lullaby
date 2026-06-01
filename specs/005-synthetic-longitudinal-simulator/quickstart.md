@@ -10,7 +10,7 @@ depends_on: [SPEC-005, PLAN-005]
 implements: [P2, P3, P5, P7, P8, P9]
 supersedes: null
 superseded_by: null
-related: [SPEC-001, SPEC-004A, SPEC-004B, SPEC-006, SPEC-007]
+related: [SPEC-001, SPEC-004, SPEC-006, SPEC-007, SPEC-008]
 ---
 
 <!-- Conforms to Project Lullaby Constitution v1.0.0 -->
@@ -56,7 +56,7 @@ python -m src.cli.validate_visualization_foundation \
 
 Expected behavior:
 
-- Uses the SPEC-004A schema registry
+- Uses the SPEC-004 schema registry
 - Reports no required-role failures
 - Preserves missingness and extra columns
 - Writes `artifacts/validation-report.json`

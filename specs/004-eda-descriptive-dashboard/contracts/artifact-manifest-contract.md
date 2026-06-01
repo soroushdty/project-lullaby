@@ -1,16 +1,16 @@
 ---
-id: CONTRACT-004A-MANIFEST
+id: CONTRACT-004-MANIFEST
 title: Figure Artifact Manifest Contract
 status: draft
 version: 0.1.0
 created: 2026-06-01
 updated: 2026-06-01
 author: Soroush Dianaty
-depends_on: [SPEC-004A, PLAN-004A]
+depends_on: [SPEC-004, PLAN-004]
 implements: [P2, P7]
 supersedes: null
 superseded_by: null
-related: [SPEC-004B, SPEC-006, SPEC-007]
+related: [SPEC-006, SPEC-007, SPEC-008]
 ---
 
 <!-- Conforms to Project Lullaby Constitution v1.0.0 -->
@@ -41,7 +41,7 @@ An empty manifest is valid and must be created by the foundation validation comm
   "artifact_id": "eda_01_cohort_overview",
   "path": "outputs/figures/eda/01_cohort_overview.png",
   "title": "Cohort Overview",
-  "spec": "SPEC-004B",
+  "spec": "SPEC-007",
   "inputs": ["participants", "clinical_outcomes"],
   "required_roles": ["participant.id", "participant.age"],
   "optional_roles_used": ["participant.has_ac"],

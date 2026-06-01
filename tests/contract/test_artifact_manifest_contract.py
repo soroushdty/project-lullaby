@@ -16,7 +16,7 @@ def _artifact(**overrides):
         "artifact_id": "test_artifact",
         "path": "outputs/figures/test.png",
         "title": "Test Artifact",
-        "spec": "SPEC-004A",
+        "spec": "SPEC-004",
         "inputs": ["participants"],
         "required_roles": ["participant.id"],
     }

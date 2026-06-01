@@ -6,11 +6,11 @@ version: 0.1.0
 created: 2026-06-01
 updated: 2026-06-01
 author: Soroush Dianaty
-depends_on: [PLAN-005, SPEC-005, SPEC-001, SPEC-004A]
+depends_on: [PLAN-005, SPEC-005, SPEC-001, SPEC-004]
 implements: [P1, P2, P3, P5, P7, P8, P9]
 supersedes: null
 superseded_by: null
-related: [SPEC-004A, SPEC-004B, SPEC-006, SPEC-007]
+related: [SPEC-004, SPEC-006, SPEC-007, SPEC-008]
 description: "Executable task list for the seeded longitudinal synthetic cohort simulator"
 ---
 
@@ -80,7 +80,7 @@ description: "Executable task list for the seeded longitudinal synthetic cohort 
 - [X] T018 [US1] Implement full participant-day grid construction with stable date, study-day, and week columns in src/simulation/cohort.py
 - [X] T019 [US1] Implement baseline environment, recruitment, clinical outcome, alert, and contact table placeholders needed for a schema-valid package in src/simulation/cohort.py
 - [X] T020 [US1] Implement deterministic CSV/YAML/JSON output writing with stable row and column ordering in src/simulation/export.py
-- [X] T021 [US1] Integrate SPEC-004A schema validation and failed/not-ready handling into the export flow in src/simulation/export.py
+- [X] T021 [US1] Integrate SPEC-004 schema validation and failed/not-ready handling into the export flow in src/simulation/export.py
 - [X] T022 [US1] Implement generator orchestration entry point for config, generation, export, validation, and summary writing in src/simulation/export.py
 - [X] T023 [US1] Implement argparse command wrapper with `--config`, `--out-dir`, and `--seed` in scripts/generate_synthetic.py
 - [X] T024 [US1] Wire public `generate_synthetic` or equivalent orchestration export in src/simulation/__init__.py

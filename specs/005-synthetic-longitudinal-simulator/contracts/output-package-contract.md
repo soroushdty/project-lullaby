@@ -10,7 +10,7 @@ depends_on: [SPEC-005, PLAN-005]
 implements: [P2, P3, P5, P8, P9]
 supersedes: null
 superseded_by: null
-related: [SPEC-001, SPEC-004A]
+related: [SPEC-001, SPEC-004]
 ---
 
 <!-- Conforms to Project Lullaby Constitution v1.0.0 -->
@@ -55,7 +55,7 @@ simulation_summary.json
 - Temperature and heat-index columns use Celsius.
 - Each CSV contains a `synthetic_data` indicator where schema allows extra columns.
 - `daily_vitals.csv` row count equals `n_participants * study_days`.
-- Generated tables validate through the SPEC-004A schema registry before readiness is true.
+- Generated tables validate through the SPEC-004 schema registry before readiness is true.
 
 ## Required Schema Registry Extensions
 

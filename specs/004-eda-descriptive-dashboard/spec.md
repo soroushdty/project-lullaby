@@ -1,5 +1,5 @@
 ---
-id: SPEC-004A
+id: SPEC-004
 title: Visualization Foundation and Schema Registry
 status: draft
 version: 0.1.0
@@ -10,7 +10,7 @@ depends_on: [SPEC-001]
 implements: [P3, P5, P7, P10]
 supersedes: null
 superseded_by: null
-related: [SPEC-001, SPEC-004B, SPEC-005, SPEC-006, SPEC-007]
+related: [SPEC-001, SPEC-005, SPEC-006, SPEC-007, SPEC-008]
 ---
 
 <!-- Conforms to Project Lullaby Constitution v1.0.0 -->
@@ -23,14 +23,14 @@ related: [SPEC-001, SPEC-004B, SPEC-005, SPEC-006, SPEC-007]
 
 **Status**: Draft
 
-**Input**: User description: "SPEC-004A - Visualization Foundation and Schema Registry — create shared infrastructure for high-quality, schema-driven, deterministic visualization artifacts. Establish the schema registry, validation behavior, visualization design system, artifact manifest contract, visualization configuration, and root commands that later EDA, simulator, model bake-off, and analytic dashboard specs depend on."
+**Input**: User description: "SPEC-004 - Visualization Foundation and Schema Registry — create shared infrastructure for high-quality, schema-driven, deterministic visualization artifacts. Establish the schema registry, validation behavior, visualization design system, artifact manifest contract, visualization configuration, and root commands that later EDA, simulator, model bake-off, and analytic dashboard specs depend on."
 
 ## Clarifications
 
 ### Session 2026-06-01
 
-- Q: Which bundled data directory is the default validation target for SPEC-004A root commands? -> A: Default to repository-root `data/` CSV files, with `--data-dir` available for alternate directories.
-- Q: Should SPEC-004A require a concrete default artifact manifest file or only define the manifest schema/contract? -> A: Require `outputs/figures/manifest.json` as the default manifest path, created with an empty valid manifest when no figures exist yet.
+- Q: Which bundled data directory is the default validation target for SPEC-004 root commands? -> A: Default to repository-root `data/` CSV files, with `--data-dir` available for alternate directories.
+- Q: Should SPEC-004 require a concrete default artifact manifest file or only define the manifest schema/contract? -> A: Require `outputs/figures/manifest.json` as the default manifest path, created with an empty valid manifest when no figures exist yet.
 - Q: What output contract should the repository-root schema validation command provide? -> A: Print a concise human-readable summary and also produce deterministic JSON validation results at `artifacts/validation-report.json`.
 
 ## User Scenarios & Testing *(mandatory)*

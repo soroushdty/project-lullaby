@@ -1,16 +1,16 @@
 ---
-id: PLAN-004A-RESEARCH
+id: PLAN-004-RESEARCH
 title: Visualization Foundation and Schema Registry Research
 status: draft
 version: 0.1.0
 created: 2026-06-01
 updated: 2026-06-01
 author: Soroush Dianaty
-depends_on: [SPEC-004A, PLAN-004A]
+depends_on: [SPEC-004, PLAN-004]
 implements: [P1, P2, P3, P5, P7, P10]
 supersedes: null
 superseded_by: null
-related: [SPEC-001, SPEC-004B, SPEC-005, SPEC-006, SPEC-007]
+related: [SPEC-001, SPEC-005, SPEC-006, SPEC-007, SPEC-008]
 ---
 
 <!-- Conforms to Project Lullaby Constitution v1.0.0 -->
@@ -20,7 +20,7 @@ related: [SPEC-001, SPEC-004B, SPEC-005, SPEC-006, SPEC-007]
 ## Decision: Add a visualization-specific semantic registry beside the SPEC-001 schema contract
 
 **Rationale**: The existing `src/schemas` contract defines ingestion-ready table shape, primary
-keys, timestamps, and Pandera validation. SPEC-004A needs additional visualization semantics:
+keys, timestamps, and Pandera validation. SPEC-004 needs additional visualization semantics:
 role aliases, display labels, units, valid ranges, missingness policy, default aggregation, and
 future optional entities. A dedicated visualization registry can reference SPEC-001 as the
 canonical baseline without forcing ingestion contracts to grow dashboard concerns.
@@ -28,7 +28,7 @@ canonical baseline without forcing ingestion contracts to grow dashboard concern
 **Alternatives considered**:
 - Extend `TableContract` directly. Rejected because it would mix ingestion validation with
   visualization-only concerns and risk breaking SPEC-001 tests.
-- Hardcode plotting columns in each dashboard. Rejected by SPEC-004A and P3.
+- Hardcode plotting columns in each dashboard. Rejected by SPEC-004 and P3.
 
 ## Decision: Support canonical entity names with ordered source filename aliases
 
@@ -69,15 +69,15 @@ rewrite caller-provided frames.
 
 ## Decision: Use matplotlib as the only new visualization dependency
 
-**Rationale**: SPEC-004A requires static dashboard-grade figures with DPI, canvas-size, labels,
+**Rationale**: SPEC-004 requires static dashboard-grade figures with DPI, canvas-size, labels,
 warning panels, no-data panels, and non-color encodings. Matplotlib provides deterministic
 static image generation, integrates well with pytest smoke tests, and avoids a browser, server,
 or notebook dependency.
 
 **Alternatives considered**:
-- Seaborn. Rejected for SPEC-004A foundation because it adds another style abstraction while
+- Seaborn. Rejected for SPEC-004 foundation because it adds another style abstraction while
   matplotlib already satisfies the required contract.
-- Plotly or browser-rendered figures. Rejected because SPEC-004A requires reproducible static
+- Plotly or browser-rendered figures. Rejected because SPEC-004 requires reproducible static
   artifacts without a web runtime.
 - Notebook-only rendering. Rejected by the spec.
 
@@ -104,7 +104,7 @@ machine-readable contract. The command prints summary counts and writes determin
 
 ## Decision: Add a focused visualization foundation CLI instead of changing SPEC-001 behavior
 
-**Rationale**: The existing `src.cli.validate_schema` validates canonical ingestion tables. SPEC-004A
+**Rationale**: The existing `src.cli.validate_schema` validates canonical ingestion tables. SPEC-004
 has a different boundary: visualization semantic roles over richer source data. A focused command
 under `src/cli/validate_visualization_foundation.py` can default to `data/`, create the figure
 manifest, and write the shared report while preserving the existing SPEC-001 CLI behavior.

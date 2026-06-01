@@ -6,11 +6,11 @@ version: 0.1.0
 created: 2026-06-01
 updated: 2026-06-01
 author: Soroush Dianaty
-depends_on: [SPEC-001, SPEC-004A]
+depends_on: [SPEC-001, SPEC-004]
 implements: [P2, P3, P5, P7, P8, P9]
 supersedes: null
 superseded_by: null
-related: [SPEC-004A, SPEC-004B, SPEC-006, SPEC-007]
+related: [SPEC-004, SPEC-006, SPEC-007, SPEC-008]
 ---
 
 <!-- Conforms to Project Lullaby Constitution v1.0.0 -->
@@ -145,7 +145,7 @@ A dashboard author or model evaluator needs a concise run summary that explains 
 - **FR-002**: The system MUST produce identical exported table contents for repeated runs with the same seed and effective configuration, except for explicitly allowed run metadata.
 - **FR-003**: The generated output package MUST default to `data/synthetic/longitudinal/` and MUST include `participants.csv`, `daily_vitals.csv`, `alerts.csv`, `staff_contacts.csv`, `clinical_outcomes.csv`, `environment.csv`, `recruitment.csv`, `simulation_config_used.yaml`, and `simulation_summary.json`.
 - **FR-004**: Generated tabular artifacts MUST validate against the schema registry before the output package is considered ready for downstream use.
-- **FR-004A**: If generated artifacts fail schema validation, the system MUST leave the generated artifacts available for debugging, mark the simulation summary as failed/not ready, and report generation failure to the caller.
+- **FR-004-FAILURE**: If generated artifacts fail schema validation, the system MUST leave the generated artifacts available for debugging, mark the simulation summary as failed/not ready, and report generation failure to the caller.
 - **FR-005**: The simulator MUST support the archetypes diligent monitor, overwhelmed mom, heat stressed, true emergency, and silent decliner, each with configurable target weight, adherence behavior, missingness pattern, and physiologic risk profile; default target weights MUST be 0.30, 0.30, 0.15, 0.06, and 0.14 respectively before normalization.
 - **FR-006**: Archetype target weights MUST be normalized when configured weights do not sum to 1.0, and the effective weights MUST be recorded in the run summary.
 - **FR-007**: The default configuration MUST define seed 20260601, 200 participants, 84 study days (12 weeks), event-rate targets for cardiovascular events, heat illness, emergency department visits, and hospitalization, summer heat behavior, adherence decline, missingness behavior, physiologic effect ranges, and alert follow-up probabilities.
@@ -207,7 +207,7 @@ A dashboard author or model evaluator needs a concise run summary that explains 
 
 ## Assumptions
 
-- SPEC-001 remains the authoritative canonical schema baseline, and SPEC-004A provides the schema registry used to validate generated exports.
+- SPEC-001 remains the authoritative canonical schema baseline, and SPEC-004 provides the schema registry used to validate generated exports.
 - The default study window is 84 days (12 weeks), with future specs able to extend the window through configuration.
 - Generated data is wholly synthetic and contains no real participant records or protected health information.
 - The simulator generates raw synthetic tables and diagnostics; downstream feature engineering for modeling remains the responsibility of later analytic specs.

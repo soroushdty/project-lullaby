@@ -1,12 +1,12 @@
 ---
-id: CONTRACT-004A-VALIDATION-COMMAND
+id: CONTRACT-004-VALIDATION-COMMAND
 title: Visualization Foundation Validation Command Contract
 status: draft
 version: 0.1.0
 created: 2026-06-01
 updated: 2026-06-01
 author: Soroush Dianaty
-depends_on: [SPEC-004A, PLAN-004A]
+depends_on: [SPEC-004, PLAN-004]
 implements: [P2, P3, P5]
 supersedes: null
 superseded_by: null

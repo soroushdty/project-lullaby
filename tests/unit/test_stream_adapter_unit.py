@@ -258,6 +258,30 @@ def test_non_empty_pending_buffer_raises_at_end_of_stream():
         list(_adapter({"events": events, "staff": _staff()}))
 
 
+def test_pending_buffer_parses_string_and_numeric_boolean_tokens():
+    events = _events(
+        [
+            ("A", "2025-06-01T00:00:00+00:00", 1),
+            ("B", "2025-06-01T00:01:00+00:00", 2),
+            ("C", "2025-06-01T00:02:00+00:00", 3),
+            ("D", "2025-06-01T00:03:00+00:00", 4),
+            ("E", "2025-06-01T00:04:00+00:00", 5),
+        ]
+    )
+    events["_stream_pending"] = ["False", "0", 0, None, "true"]
+
+    with pytest.raises(StreamAdapterError, match="1 undeliverable"):
+        windows = list(_adapter({"events": events, "staff": _staff()}))
+
+
+def test_pending_buffer_invalid_token_fails_loudly():
+    events = _events([("A", "2025-06-01T00:00:00+00:00", 1)])
+    events["_stream_pending"] = ["later-ish"]
+
+    with pytest.raises(StreamAdapterError, match="Invalid boolean token.*_stream_pending"):
+        list(_adapter({"events": events, "staff": _staff()}))
+
+
 def test_static_table_emitted_once_in_first_window():
     windows = list(
         _adapter(

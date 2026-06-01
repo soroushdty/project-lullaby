@@ -1,16 +1,16 @@
 ---
-id: PLAN-004A-DATA-MODEL
+id: PLAN-004-DATA-MODEL
 title: Visualization Foundation and Schema Registry Data Model
 status: draft
 version: 0.1.0
 created: 2026-06-01
 updated: 2026-06-01
 author: Soroush Dianaty
-depends_on: [SPEC-004A, PLAN-004A]
+depends_on: [SPEC-004, PLAN-004]
 implements: [P3, P5, P7, P10]
 supersedes: null
 superseded_by: null
-related: [SPEC-001, SPEC-004B, SPEC-005, SPEC-006, SPEC-007]
+related: [SPEC-001, SPEC-005, SPEC-006, SPEC-007, SPEC-008]
 ---
 
 <!-- Conforms to Project Lullaby Constitution v1.0.0 -->

@@ -10,7 +10,7 @@ depends_on: [SPEC-005, PLAN-005]
 implements: [P2, P5, P7, P8]
 supersedes: null
 superseded_by: null
-related: [SPEC-001, SPEC-004A, SPEC-006, SPEC-007]
+related: [SPEC-001, SPEC-004, SPEC-006, SPEC-008]
 ---
 
 <!-- Conforms to Project Lullaby Constitution v1.0.0 -->

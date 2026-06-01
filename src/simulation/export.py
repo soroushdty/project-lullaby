@@ -13,6 +13,7 @@ import yaml
 from src.simulation.cohort import SimulationTables, generate_cohort_tables
 from src.simulation.config import SimulationConfig, load_simulation_config
 from src.simulation.physiology import simple_auc
+from src.validation.semantics import DomainBooleanParsePolicy, ParsedBooleanSeries, parse_domain_boolean_series
 from src.visualization.validation import ValidationResult, validate_data_dir
 
 
@@ -163,8 +164,14 @@ def _event_rate_checks(config: SimulationConfig, outcomes: pd.DataFrame) -> list
     }
     checks = []
     for field, target in fields.items():
-        observed = float(outcomes[field].astype(bool).mean()) if len(outcomes) else 0.0
-        checks.append(_absolute_check(f"event_rate.{field}", target, observed, tolerance, len(outcomes)))
+        parsed = _required_bool(outcomes, field, f"clinical_outcomes.{field}")
+        if parsed.errors:
+            checks.append(_semantic_failure_check(f"event_rate.{field}", target, len(outcomes), parsed.errors))
+            continue
+        observed = float(parsed.true_mask.sum() / len(outcomes)) if len(outcomes) else 0.0
+        check = _absolute_check(f"event_rate.{field}", target, observed, tolerance, len(outcomes))
+        check.details["missing_unknown"] = parsed.counts["missing_unknown"]
+        checks.append(check)
     return checks
 
 
@@ -188,8 +195,11 @@ def _adherence_checks(daily: pd.DataFrame) -> list[DiagnosticCheck]:
     late = daily.loc[daily["week"] >= max(daily["week"].max() - 1, 1)]
     early_wear = float(pd.to_numeric(early["sensor_wear_hours"], errors="coerce").mean())
     late_wear = float(pd.to_numeric(late["sensor_wear_hours"], errors="coerce").mean())
-    early_scale = float(early["scale_used"].dropna().astype(bool).mean())
-    late_scale = float(late["scale_used"].dropna().astype(bool).mean())
+    early_scale_parsed = _required_bool(early, "scale_used", "daily_vitals.scale_used")
+    late_scale_parsed = _required_bool(late, "scale_used", "daily_vitals.scale_used")
+    scale_errors = early_scale_parsed.errors + late_scale_parsed.errors
+    early_scale = _parsed_rate(early_scale_parsed)
+    late_scale = _parsed_rate(late_scale_parsed)
     return [
         DiagnosticCheck(
             "adherence.wear_hours_decline",
@@ -208,8 +218,14 @@ def _adherence_checks(daily: pd.DataFrame) -> list[DiagnosticCheck]:
             round(late_scale - early_scale, 4),
             None,
             len(daily),
-            "pass" if late_scale < early_scale else "fail",
-            {"early_rate": early_scale, "late_rate": late_scale},
+            "fail" if scale_errors else "pass" if late_scale < early_scale else "fail",
+            {
+                "early_rate": early_scale,
+                "late_rate": late_scale,
+                "early_missing_unknown": early_scale_parsed.counts["missing_unknown"],
+                "late_missing_unknown": late_scale_parsed.counts["missing_unknown"],
+                "errors": scale_errors,
+            },
         ),
     ]
 
@@ -220,12 +236,21 @@ def _physiology_checks(
     outcomes: pd.DataFrame,
 ) -> list[DiagnosticCheck]:
     checks: list[DiagnosticCheck] = []
-    cv_ids = outcomes.loc[outcomes["cv_event"].astype(bool), "participant_id"].tolist()
+    cv_events = _required_bool(outcomes, "cv_event", "clinical_outcomes.cv_event")
+    cv_windows = _required_bool(daily, "cv_event_window", "daily_vitals.cv_event_window")
+    heat_days = _required_bool(daily, "heat_strain_day", "daily_vitals.heat_strain_day")
+    parse_errors = cv_events.errors + cv_windows.errors + heat_days.errors
+    if parse_errors:
+        checks.append(_semantic_failure_check("physiology.cv_body_water_pre_event_positive", 0.80, len(daily), parse_errors))
+        checks.append(_semantic_failure_check("physiology.heat_strain_direction", 0.55, len(daily), parse_errors))
+        checks.append(_semantic_failure_check("physiology.overlap_body_water_auc", "<=0.90", len(daily), parse_errors))
+        return checks
+    cv_ids = outcomes.loc[cv_events.true_mask, "participant_id"].tolist()
     positive_slopes = 0
     slope_denominator = 0
     for participant_id in cv_ids:
         participant_days = daily.loc[
-            (daily["participant_id"] == participant_id) & (daily["cv_event_window"].astype(bool))
+            (daily["participant_id"] == participant_id) & cv_windows.true_mask
         ].sort_values("study_day")
         values = pd.to_numeric(participant_days["body_water_pct"], errors="coerce").dropna()
         if len(values) >= 4:
@@ -236,7 +261,7 @@ def _physiology_checks(
     checks.append(
         _minimum_check("physiology.cv_body_water_pre_event_positive", 0.80, slope_rate, 0.20, slope_denominator)
     )
-    heat_rows = daily.loc[daily["heat_strain_day"].astype(bool)].sort_values(["participant_id", "study_day"])
+    heat_rows = daily.loc[heat_days.true_mask].sort_values(["participant_id", "study_day"])
     heat_success = 0
     heat_denominator = 0
     for row in heat_rows.itertuples(index=False):
@@ -259,8 +284,10 @@ def _physiology_checks(
     heat_rate = heat_success / heat_denominator if heat_denominator else (0.0 if config.event_rate.heat_illness > 0 else 1.0)
     checks.append(_minimum_check("physiology.heat_strain_direction", 0.55, heat_rate, 0.10, heat_denominator))
     body_water = pd.to_numeric(daily["body_water_pct"], errors="coerce")
-    labels = daily["cv_event_window"].fillna(False).astype(bool)
-    auc = simple_auc(body_water.fillna(np.nan).tolist(), labels.tolist())
+    valid_label_mask = cv_windows.valid_mask
+    auc_values = body_water.loc[valid_label_mask]
+    labels = cv_windows.true_mask.loc[valid_label_mask]
+    auc = simple_auc(auc_values.fillna(np.nan).tolist(), labels.tolist())
     checks.append(
         DiagnosticCheck(
             "physiology.overlap_body_water_auc",
@@ -268,7 +295,7 @@ def _physiology_checks(
             "<=0.90",
             round(auc, 4),
             None,
-            int(body_water.notna().sum()),
+            int(body_water.loc[valid_label_mask].notna().sum()),
             "pass" if auc <= 0.90 else "fail",
             {"interpretation": "single raw body-water measure is useful but not trivially separable"},
         )
@@ -282,7 +309,16 @@ def _missingness_checks(daily: pd.DataFrame) -> list[DiagnosticCheck]:
     archetype_spread = float(archetype_rates.max() - archetype_rates.min()) if len(archetype_rates) else 0.0
     heat_rates = observed_missing.groupby(daily["heat_exposure_level"].isin(["high", "extreme"])).mean()
     heat_spread = float(heat_rates.max() - heat_rates.min()) if len(heat_rates) > 1 else 0.0
-    worsening_mask = daily["cv_event_window"].astype(bool) | daily["heat_strain_day"].astype(bool)
+    cv_windows = _required_bool(daily, "cv_event_window", "daily_vitals.cv_event_window")
+    heat_days = _required_bool(daily, "heat_strain_day", "daily_vitals.heat_strain_day")
+    errors = cv_windows.errors + heat_days.errors
+    if errors:
+        return [
+            _minimum_check("missingness.by_archetype_spread", 0.05, archetype_spread, 0.05, len(daily)),
+            _minimum_check("missingness.by_heat_exposure_spread", 0.02, heat_spread, 0.02, len(daily)),
+            _semantic_failure_check("missingness.worsening_state_lift", 0.01, len(daily), errors),
+        ]
+    worsening_mask = cv_windows.true_mask | heat_days.true_mask
     worsening_rate = float(pd.to_numeric(daily.loc[worsening_mask, "latent_missingness_probability"], errors="coerce").mean())
     baseline_rate = float(pd.to_numeric(daily.loc[~worsening_mask, "latent_missingness_probability"], errors="coerce").mean())
     return [
@@ -290,6 +326,49 @@ def _missingness_checks(daily: pd.DataFrame) -> list[DiagnosticCheck]:
         _minimum_check("missingness.by_heat_exposure_spread", 0.02, heat_spread, 0.02, len(daily)),
         _minimum_check("missingness.worsening_state_lift", 0.01, worsening_rate - baseline_rate, 0.05, len(daily)),
     ]
+
+
+def _required_bool(frame: pd.DataFrame, column: str, role: str) -> ParsedBooleanSeries:
+    if column not in frame:
+        index = frame.index
+        false = pd.Series(False, index=index)
+        return ParsedBooleanSeries(
+            true_mask=false,
+            false_mask=false.copy(),
+            missing_mask=pd.Series(True, index=index),
+            invalid_mask=false.copy(),
+            errors=[f"Missing required boolean column for {role}: {column}"],
+        )
+    return parse_domain_boolean_series(
+        frame[column],
+        DomainBooleanParsePolicy(role=role, required=True),
+        source_column=column,
+    )
+
+
+def _parsed_rate(parsed: ParsedBooleanSeries) -> float:
+    denominator = int(parsed.valid_mask.sum())
+    if not denominator:
+        return 0.0
+    return float(parsed.true_mask.sum() / denominator)
+
+
+def _semantic_failure_check(
+    name: str,
+    target: float | str,
+    denominator: int,
+    errors: list[str],
+) -> DiagnosticCheck:
+    return DiagnosticCheck(
+        name=name,
+        required=True,
+        target=target,
+        observed=None,
+        tolerance=None,
+        denominator=int(denominator),
+        status="fail",
+        details={"errors": errors},
+    )
 
 
 def _absolute_check(

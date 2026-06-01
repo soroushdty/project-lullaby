@@ -1,16 +1,16 @@
 ---
-id: QS-004A
+id: QS-004
 title: Visualization Foundation and Schema Registry Quickstart
 status: draft
 version: 0.1.0
 created: 2026-06-01
 updated: 2026-06-01
 author: Soroush Dianaty
-depends_on: [SPEC-004A, PLAN-004A]
+depends_on: [SPEC-004, PLAN-004]
 implements: [P2, P3, P5, P7, P10]
 supersedes: null
 superseded_by: null
-related: [SPEC-001, SPEC-004B, SPEC-005, SPEC-006, SPEC-007]
+related: [SPEC-001, SPEC-005, SPEC-006, SPEC-007, SPEC-008]
 ---
 
 <!-- Conforms to Project Lullaby Constitution v1.0.0 -->
@@ -25,7 +25,7 @@ From the repository root, install the project and development dependencies:
 python -m pip install -e ".[dev]"
 ```
 
-SPEC-004A also requires matplotlib for static figure output. Add it to project dependencies
+SPEC-004 also requires matplotlib for static figure output. Add it to project dependencies
 during implementation before running the commands below.
 
 ## Validate the Default Bundled Data
