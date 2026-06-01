@@ -45,3 +45,18 @@ Notes
 - Record only per-file line counts (e.g. `+3 -1`) instead of pasting actual changed lines into the changelog.
 - For large specs that touch many files, include only the file paths and line counts; avoid pasting whole files into the changelog.
 - Use a single changelog entry per implemented spec. If multiple specs are implemented on the same date, add separate dated entries.
+
+## Changelog Entry: 000-changelog-creation
+
+Date: 2026-06-01
+Spec: specs/000-changelog-creation/spec.md
+Summary: Add merge-gating changelog policy and validator to enforce per-spec provenance.
+Rationale: Ensure every implemented spec produces a single, machine-parseable changelog entry for traceability and CI enforcement.
+Impact:
+  - Broke/Changed requirements: no
+  - Docs/Constitution changes: added changelog policy and validator
+Targets:
+  - specs/000-changelog-creation/spec.md | +12 -0
+  - tools/changelog_validator.py | +650 -0
+  - .github/workflows/changelog-policy.yml | +120 -0
+
