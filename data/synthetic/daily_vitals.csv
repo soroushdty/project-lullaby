@@ -1,0 +1,5 @@
+participant_id,event_ts,cadence,heart_rate,systolic_bp,diastolic_bp,temperature_c
+LUL-2000,2025-06-02T00:00:00+00:00,daily,103.0,118.0,90.0,37.4
+LUL-2000,2025-06-03T00:00:00+00:00,daily,89.0,126.0,92.0,36.5
+LUL-2001,2025-06-01T00:00:00+00:00,daily,,121.0,88.0,
+LUL-2002,2025-06-02T00:00:00+00:00,daily,95.0,,,37.1
