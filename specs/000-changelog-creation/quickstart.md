@@ -39,3 +39,23 @@ Add required workflow `changelog-policy` that runs validator on pull requests an
 - Add exactly one changelog entry for that `spec-id`.
 - Ensure `Targets` lines use `path | +added -removed`.
 - Ensure `Date` reflects merge date policy.
+
+## End-to-end commands
+Use these commands locally to run the validator, run tests, and simulate the CI gate.
+
+Run validator against the repo changelog (smoke test):
+```bash
+python3 tools/changelog_validator.py --changelog CHANGELOG.md --spec-dir specs --spec-id 000-changelog-creation --merge-date "$(date -u +%Y-%m-%d)"
+```
+
+Run the unit, contract, and integration tests (requires a Python venv with pytest):
+```bash
+python3 -m venv .venv
+.venv/bin/pip install -q pytest
+.venv/bin/python -m pytest tests/unit tests/contract tests/integration -q
+```
+
+Simulate CI run (checkout and run validator as workflow would):
+```bash
+python3 tools/changelog_validator.py --changelog CHANGELOG.md --spec-dir specs --spec-id 000-changelog-creation --merge-date "2026-06-01"
+```
