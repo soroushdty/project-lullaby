@@ -89,3 +89,15 @@ message and does not write affected PNG artifacts or manifest entries.
 
 Expected result: the full test suite passes without network access. Any socket-bound tests use
 the same local permissions already required by the existing suite.
+
+## 7. Implementation Evidence
+
+Recorded during SPEC-007 implementation on 2026-06-01:
+
+- Default EDA generation completed in 0:02.78.
+- Synthetic longitudinal EDA generation completed in 0:02.40.
+- Focused EDA acceptance tests completed in 0:13.69.
+- Full local test suite passed with local socket permissions for HTTP adapter fixtures:
+  `218 passed, 4 skipped`.
+- Feature directory remained pinned to `specs/007-core-descriptive-eda-dashboards`; the
+  current branch name remained `006-core-descriptive-eda-dashboards`.

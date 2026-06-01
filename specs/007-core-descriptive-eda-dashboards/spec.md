@@ -120,7 +120,7 @@ An operations reviewer needs alert volume, trigger reasons, survey status, staff
 - **FR-005**: The system MUST generate `outputs/figures/eda/02_outcome_prevalence.png`.
 - **FR-006**: The system MUST generate `outputs/figures/eda/03_distribution_outliers.png`.
 - **FR-007**: The system MUST generate `outputs/figures/eda/04_alert_engagement_funnel.png`.
-- **FR-008**: Every generated dashboard artifact MUST be registered in `outputs/figures/manifest.json`.
+- **FR-008**: Every generated repo-relative dashboard artifact MUST be registered in `outputs/figures/manifest.json`; outside-repository output paths MUST warn and remain unregistered.
 - **FR-009**: Every dashboard artifact MUST be at least 1600 x 900 pixels and include a title, subtitle, labels, units where available, and direct annotations where feasible.
 - **FR-010**: Dashboards MUST present descriptive data only and MUST NOT predict outcomes or impute missing values.
 - **FR-011**: Missing optional roles MUST render visible warning or unavailable panels rather than crashes.

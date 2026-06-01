@@ -2,7 +2,7 @@
   "entries": [
     {
       "artifact_id": "eda_core_01_cohort_overview",
-      "created_at_utc": "2026-06-01T18:12:39.782111+00:00",
+      "created_at_utc": "2026-06-01T19:18:55.450866+00:00",
       "deterministic": true,
       "inputs": [
         "participants",
@@ -18,13 +18,13 @@
       "required_roles": [
         "participant.id"
       ],
-      "spec": "SPEC-006",
+      "spec": "SPEC-007",
       "title": "Cohort Overview",
       "warnings": []
     },
     {
       "artifact_id": "eda_core_02_outcome_prevalence",
-      "created_at_utc": "2026-06-01T18:12:39.782566+00:00",
+      "created_at_utc": "2026-06-01T19:18:55.451334+00:00",
       "deterministic": true,
       "inputs": [
         "clinical_outcomes",
@@ -41,13 +41,13 @@
         "outcome.participant_id",
         "outcome.cv_event"
       ],
-      "spec": "SPEC-006",
+      "spec": "SPEC-007",
       "title": "Outcome Prevalence and Class Imbalance",
       "warnings": []
     },
     {
       "artifact_id": "eda_core_03_distribution_outliers",
-      "created_at_utc": "2026-06-01T18:12:39.783400+00:00",
+      "created_at_utc": "2026-06-01T19:18:55.452206+00:00",
       "deterministic": true,
       "inputs": [
         "daily_vitals",
@@ -68,15 +68,16 @@
       "path": "outputs/figures/eda/03_distribution_outliers.png",
       "required_roles": [
         "vital.participant_id",
-        "vital.date"
+        "vital.date",
+        "vital.systolic_bp"
       ],
-      "spec": "SPEC-006",
+      "spec": "SPEC-007",
       "title": "Distributions and Capture-Worthy Outliers",
       "warnings": []
     },
     {
       "artifact_id": "eda_core_04_alert_engagement_funnel",
-      "created_at_utc": "2026-06-01T18:12:39.783617+00:00",
+      "created_at_utc": "2026-06-01T19:18:55.452433+00:00",
       "deterministic": true,
       "inputs": [
         "alerts",
@@ -102,7 +103,7 @@
         "alert.level",
         "contact.type"
       ],
-      "spec": "SPEC-006",
+      "spec": "SPEC-007",
       "title": "Alerts and Engagement Funnel",
       "warnings": [
         "trigger_reasons overflow categories preserved: WeightGain>2lb/24h=101; dBP>=100=24; RR_abnormal=5; dBP>110=5; Composite_sBP+HR+Weight=3"
@@ -110,7 +111,7 @@
     },
     {
       "artifact_id": "eda_synthetic_eda_core_01_cohort_overview",
-      "created_at_utc": "2026-06-01T18:10:10.086557+00:00",
+      "created_at_utc": "2026-06-01T19:15:24.147308+00:00",
       "deterministic": true,
       "inputs": [
         "participants",
@@ -126,7 +127,7 @@
       "required_roles": [
         "participant.id"
       ],
-      "spec": "SPEC-006",
+      "spec": "SPEC-007",
       "title": "Cohort Overview",
       "warnings": [
         "age unavailable",
@@ -138,7 +139,7 @@
     },
     {
       "artifact_id": "eda_synthetic_eda_core_02_outcome_prevalence",
-      "created_at_utc": "2026-06-01T18:10:10.087081+00:00",
+      "created_at_utc": "2026-06-01T19:15:24.147827+00:00",
       "deterministic": true,
       "inputs": [
         "clinical_outcomes",
@@ -155,13 +156,13 @@
         "outcome.participant_id",
         "outcome.cv_event"
       ],
-      "spec": "SPEC-006",
+      "spec": "SPEC-007",
       "title": "Outcome Prevalence and Class Imbalance",
       "warnings": []
     },
     {
       "artifact_id": "eda_synthetic_eda_core_03_distribution_outliers",
-      "created_at_utc": "2026-06-01T18:10:10.089328+00:00",
+      "created_at_utc": "2026-06-01T19:15:24.148433+00:00",
       "deterministic": true,
       "inputs": [
         "daily_vitals",
@@ -182,15 +183,16 @@
       "path": "outputs/figures/eda_synthetic/03_distribution_outliers.png",
       "required_roles": [
         "vital.participant_id",
-        "vital.date"
+        "vital.date",
+        "vital.systolic_bp"
       ],
-      "spec": "SPEC-006",
+      "spec": "SPEC-007",
       "title": "Distributions and Capture-Worthy Outliers",
       "warnings": []
     },
     {
       "artifact_id": "eda_synthetic_eda_core_04_alert_engagement_funnel",
-      "created_at_utc": "2026-06-01T18:10:10.089974+00:00",
+      "created_at_utc": "2026-06-01T19:15:24.148657+00:00",
       "deterministic": true,
       "inputs": [
         "alerts",
@@ -210,7 +212,7 @@
         "alert.level",
         "contact.type"
       ],
-      "spec": "SPEC-006",
+      "spec": "SPEC-007",
       "title": "Alerts and Engagement Funnel",
       "warnings": []
     }

@@ -34,6 +34,25 @@ Notes
 - Use a single changelog entry per implemented spec. If multiple specs are implemented on the same date, add separate dated entries.
 
 Date: 2026-06-01
+Spec: /specs/007-core-descriptive-eda-dashboards/spec.md
+Summary: Implement SPEC-007 traceability for core descriptive EDA dashboards, manifest entries, required-role coverage, hard-range vital rendering, and acceptance evidence.
+Rationale: SPEC-007 formalizes the first four descriptive dashboard panels as static, reproducible, schema-driven artifacts. This pass aligns the existing EDA renderer with SPEC-007 provenance, expands tests for required role failures and panel dimensions, preserves hard-range vital values as `impossible by schema` evidence, and records default plus synthetic generation evidence.
+Impact:
+  - Broke/Changed requirements: yes; generated core EDA manifest entries now identify SPEC-007, Panel 3 manifest metadata includes `vital.systolic_bp` as a required role, hard-range daily vital values render as `impossible by schema` instead of failing the EDA CLI, and FR-008 now scopes registration to repo-relative artifacts while outside-repo outputs warn.
+  - Docs/Constitution changes: no constitution changes; SPEC-007 tasks marked complete, quickstart records timing evidence, and branch traceability notes retain the pinned `007` feature directory while the current branch remains `006-core-descriptive-eda-dashboards`.
+Targets:
+  - CHANGELOG.md | +19 -0
+  - src/visualization/__init__.py | +22 -0
+  - src/visualization/eda_core.py | +4 -8
+  - tests/test_eda_core_outputs.py | +58 -2
+  - tests/unit/test_artifact_manifest.py | +1 -1
+  - outputs/figures/manifest.json | +20 -18
+  - outputs/figures/eda/02_outcome_prevalence.png | +0 -0
+  - specs/007-core-descriptive-eda-dashboards/spec.md | +1 -1
+  - specs/007-core-descriptive-eda-dashboards/quickstart.md | +12 -0
+  - specs/007-core-descriptive-eda-dashboards/tasks.md | +64 -64
+
+Date: 2026-06-01
 Spec: /specs/006-data-semantics-validation-hardening/spec.md
 Summary: Implement shared domain boolean semantics, EDA missingness/preflight hardening, manifest registration expansion, simulator diagnostic truthiness fixes, and category-completeness preservation.
 Rationale: Repo-wide audit found that CSV/object boolean values, missing outcomes, optional dashboard inputs, contact completion states, and top-N category defaults could silently distort descriptive evidence or provenance. SPEC-006 centralizes parsing, fails required invalid inputs before artifacts are written, preserves missingness as evidence, and keeps generated dashboard artifacts aligned with hardened semantics.

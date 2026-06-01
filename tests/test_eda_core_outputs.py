@@ -7,7 +7,13 @@ import pandas as pd
 import pytest
 from PIL import Image
 
-from src.visualization.eda_core import EDAInputError, PANEL_FILENAMES, generate_core_dashboards
+from src.visualization.eda_core import (
+    EDAInputError,
+    PANEL_FILENAMES,
+    _capture_worthy_rows,
+    _vital_specs,
+    generate_core_dashboards,
+)
 
 
 def test_core_eda_outputs_and_manifest_entries():
@@ -28,9 +34,10 @@ def test_core_eda_outputs_and_manifest_entries():
     for filename in PANEL_FILENAMES.values():
         path = f"outputs/figures/eda/{filename}"
         assert path in entries
-        assert entries[path]["spec"] == "SPEC-006"
+        assert entries[path]["spec"] == "SPEC-007"
         assert entries[path]["title"]
         assert entries[path]["required_roles"]
+    assert "vital.systolic_bp" in entries["outputs/figures/eda/03_distribution_outliers.png"]["required_roles"]
 
 
 def test_generate_eda_cli_core_panels(tmp_path):
@@ -85,6 +92,25 @@ def test_schema_invalid_required_role_names_entity_path_and_role(tmp_path):
     assert "clinical_outcomes.csv" in message
     assert "outcome.cv_event" in message
     assert "maybe" in message
+
+
+def test_missing_required_semantic_role_fails_before_artifacts_or_manifest(tmp_path):
+    data_dir = _write_core_fixture(tmp_path / "missing_required_role")
+    pd.DataFrame({"participant_id": ["P1"], "date": ["2026-06-01"]}).to_csv(
+        data_dir / "daily_vitals.csv",
+        index=False,
+    )
+    out_dir = tmp_path / "eda"
+    manifest = tmp_path / "manifest.json"
+
+    with pytest.raises(EDAInputError) as excinfo:
+        generate_core_dashboards(data_dir, out_dir, manifest_path=manifest)
+
+    message = str(excinfo.value)
+    assert "daily_vitals" in message
+    assert "vital.systolic_bp" in message
+    assert not out_dir.exists()
+    assert not manifest.exists()
 
 
 def test_generate_eda_cli_required_failure_returns_nonzero(tmp_path):
@@ -149,6 +175,36 @@ def test_low_count_demographic_categories_are_not_suppressed(tmp_path):
 
     assert len(results) == 4
     assert (tmp_path / "eda" / PANEL_FILENAMES["cohort_overview"]).exists()
+
+
+def test_outcome_and_alert_artifacts_meet_minimum_dimensions(tmp_path):
+    out_dir = tmp_path / "eda"
+
+    generate_core_dashboards("data/raw", out_dir, manifest_path=tmp_path / "manifest.json")
+
+    for panel in ("outcome_prevalence", "alert_engagement_funnel"):
+        with Image.open(out_dir / PANEL_FILENAMES[panel]) as image:
+            width, height = image.size
+        assert width >= 1600
+        assert height >= 900
+
+
+def test_hard_range_vital_values_render_as_impossible_by_schema_without_blocking_cli(tmp_path):
+    data_dir = _write_core_fixture(tmp_path / "hard_range_vital")
+    pd.DataFrame(
+        {
+            "participant_id": ["P1"],
+            "date": ["2026-06-01"],
+            "study_day": [1],
+            "systolic_bp": [999],
+        }
+    ).to_csv(data_dir / "daily_vitals.csv", index=False)
+
+    results = generate_core_dashboards(data_dir, tmp_path / "eda", manifest_path=tmp_path / "manifest.json")
+    rows = _capture_worthy_rows(pd.read_csv(data_dir / "daily_vitals.csv"), _vital_specs())
+
+    assert len(results) == 4
+    assert any("impossible by schema" in row["context"] for row in rows)
 
 
 def _write_core_fixture(data_dir: Path) -> Path:

@@ -35,7 +35,7 @@ from src.visualization.design import (
 from src.visualization.validation import validate_entity
 
 
-SPEC_ID = "SPEC-006"
+SPEC_ID = "SPEC-007"
 PANEL_FILENAMES = {
     "cohort_overview": "01_cohort_overview.png",
     "outcome_prevalence": "02_outcome_prevalence.png",
@@ -150,14 +150,10 @@ def _load_eda_tables(
         if frame.empty:
             continue
         entity_result = validate_entity(entity, frame, source_file=str(_entity_source_path(resolved, entity)))
-        if entity_result.errors or entity_result.range_violations:
+        if entity_result.errors:
             errors.extend(
                 f"{entity}: {_entity_source_path(resolved, entity)}: {message}"
                 for message in entity_result.errors
-            )
-            errors.extend(
-                f"{entity}: {_entity_source_path(resolved, entity)}: hard range violation {item['role']} value={item['value']}"
-                for item in entity_result.range_violations
             )
         role_result = registry.require_roles(frame, list(roles), entity=entity)
         errors.extend(
@@ -589,7 +585,7 @@ def _class_imbalance_panel(ax, positive: int, negative: int, missing: int) -> No
     for bar, value in zip(bars, values, strict=False):
         ax.text(bar.get_x() + bar.get_width() / 2, value, f"{value:,} ({_percent(value, total)})", ha="center", va="bottom", fontsize=10, fontweight="bold")
     if total and abs(positive / total - 0.075) <= 0.02:
-        ax.text(0.02, 0.92, f"Near target rare-event rate: {positive}/{total} ({positive / total:.1%})", transform=ax.transAxes, ha="left", va="top", fontsize=9, color=DEFAULT_STYLE.warning_color)
+        ax.text(0.02, 0.92, f"Near target rare-event rate: 15/200 (7.5%); observed {positive}/{total} ({positive / total:.1%})", transform=ax.transAxes, ha="left", va="top", fontsize=9, color=DEFAULT_STYLE.warning_color)
 
 
 def _prevalence_panel(ax, measures: list[BooleanMeasure], denominator: int) -> None:
@@ -946,7 +942,7 @@ def _required_roles_for_result(artifact_id: str) -> list[str]:
     if "02" in artifact_id:
         return ["outcome.participant_id", "outcome.cv_event"]
     if "03" in artifact_id:
-        return ["vital.participant_id", "vital.date"]
+        return ["vital.participant_id", "vital.date", "vital.systolic_bp"]
     return ["alert.id", "alert.participant_id", "alert.level", "contact.type"]
 
 

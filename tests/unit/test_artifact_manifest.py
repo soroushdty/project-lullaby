@@ -73,7 +73,7 @@ def test_manifest_allows_safe_repo_relative_alternate_paths(visualization_paths)
             artifact_id="alternate",
             path="tmp_figures/eda/panel.png",
             title="Alternate",
-            spec="SPEC-006",
+            spec="SPEC-007",
             inputs=["participants"],
             required_roles=["participant.id"],
         ),

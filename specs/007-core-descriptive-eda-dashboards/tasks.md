@@ -36,10 +36,10 @@ description: "Executable implementation task list for the core descriptive EDA d
 
 **Purpose**: Confirm the existing visualization foundation is ready for the core EDA panel work.
 
-- [ ] T001 Verify Python 3.11, pandas, numpy, matplotlib, PyYAML, and pytest dependencies for EDA generation in `pyproject.toml`.
-- [ ] T002 Export the public core EDA generation API from `src/visualization/__init__.py`.
-- [ ] T003 [P] Add reusable core EDA table fixture helpers in `tests/test_eda_core_outputs.py`.
-- [ ] T004 [P] Add reusable missingness and optional-role fixture helpers in `tests/test_eda_missingness_policy.py`.
+- [X] T001 Verify Python 3.11, pandas, numpy, matplotlib, PyYAML, and pytest dependencies for EDA generation in `pyproject.toml`.
+- [X] T002 Export the public core EDA generation API from `src/visualization/__init__.py`.
+- [X] T003 [P] Add reusable core EDA table fixture helpers in `tests/test_eda_core_outputs.py`.
+- [X] T004 [P] Add reusable missingness and optional-role fixture helpers in `tests/test_eda_missingness_policy.py`.
 
 ---
 
@@ -51,18 +51,18 @@ description: "Executable implementation task list for the core descriptive EDA d
 
 ### Tests for Foundational Behavior
 
-- [ ] T005 [P] Add CLI success, synthetic run, and required-failure contract tests in `tests/test_eda_core_outputs.py`.
-- [ ] T006 [P] Add manifest registration assertions for SPEC-007 artifact entries in `tests/test_eda_core_outputs.py`.
-- [ ] T007 [P] Add required table and required semantic role preflight failure tests in `tests/test_eda_core_outputs.py`.
-- [ ] T008 [P] Add optional-role warning and unavailable-section regression tests in `tests/test_eda_missingness_policy.py`.
+- [X] T005 [P] Add CLI success, synthetic run, and required-failure contract tests in `tests/test_eda_core_outputs.py`.
+- [X] T006 [P] Add manifest registration assertions for SPEC-007 artifact entries in `tests/test_eda_core_outputs.py`.
+- [X] T007 [P] Add required table and required semantic role preflight failure tests in `tests/test_eda_core_outputs.py`.
+- [X] T008 [P] Add optional-role warning and unavailable-section regression tests in `tests/test_eda_missingness_policy.py`.
 
 ### Implementation for Foundational Behavior
 
-- [ ] T009 Define `SPEC_ID = "SPEC-007"`, `PANEL_FILENAMES`, `EDATables`, `PanelResult`, and `EDAInputError` in `src/visualization/eda_core.py`.
-- [ ] T010 Implement canonical table loading and `data/raw` to `data/` fallback resolution in `src/visualization/eda_core.py`.
-- [ ] T011 Implement required entity and semantic-role preflight validation before output directory creation in `src/visualization/eda_core.py`.
-- [ ] T012 Implement repo-relative `FigureArtifact` upsert registration with SPEC-007 metadata in `src/visualization/eda_core.py`.
-- [ ] T013 Implement `--data-dir`, `--out-dir`, `--panels core`, `--manifest`, stdout success output, and stderr failure output in `src/visualization/generate_eda.py`.
+- [X] T009 Define `SPEC_ID = "SPEC-007"`, `PANEL_FILENAMES`, `EDATables`, `PanelResult`, and `EDAInputError` in `src/visualization/eda_core.py`.
+- [X] T010 Implement canonical table loading and `data/raw` to `data/` fallback resolution in `src/visualization/eda_core.py`.
+- [X] T011 Implement required entity and semantic-role preflight validation before output directory creation in `src/visualization/eda_core.py`.
+- [X] T012 Implement repo-relative `FigureArtifact` upsert registration with SPEC-007 metadata in `src/visualization/eda_core.py`.
+- [X] T013 Implement `--data-dir`, `--out-dir`, `--panels core`, `--manifest`, stdout success output, and stderr failure output in `src/visualization/generate_eda.py`.
 
 **Checkpoint**: Core EDA runs can load canonical inputs, fail before writes on required problems, and register generated repo-relative artifacts.
 
@@ -76,19 +76,19 @@ description: "Executable implementation task list for the core descriptive EDA d
 
 ### Tests for User Story 1
 
-- [ ] T014 [P] [US1] Add cohort overview artifact existence and 1600 x 900 dimension tests in `tests/test_eda_core_outputs.py`.
-- [ ] T015 [P] [US1] Add participant N, age median/range, and available Table 1 field assertion tests in `tests/test_eda_core_outputs.py`.
-- [ ] T016 [P] [US1] Add optional cohort field unavailable-card warning tests in `tests/test_eda_missingness_policy.py`.
-- [ ] T017 [P] [US1] Add low-count race/ethnicity and insurance category preservation tests in `tests/test_eda_core_outputs.py`.
+- [X] T014 [P] [US1] Add cohort overview artifact existence and 1600 x 900 dimension tests in `tests/test_eda_core_outputs.py`.
+- [X] T015 [P] [US1] Add participant N, age median/range, and available Table 1 field assertion tests in `tests/test_eda_core_outputs.py`.
+- [X] T016 [P] [US1] Add optional cohort field unavailable-card warning tests in `tests/test_eda_missingness_policy.py`.
+- [X] T017 [P] [US1] Add low-count race/ethnicity and insurance category preservation tests in `tests/test_eda_core_outputs.py`.
 
 ### Implementation for User Story 1
 
-- [ ] T018 [US1] Implement `render_cohort_overview()` layout and artifact save path in `src/visualization/eda_core.py`.
-- [ ] T019 [US1] Implement participant count, age distribution, PIH severity, insurance, race/ethnicity, AC availability, household size, and parity panels in `src/visualization/eda_core.py`.
-- [ ] T020 [US1] Implement equity-context grouping, risk indicator counts, and low-count category preservation in `src/visualization/eda_core.py`.
-- [ ] T021 [US1] Implement BHLS, MSPSS, EPDS, PASS, and optional clinical outcome context sections in `src/visualization/eda_core.py`.
-- [ ] T022 [US1] Propagate optional cohort unavailable-card warnings into `PanelResult.warnings` and manifest metadata in `src/visualization/eda_core.py`.
-- [ ] T023 [US1] Generate `outputs/figures/eda/01_cohort_overview.png` through `src/visualization/generate_eda.py`.
+- [X] T018 [US1] Implement `render_cohort_overview()` layout and artifact save path in `src/visualization/eda_core.py`.
+- [X] T019 [US1] Implement participant count, age distribution, PIH severity, insurance, race/ethnicity, AC availability, household size, and parity panels in `src/visualization/eda_core.py`.
+- [X] T020 [US1] Implement equity-context grouping, risk indicator counts, and low-count category preservation in `src/visualization/eda_core.py`.
+- [X] T021 [US1] Implement BHLS, MSPSS, EPDS, PASS, and optional clinical outcome context sections in `src/visualization/eda_core.py`.
+- [X] T022 [US1] Propagate optional cohort unavailable-card warnings into `PanelResult.warnings` and manifest metadata in `src/visualization/eda_core.py`.
+- [X] T023 [US1] Generate `outputs/figures/eda/01_cohort_overview.png` through `src/visualization/generate_eda.py`.
 
 **Checkpoint**: User Story 1 is independently functional and the cohort overview panel can be reviewed without the other panels.
 
@@ -102,19 +102,19 @@ description: "Executable implementation task list for the core descriptive EDA d
 
 ### Tests for User Story 2
 
-- [ ] T024 [P] [US2] Add CV event, ED visit, hospitalization, and heat illness count/percent tests in `tests/test_eda_core_outputs.py`.
-- [ ] T025 [P] [US2] Add positive, negative, and missing/unknown CV event class count tests in `tests/test_eda_missingness_policy.py`.
-- [ ] T026 [P] [US2] Add 6.5% to 8.5% target-rate annotation fixture tests in `tests/test_eda_core_outputs.py`.
-- [ ] T027 [P] [US2] Add rare-outcome warning text assertion tests in `tests/test_eda_core_outputs.py`.
+- [X] T024 [P] [US2] Add outcome artifact existence, 1600 x 900 dimension, CV event, ED visit, hospitalization, and heat illness count/percent tests in `tests/test_eda_core_outputs.py`.
+- [X] T025 [P] [US2] Add positive, negative, and missing/unknown CV event class count tests in `tests/test_eda_missingness_policy.py`.
+- [X] T026 [P] [US2] Add 6.5% to 8.5% target-rate annotation fixture tests in `tests/test_eda_core_outputs.py`.
+- [X] T027 [P] [US2] Add rare-outcome warning text assertion tests in `tests/test_eda_core_outputs.py`.
 
 ### Implementation for User Story 2
 
-- [ ] T028 [US2] Implement parser-backed `_outcome_series()` and `_heat_illness_series()` helpers in `src/visualization/eda_core.py`.
-- [ ] T029 [US2] Implement `render_outcome_prevalence()` metric cards and prevalence chart in `src/visualization/eda_core.py`.
-- [ ] T030 [US2] Implement CV class imbalance positive, negative, missing/unknown, and target-rate annotation behavior in `src/visualization/eda_core.py`.
-- [ ] T031 [US2] Implement the exact rare-outcome warning text and no-prediction/no-model-label guardrails in `src/visualization/eda_core.py`.
-- [ ] T032 [US2] Propagate outcome parsing warnings into `PanelResult.warnings` and manifest metadata in `src/visualization/eda_core.py`.
-- [ ] T033 [US2] Generate `outputs/figures/eda/02_outcome_prevalence.png` through `src/visualization/generate_eda.py`.
+- [X] T028 [US2] Implement parser-backed `_outcome_series()` and `_heat_illness_series()` helpers in `src/visualization/eda_core.py`.
+- [X] T029 [US2] Implement `render_outcome_prevalence()` metric cards and prevalence chart in `src/visualization/eda_core.py`.
+- [X] T030 [US2] Implement CV class imbalance positive, negative, missing/unknown, and target-rate annotation behavior in `src/visualization/eda_core.py`.
+- [X] T031 [US2] Implement the exact rare-outcome warning text and no-prediction/no-model-label guardrails in `src/visualization/eda_core.py`.
+- [X] T032 [US2] Propagate outcome parsing warnings into `PanelResult.warnings` and manifest metadata in `src/visualization/eda_core.py`.
+- [X] T033 [US2] Generate `outputs/figures/eda/02_outcome_prevalence.png` through `src/visualization/generate_eda.py`.
 
 **Checkpoint**: User Story 2 is independently functional and rare-event imbalance is visible before modeling work.
 
@@ -128,20 +128,20 @@ description: "Executable implementation task list for the core descriptive EDA d
 
 ### Tests for User Story 3
 
-- [ ] T034 [P] [US3] Add distribution artifact existence, dimension, and required vital card tests in `tests/test_eda_core_outputs.py`.
-- [ ] T035 [P] [US3] Add schema unit and observed/missing denominator tests in `tests/test_eda_missingness_policy.py`.
-- [ ] T036 [P] [US3] Add capture-worthy and impossible-by-schema fixture tests in `tests/test_eda_core_outputs.py`.
-- [ ] T037 [P] [US3] Add no dashboard-local IQR, percentile, min/max-only, or unregistered-threshold flagging tests in `tests/test_eda_missingness_policy.py`.
+- [X] T034 [P] [US3] Add distribution artifact existence, dimension, and required vital card tests in `tests/test_eda_core_outputs.py`.
+- [X] T035 [P] [US3] Add schema unit and observed/missing denominator tests in `tests/test_eda_missingness_policy.py`.
+- [X] T036 [P] [US3] Add capture-worthy and impossible-by-schema fixture tests in `tests/test_eda_core_outputs.py`.
+- [X] T037 [P] [US3] Add no dashboard-local IQR, percentile, min/max-only, or unregistered-threshold flagging tests in `tests/test_eda_missingness_policy.py`.
 
 ### Implementation for User Story 3
 
-- [ ] T038 [US3] Implement the SBP, DBP, HR, RR, skin temperature, weight, body water, sleep, and steps vital spec list in `src/visualization/eda_core.py`.
-- [ ] T039 [US3] Implement schema-role column resolution and distribution card rendering with schema units in `src/visualization/eda_core.py`.
-- [ ] T040 [US3] Implement observed and missing denominator annotations without imputation in `src/visualization/eda_core.py`.
-- [ ] T041 [US3] Implement capture-worthy and impossible value row extraction using only `capture_worthy_range` and `hard_range` from `src/visualization/schema_registry.py`.
-- [ ] T042 [US3] Implement the top capture-worthy values table with participant id, study day, value, unit, and context link label in `src/visualization/eda_core.py`.
-- [ ] T043 [US3] Ensure hard-range daily vital values render as `impossible by schema` instead of blocking the CLI in `src/visualization/eda_core.py`.
-- [ ] T044 [US3] Generate `outputs/figures/eda/03_distribution_outliers.png` through `src/visualization/generate_eda.py`.
+- [X] T038 [US3] Implement the SBP, DBP, HR, RR, skin temperature, weight, body water, sleep, and steps vital spec list in `src/visualization/eda_core.py`.
+- [X] T039 [US3] Implement schema-role column resolution and distribution card rendering with schema units in `src/visualization/eda_core.py`.
+- [X] T040 [US3] Implement observed and missing denominator annotations without imputation in `src/visualization/eda_core.py`.
+- [X] T041 [US3] Implement capture-worthy and impossible value row extraction using only `capture_worthy_range` and `hard_range` from `src/visualization/schema_registry.py`.
+- [X] T042 [US3] Implement the top capture-worthy values table with participant id, study day, value, unit, and context link label in `src/visualization/eda_core.py`.
+- [X] T043 [US3] Ensure hard-range daily vital values render as `impossible by schema` instead of blocking the CLI in `src/visualization/eda_core.py`.
+- [X] T044 [US3] Generate `outputs/figures/eda/03_distribution_outliers.png` through `src/visualization/generate_eda.py`.
 
 **Checkpoint**: User Story 3 is independently functional and physiologic extremes are preserved rather than discarded or statistically over-labeled.
 
@@ -155,21 +155,21 @@ description: "Executable implementation task list for the core descriptive EDA d
 
 ### Tests for User Story 4
 
-- [ ] T045 [P] [US4] Add alert level, trigger reason, and summary tile tests in `tests/test_eda_core_outputs.py`.
-- [ ] T046 [P] [US4] Add survey completed/dismissed/abandoned/missing state tests in `tests/test_eda_missingness_policy.py`.
-- [ ] T047 [P] [US4] Add staff contact missing-state and explicit-completion tests in `tests/test_eda_missingness_policy.py`.
-- [ ] T048 [P] [US4] Add prior-stage funnel conversion percentage tests in `tests/test_eda_missingness_policy.py`.
-- [ ] T049 [P] [US4] Add trigger reason overflow category completeness tests in `tests/test_eda_core_outputs.py`.
+- [X] T045 [P] [US4] Add alert-funnel artifact existence, 1600 x 900 dimension, alert level, trigger reason, and summary tile tests in `tests/test_eda_core_outputs.py`.
+- [X] T046 [P] [US4] Add survey completed/dismissed/abandoned/missing state tests in `tests/test_eda_missingness_policy.py`.
+- [X] T047 [P] [US4] Add staff contact missing-state and explicit-completion tests in `tests/test_eda_missingness_policy.py`.
+- [X] T048 [P] [US4] Add prior-stage funnel conversion percentage tests in `tests/test_eda_missingness_policy.py`.
+- [X] T049 [P] [US4] Add trigger reason overflow category completeness tests in `tests/test_eda_core_outputs.py`.
 
 ### Implementation for User Story 4
 
-- [ ] T050 [US4] Implement `render_alert_engagement_funnel()` summary tiles and artifact save path in `src/visualization/eda_core.py`.
-- [ ] T051 [US4] Implement alert level and trigger reason panels with complete category preservation in `src/visualization/eda_core.py`.
-- [ ] T052 [US4] Implement survey state normalization for completed, dismissed, abandoned, and missing/unknown values in `src/visualization/eda_core.py`.
-- [ ] T053 [US4] Implement staff contact completion parsing using explicit completed states only in `src/visualization/eda_core.py`.
-- [ ] T054 [US4] Implement engagement funnel counts and immediately-prior-stage conversion percentages in `src/visualization/eda_core.py`.
-- [ ] T055 [US4] Propagate trigger reason overflow and missing contact/survey warnings into `PanelResult.metadata` and manifest entries in `src/visualization/eda_core.py`.
-- [ ] T056 [US4] Generate `outputs/figures/eda/04_alert_engagement_funnel.png` through `src/visualization/generate_eda.py`.
+- [X] T050 [US4] Implement `render_alert_engagement_funnel()` summary tiles and artifact save path in `src/visualization/eda_core.py`.
+- [X] T051 [US4] Implement alert level and trigger reason panels with complete category preservation in `src/visualization/eda_core.py`.
+- [X] T052 [US4] Implement survey state normalization for completed, dismissed, abandoned, and missing/unknown values in `src/visualization/eda_core.py`.
+- [X] T053 [US4] Implement staff contact completion parsing using explicit completed states only in `src/visualization/eda_core.py`.
+- [X] T054 [US4] Implement engagement funnel counts and immediately-prior-stage conversion percentages in `src/visualization/eda_core.py`.
+- [X] T055 [US4] Propagate trigger reason overflow and missing contact/survey warnings into `PanelResult.metadata` and manifest entries in `src/visualization/eda_core.py`.
+- [X] T056 [US4] Generate `outputs/figures/eda/04_alert_engagement_funnel.png` through `src/visualization/generate_eda.py`.
 
 **Checkpoint**: User Story 4 is independently functional and missing engagement states are not inferred as completed or attempted.
 
@@ -179,14 +179,14 @@ description: "Executable implementation task list for the core descriptive EDA d
 
 **Purpose**: Verify the full SPEC-007 implementation and refresh tracked acceptance artifacts.
 
-- [ ] T057 Regenerate all default core EDA artifacts under `outputs/figures/eda/` with `.venv/bin/python -m src.visualization.generate_eda --data-dir data/raw --out-dir outputs/figures/eda --panels core`.
-- [ ] T058 Verify all SPEC-007 entries, repo-relative paths, warnings, and required roles in `outputs/figures/manifest.json`.
-- [ ] T059 Run optional synthetic EDA generation under `outputs/figures/eda_synthetic/` with `.venv/bin/python -m src.visualization.generate_eda --data-dir data/synthetic/longitudinal --out-dir outputs/figures/eda_synthetic --panels core`.
-- [ ] T060 Run focused acceptance tests with `.venv/bin/pytest tests/test_eda_core_outputs.py tests/test_eda_missingness_policy.py`.
-- [ ] T061 Run full local validation for `tests/` with `.venv/bin/pytest`.
-- [ ] T062 Audit descriptive-only behavior for prediction, model scoring, and imputation language in `src/visualization/eda_core.py`.
-- [ ] T063 Update completion evidence and any changed command notes in `specs/007-core-descriptive-eda-dashboards/quickstart.md`.
-- [ ] T064 Update the SPEC-007 implementation entry in `CHANGELOG.md`.
+- [X] T057 Regenerate all default core EDA artifacts under `outputs/figures/eda/` with `.venv/bin/python -m src.visualization.generate_eda --data-dir data/raw --out-dir outputs/figures/eda --panels core` and record whether generation meets the under-2-minute target.
+- [X] T058 Verify all SPEC-007 entries, repo-relative paths, warnings, and required roles in `outputs/figures/manifest.json`.
+- [X] T059 Run optional synthetic EDA generation under `outputs/figures/eda_synthetic/` with `.venv/bin/python -m src.visualization.generate_eda --data-dir data/synthetic/longitudinal --out-dir outputs/figures/eda_synthetic --panels core`.
+- [X] T060 Run focused acceptance tests with `.venv/bin/pytest tests/test_eda_core_outputs.py tests/test_eda_missingness_policy.py` and record whether the focused run meets the under-2-minute target.
+- [X] T061 Run full local validation for `tests/` with `.venv/bin/pytest`.
+- [X] T062 Audit descriptive-only behavior for prediction, model scoring, and imputation language in `src/visualization/eda_core.py`.
+- [X] T063 Update completion evidence and any changed command notes in `specs/007-core-descriptive-eda-dashboards/quickstart.md`.
+- [X] T064 Update the SPEC-007 implementation entry in `CHANGELOG.md`, including the pinned `007` feature directory and current branch naming note if the branch remains `006-core-descriptive-eda-dashboards`.
 
 ---
 
