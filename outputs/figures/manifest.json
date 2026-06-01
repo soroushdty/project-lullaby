@@ -2,12 +2,13 @@
   "entries": [
     {
       "artifact_id": "eda_core_01_cohort_overview",
-      "created_at_utc": "2026-06-01T17:01:07.240745+00:00",
+      "created_at_utc": "2026-06-01T18:12:39.782111+00:00",
       "deterministic": true,
       "inputs": [
         "participants",
         "clinical_outcomes"
       ],
+      "metadata": {},
       "optional_roles_used": [
         "participant.age",
         "participant.pih_severity",
@@ -23,12 +24,13 @@
     },
     {
       "artifact_id": "eda_core_02_outcome_prevalence",
-      "created_at_utc": "2026-06-01T17:01:07.254646+00:00",
+      "created_at_utc": "2026-06-01T18:12:39.782566+00:00",
       "deterministic": true,
       "inputs": [
         "clinical_outcomes",
         "participants"
       ],
+      "metadata": {},
       "optional_roles_used": [
         "outcome.ed_visit",
         "outcome.hospitalized",
@@ -45,12 +47,13 @@
     },
     {
       "artifact_id": "eda_core_03_distribution_outliers",
-      "created_at_utc": "2026-06-01T17:01:07.255012+00:00",
+      "created_at_utc": "2026-06-01T18:12:39.783400+00:00",
       "deterministic": true,
       "inputs": [
         "daily_vitals",
         "participants"
       ],
+      "metadata": {},
       "optional_roles_used": [
         "vital.systolic_bp",
         "vital.diastolic_bp",
@@ -73,19 +76,134 @@
     },
     {
       "artifact_id": "eda_core_04_alert_engagement_funnel",
-      "created_at_utc": "2026-06-01T17:01:07.255167+00:00",
+      "created_at_utc": "2026-06-01T18:12:39.783617+00:00",
       "deterministic": true,
       "inputs": [
         "alerts",
         "staff_contacts",
         "participants"
       ],
+      "metadata": {
+        "category_completeness": {
+          "alert.trigger_reasons": [
+            "trigger_reasons overflow categories preserved: WeightGain>2lb/24h=101; dBP>=100=24; RR_abnormal=5; dBP>110=5; Composite_sBP+HR+Weight=3"
+          ]
+        }
+      },
       "optional_roles_used": [
         "alert.trigger_reasons",
         "alert.called_nurse",
         "contact.completed"
       ],
       "path": "outputs/figures/eda/04_alert_engagement_funnel.png",
+      "required_roles": [
+        "alert.id",
+        "alert.participant_id",
+        "alert.level",
+        "contact.type"
+      ],
+      "spec": "SPEC-006",
+      "title": "Alerts and Engagement Funnel",
+      "warnings": [
+        "trigger_reasons overflow categories preserved: WeightGain>2lb/24h=101; dBP>=100=24; RR_abnormal=5; dBP>110=5; Composite_sBP+HR+Weight=3"
+      ]
+    },
+    {
+      "artifact_id": "eda_synthetic_eda_core_01_cohort_overview",
+      "created_at_utc": "2026-06-01T18:10:10.086557+00:00",
+      "deterministic": true,
+      "inputs": [
+        "participants",
+        "clinical_outcomes"
+      ],
+      "metadata": {},
+      "optional_roles_used": [
+        "participant.age",
+        "participant.pih_severity",
+        "participant.has_ac"
+      ],
+      "path": "outputs/figures/eda_synthetic/01_cohort_overview.png",
+      "required_roles": [
+        "participant.id"
+      ],
+      "spec": "SPEC-006",
+      "title": "Cohort Overview",
+      "warnings": [
+        "age unavailable",
+        "race_ethnicity unavailable",
+        "insurance unavailable",
+        "household_size unavailable",
+        "para unavailable"
+      ]
+    },
+    {
+      "artifact_id": "eda_synthetic_eda_core_02_outcome_prevalence",
+      "created_at_utc": "2026-06-01T18:10:10.087081+00:00",
+      "deterministic": true,
+      "inputs": [
+        "clinical_outcomes",
+        "participants"
+      ],
+      "metadata": {},
+      "optional_roles_used": [
+        "outcome.ed_visit",
+        "outcome.hospitalized",
+        "outcome.heat_illness"
+      ],
+      "path": "outputs/figures/eda_synthetic/02_outcome_prevalence.png",
+      "required_roles": [
+        "outcome.participant_id",
+        "outcome.cv_event"
+      ],
+      "spec": "SPEC-006",
+      "title": "Outcome Prevalence and Class Imbalance",
+      "warnings": []
+    },
+    {
+      "artifact_id": "eda_synthetic_eda_core_03_distribution_outliers",
+      "created_at_utc": "2026-06-01T18:10:10.089328+00:00",
+      "deterministic": true,
+      "inputs": [
+        "daily_vitals",
+        "participants"
+      ],
+      "metadata": {},
+      "optional_roles_used": [
+        "vital.systolic_bp",
+        "vital.diastolic_bp",
+        "vital.heart_rate",
+        "vital.respiratory_rate",
+        "vital.skin_temperature_c",
+        "vital.weight_kg",
+        "vital.body_water_pct",
+        "vital.sleep_hours",
+        "vital.steps"
+      ],
+      "path": "outputs/figures/eda_synthetic/03_distribution_outliers.png",
+      "required_roles": [
+        "vital.participant_id",
+        "vital.date"
+      ],
+      "spec": "SPEC-006",
+      "title": "Distributions and Capture-Worthy Outliers",
+      "warnings": []
+    },
+    {
+      "artifact_id": "eda_synthetic_eda_core_04_alert_engagement_funnel",
+      "created_at_utc": "2026-06-01T18:10:10.089974+00:00",
+      "deterministic": true,
+      "inputs": [
+        "alerts",
+        "staff_contacts",
+        "participants"
+      ],
+      "metadata": {},
+      "optional_roles_used": [
+        "alert.trigger_reasons",
+        "alert.called_nurse",
+        "contact.completed"
+      ],
+      "path": "outputs/figures/eda_synthetic/04_alert_engagement_funnel.png",
       "required_roles": [
         "alert.id",
         "alert.participant_id",

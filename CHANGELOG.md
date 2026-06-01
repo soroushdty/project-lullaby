@@ -33,7 +33,32 @@ Notes
 - For large specs that touch many files, include only the file paths and line counts; avoid pasting whole files into the changelog.
 - Use a single changelog entry per implemented spec. If multiple specs are implemented on the same date, add separate dated entries.
 
-## Changelog Entry: SPEC-003
+Date: 2026-06-01
+Spec: /specs/006-data-semantics-validation-hardening/spec.md
+Summary: Implement shared domain boolean semantics, EDA missingness/preflight hardening, manifest registration expansion, simulator diagnostic truthiness fixes, and category-completeness preservation.
+Rationale: Repo-wide audit found that CSV/object boolean values, missing outcomes, optional dashboard inputs, contact completion states, and top-N category defaults could silently distort descriptive evidence or provenance. SPEC-006 centralizes parsing, fails required invalid inputs before artifacts are written, preserves missingness as evidence, and keeps generated dashboard artifacts aligned with hardened semantics.
+Impact:
+  - Broke/Changed requirements: yes; required EDA panel inputs now fail before writing/registering artifacts, invalid required boolean tokens fail diagnostics/preflight, optional invalid boolean tokens warn as Missing/Unknown, and repo-relative alternate outputs are registered in the default manifest.
+  - Docs/Constitution changes: no constitution changes; SPEC-006 tasks marked complete after implementation.
+Targets:
+  - src/validation/semantics.py | +159 -0
+  - src/validation/__init__.py | +19 -0
+  - src/ingestion/stream/adapter.py | +12 -1
+  - src/simulation/export.py | +92 -13
+  - src/visualization/eda_core.py | +390 -114
+  - src/visualization/artifacts.py | +3 -3
+  - tests/unit/test_boolean_semantics.py | +104 -0
+  - tests/unit/test_stream_adapter_unit.py | +24 -0
+  - tests/unit/test_simulation_targets.py | +53 -1
+  - tests/unit/test_simulation_schema_validation.py | +16 -5
+  - tests/test_eda_missingness_policy.py | +77 -1
+  - tests/test_eda_core_outputs.py | +119 -1
+  - tests/unit/test_artifact_manifest.py | +59 -0
+  - outputs/figures/manifest.json | +122 -4
+  - outputs/figures/eda/01_cohort_overview.png | +0 -0
+  - outputs/figures/eda/02_outcome_prevalence.png | +0 -0
+  - outputs/figures/eda/04_alert_engagement_funnel.png | +0 -0
+  - specs/006-data-semantics-validation-hardening/tasks.md | +55 -55
 
 Date: 2026-06-01
 Spec: /specs/003-streaming-ingestion/spec.md
@@ -61,8 +86,6 @@ Targets:
   - specs/003-streaming-ingestion/contracts/stream-adapter-interface.md | +10 -5
   - specs/003-streaming-ingestion/contracts/stream-config-schema.md | +1 -1
 
-## Changelog Entry: SPEC-002
-
 Date: 2026-06-01
 Spec: /specs/002-batch-ingestion-adapters/spec.md
 Summary: Implement nine BatchAdapter[C] adapters (file, S3, Azure Blob, GCS, remote link, MySQL, REDCap, REST, GraphQL) plus two stubs, shared retry/backoff via tenacity, unit conversion helpers, contract+unit+integration tests, Docker Compose for cloud emulators, and three-tier GitHub Actions CI workflow.
@@ -89,9 +112,7 @@ Targets:
   - docker-compose.yml | +46 -0
   - pyproject.toml | +32 -0
   - .github/workflows/test-adapters.yml | +50 -0
-  - specs/002-batch-ingestion-adapters/ | +7 docs (plan, research, data-model, quickstart, 4 contracts, tasks)
-
-## Changelog Entry: 001-canonical-schema-validation
+  - specs/002-batch-ingestion-adapters/ | +7 -0
 
 Date: 2026-06-01
 Spec: /specs/001-canonical-schema-validation/spec.md
@@ -111,7 +132,7 @@ Targets:
   - src/cli/validate_schema.py | +65 -0
   - .github/workflows/validate-schema.yml | +34 -0
   - schemas/data-dictionary.md | +103 -0
-  - data/synthetic/ | +5 files (canonical CSVs)
+  - data/synthetic/ | +5 -0
   - tests/unit/test_lullaby_schema.py | +69 -0
   - tests/unit/test_pandera_models.py | +78 -0
   - tests/contract/test_schema_interface.py | +44 -0
@@ -119,8 +140,6 @@ Targets:
   - tests/integration/test_ingestion_validation_pipeline.py | +88 -0
   - tests/conftest.py | +42 -0
   - specs/001-canonical-schema-validation/tasks.md | +204 -0
-
-## Changelog Entry: 000-changelog-creation
 
 Date: 2026-06-01
 Spec: /specs/000-changelog-creation/spec.md

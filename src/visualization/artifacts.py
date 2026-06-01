@@ -23,6 +23,7 @@ class FigureArtifact:
     required_roles: list[str]
     optional_roles_used: list[str] = field(default_factory=list)
     warnings: list[str] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
     created_at_utc: str = field(default_factory=lambda: datetime.now(UTC).isoformat())
     deterministic: bool = True
 
@@ -181,9 +182,8 @@ def _validate_entry_path(path_value: str) -> None:
     path = Path(path_value)
     if path.is_absolute() or ".." in path.parts:
         raise ManifestValidationError(f"Artifact path must be repository-relative: {path_value}")
-    parts = path.parts
-    if len(parts) < 2 or parts[0] != "outputs" or parts[1] != "figures":
-        raise ManifestValidationError(f"Artifact path must be under outputs/figures/: {path_value}")
+    if not path.parts:
+        raise ManifestValidationError(f"Artifact path must be repository-relative: {path_value}")
 
 
 def _validate_timestamp(value: str) -> None:

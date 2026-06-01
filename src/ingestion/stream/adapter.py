@@ -16,6 +16,7 @@ from src.ingestion.adapters.base import AdapterConfig, BatchAdapter
 from src.ingestion.stream.errors import StreamAdapterError
 from src.schemas.base import SchemaContract, TableContract
 from src.validation import engine as validation_engine
+from src.validation.semantics import DomainBooleanParsePolicy, parse_domain_boolean_series
 
 logger = logging.getLogger(__name__)
 
@@ -131,7 +132,17 @@ class StreamAdapter(Generic[C]):
         if _PENDING_COLUMN not in df.columns:
             return df
 
-        pending_mask = df[_PENDING_COLUMN].fillna(False).astype(bool)
+        parsed_pending = parse_domain_boolean_series(
+            df[_PENDING_COLUMN],
+            DomainBooleanParsePolicy(role="_stream_pending", required=False),
+            source_column=_PENDING_COLUMN,
+        )
+        if parsed_pending.warnings:
+            raise StreamAdapterError(
+                f"Schema-invalid pending flag in table '{table}': "
+                + "; ".join(parsed_pending.warnings)
+            )
+        pending_mask = parsed_pending.true_mask
         if pending_mask.any():
             self._pending_timestamps.extend(
                 pd.Timestamp(ts) for ts in df.loc[pending_mask, contract.timestamp_column]

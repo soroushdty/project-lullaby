@@ -1,14 +1,22 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 import textwrap
+import warnings as py_warnings
 
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
 
+from src.validation.semantics import (
+    DEFAULT_FALSE_TOKENS,
+    DEFAULT_TRUE_TOKENS,
+    DomainBooleanParsePolicy,
+    ParsedBooleanSeries,
+    parse_domain_boolean_series,
+)
 from src.visualization import schema_registry as registry
 from src.visualization.artifacts import (
     FigureArtifact,
@@ -24,6 +32,7 @@ from src.visualization.design import (
     save_figure,
     style_card,
 )
+from src.visualization.validation import validate_entity
 
 
 SPEC_ID = "SPEC-006"
@@ -44,6 +53,7 @@ class EDATables:
     clinical_outcomes: pd.DataFrame
     alerts: pd.DataFrame
     staff_contacts: pd.DataFrame
+    load_warnings: dict[str, list[str]] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -52,6 +62,39 @@ class PanelResult:
     path: Path
     title: str
     warnings: list[str]
+    metadata: dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass(frozen=True)
+class BooleanMeasure:
+    label: str
+    parsed: ParsedBooleanSeries
+    metric: str
+
+    @property
+    def positive(self) -> int:
+        return self.parsed.counts["true"]
+
+    @property
+    def negative(self) -> int:
+        return self.parsed.counts["false"]
+
+    @property
+    def missing_unknown(self) -> int:
+        return self.parsed.counts["missing_unknown"]
+
+
+class EDAInputError(RuntimeError):
+    pass
+
+
+CORE_REQUIRED_ROLES: dict[str, tuple[str, ...]] = {
+    "participants": ("participant.id",),
+    "daily_vitals": ("vital.participant_id", "vital.date", "vital.systolic_bp"),
+    "clinical_outcomes": ("outcome.participant_id", "outcome.cv_event"),
+    "alerts": ("alert.id", "alert.participant_id", "alert.level"),
+    "staff_contacts": ("contact.type",),
+}
 
 
 def generate_core_dashboards(
@@ -60,7 +103,7 @@ def generate_core_dashboards(
     *,
     manifest_path: str | Path = Path("outputs/figures/manifest.json"),
 ) -> list[PanelResult]:
-    tables = load_eda_tables(data_dir)
+    tables = _load_eda_tables(data_dir, required_roles=CORE_REQUIRED_ROLES)
     output_dir = Path(out_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     results = [
@@ -74,16 +117,68 @@ def generate_core_dashboards(
 
 
 def load_eda_tables(data_dir: str | Path) -> EDATables:
+    return _load_eda_tables(data_dir, required_roles={})
+
+
+def _load_eda_tables(
+    data_dir: str | Path,
+    *,
+    required_roles: dict[str, tuple[str, ...]],
+) -> EDATables:
     requested = Path(data_dir)
     resolved = _resolve_data_dir(requested)
+    frames: dict[str, pd.DataFrame] = {}
+    load_warnings: dict[str, list[str]] = {}
+    errors: list[str] = []
+    for entity in ("participants", "daily_vitals", "clinical_outcomes", "alerts", "staff_contacts"):
+        required = entity in required_roles
+        try:
+            frame = registry.load_entity(resolved, entity)
+        except registry.SchemaValidationError as exc:
+            if required:
+                errors.append(_format_input_error(entity, resolved, exc))
+            else:
+                load_warnings[entity] = [str(exc)]
+            frame = pd.DataFrame()
+        frames[entity] = frame
+
+    for entity, roles in required_roles.items():
+        frame = frames.get(entity, pd.DataFrame())
+        if frame.empty and entity not in load_warnings:
+            errors.append(f"{entity}: required table in {resolved} has no rows")
+            continue
+        if frame.empty:
+            continue
+        entity_result = validate_entity(entity, frame, source_file=str(_entity_source_path(resolved, entity)))
+        if entity_result.errors or entity_result.range_violations:
+            errors.extend(
+                f"{entity}: {_entity_source_path(resolved, entity)}: {message}"
+                for message in entity_result.errors
+            )
+            errors.extend(
+                f"{entity}: {_entity_source_path(resolved, entity)}: hard range violation {item['role']} value={item['value']}"
+                for item in entity_result.range_violations
+            )
+        role_result = registry.require_roles(frame, list(roles), entity=entity)
+        errors.extend(
+            f"{entity}: {_entity_source_path(resolved, entity)}: {message}"
+            for message in role_result.errors
+        )
+        errors.extend(_required_boolean_errors(entity, frame, role_result.resolved_roles, resolved))
+
+    if errors:
+        joined = "\n".join(f"- {error}" for error in errors)
+        raise EDAInputError(f"Required EDA input validation failed before artifact generation:\n{joined}")
+
     return EDATables(
         data_dir=requested,
         resolved_data_dir=resolved,
-        participants=_load_entity_or_empty(resolved, "participants"),
-        daily_vitals=_load_entity_or_empty(resolved, "daily_vitals"),
-        clinical_outcomes=_load_entity_or_empty(resolved, "clinical_outcomes"),
-        alerts=_load_entity_or_empty(resolved, "alerts"),
-        staff_contacts=_load_entity_or_empty(resolved, "staff_contacts"),
+        participants=frames["participants"],
+        daily_vitals=frames["daily_vitals"],
+        clinical_outcomes=frames["clinical_outcomes"],
+        alerts=frames["alerts"],
+        staff_contacts=frames["staff_contacts"],
+        load_warnings=load_warnings,
     )
 
 
@@ -136,24 +231,29 @@ def render_outcome_prevalence(tables: EDATables, out_dir: Path) -> PanelResult:
 
     denominator = len(outcomes)
     measures = [
-        ("CV Event", _outcome_series(outcomes, "cv_event"), "event_rate.cv_event"),
-        ("ED Visit", _outcome_series(outcomes, "ed_visit"), "event_rate.ed_visit"),
-        ("Hospitalization", _outcome_series(outcomes, "hospitalized"), "event_rate.hospitalized"),
-        ("Heat Illness", _heat_illness_series(outcomes), "event_rate.heat_illness"),
+        BooleanMeasure("CV Event", _outcome_series(outcomes, "cv_event", required=True), "event_rate.cv_event"),
+        BooleanMeasure("ED Visit", _outcome_series(outcomes, "ed_visit", required=False), "event_rate.ed_visit"),
+        BooleanMeasure("Hospitalization", _outcome_series(outcomes, "hospitalized", required=False), "event_rate.hospitalized"),
+        BooleanMeasure("Heat Illness", _heat_illness_series(outcomes), "event_rate.heat_illness"),
     ]
-    for index, (label, series, _) in enumerate(measures):
-        count = int(series.sum())
+    for measure in measures:
+        warnings.extend(measure.parsed.warnings)
+        if measure.parsed.errors:
+            warnings.extend(measure.parsed.errors)
+    for index, measure in enumerate(measures):
+        count = measure.positive
         _metric_card(
             fig.add_subplot(gs[0, index]),
-            label,
+            measure.label,
             f"{count:,}",
-            f"{_percent(count, denominator)} of {denominator:,}",
+            f"{_percent(count, denominator)} of {denominator:,}; missing {measure.missing_unknown:,}",
         )
 
-    cv_series = measures[0][1]
-    positive = int(cv_series.sum())
-    negative = int(denominator - positive)
-    _class_imbalance_panel(fig.add_subplot(gs[1, 0:2]), positive, negative)
+    cv_measure = measures[0]
+    positive = cv_measure.positive
+    negative = cv_measure.negative
+    missing = cv_measure.missing_unknown
+    _class_imbalance_panel(fig.add_subplot(gs[1, 0:2]), positive, negative, missing)
     _prevalence_panel(fig.add_subplot(gs[1, 2:4]), measures, denominator)
     _rare_outcome_warning(fig.add_subplot(gs[2, 0:2]), positive, denominator)
     _outcome_context_panel(fig.add_subplot(gs[2, 2:4]), measures, denominator)
@@ -197,8 +297,10 @@ def render_alert_engagement_funnel(tables: EDATables, out_dir: Path) -> PanelRes
     total_alerts = len(alerts)
     alerting_participants = alerts["participant_id"].nunique() if "participant_id" in alerts else 0
     median_alerts = alerts.groupby("participant_id").size().median() if alerting_participants else 0
-    call_attempted = _call_attempted_count(alerts, contacts)
-    call_completed = _call_completed_count(alerts, contacts)
+    call_attempted, call_attempted_warnings = _call_attempted_count(alerts, contacts)
+    call_completed, call_completed_warnings = _call_completed_count(alerts, contacts)
+    warnings.extend(call_attempted_warnings)
+    warnings.extend(call_completed_warnings)
     completed_rate = call_completed / call_attempted if call_attempted else 0.0
     tile_data = [
         ("Total Alerts", f"{total_alerts:,}", "Generated alert rows"),
@@ -210,15 +312,19 @@ def render_alert_engagement_funnel(tables: EDATables, out_dir: Path) -> PanelRes
         _metric_card(fig.add_subplot(gs[0, index]), title, value, subtitle_text)
 
     warnings.extend(_count_bar(fig.add_subplot(gs[1, 0]), alerts, "alert_level", "Alert Level"))
-    _trigger_reason_panel(fig.add_subplot(gs[1, 1]), alerts)
-    _survey_state_panel(fig.add_subplot(gs[1, 2]), alerts)
-    _contact_state_panel(fig.add_subplot(gs[1, 3]), contacts)
-    _funnel_panel(fig.add_subplot(gs[2, :]), alerts, contacts)
+    metadata: dict[str, Any] = {}
+    trigger_warnings = _trigger_reason_panel(fig.add_subplot(gs[1, 1]), alerts)
+    warnings.extend(trigger_warnings)
+    if trigger_warnings:
+        metadata["category_completeness"] = {"alert.trigger_reasons": trigger_warnings}
+    warnings.extend(_survey_state_panel(fig.add_subplot(gs[1, 2]), alerts))
+    warnings.extend(_contact_state_panel(fig.add_subplot(gs[1, 3]), contacts))
+    warnings.extend(_funnel_panel(fig.add_subplot(gs[2, :]), alerts, contacts))
 
     path = out_dir / PANEL_FILENAMES["alert_engagement_funnel"]
     save_figure(fig, path)
     plt.close(fig)
-    return PanelResult("eda_core_04_alert_engagement_funnel", path, "Alerts and Engagement Funnel", warnings)
+    return PanelResult("eda_core_04_alert_engagement_funnel", path, "Alerts and Engagement Funnel", warnings, metadata)
 
 
 def _resolve_data_dir(path: Path) -> Path:
@@ -229,11 +335,34 @@ def _resolve_data_dir(path: Path) -> Path:
     return path
 
 
-def _load_entity_or_empty(data_dir: Path, entity: str) -> pd.DataFrame:
-    try:
-        return registry.load_entity(data_dir, entity)
-    except registry.SchemaValidationError:
-        return pd.DataFrame()
+def _format_input_error(entity: str, data_dir: Path, exc: registry.SchemaValidationError) -> str:
+    candidates = ", ".join(exc.candidates) if exc.candidates else "registered source filename"
+    role = f" role={exc.role_id}" if exc.role_id else ""
+    return f"{entity}: {data_dir}: {exc}{role}; expected {candidates}"
+
+
+def _entity_source_path(data_dir: Path, entity: str) -> Path:
+    spec = registry.get_entity(entity)
+    for filename in spec.source_filenames:
+        path = data_dir / filename
+        if path.exists():
+            return path
+    return data_dir
+
+
+def _required_boolean_errors(entity: str, frame: pd.DataFrame, resolved_roles: dict[str, str], data_dir: Path) -> list[str]:
+    errors: list[str] = []
+    for role_id, column in resolved_roles.items():
+        role = registry.get_role(role_id)
+        if role.value_type != "boolean":
+            continue
+        parsed = parse_domain_boolean_series(
+            frame[column],
+            DomainBooleanParsePolicy(role=role_id, required=True),
+            source_column=column,
+        )
+        errors.extend(f"{entity}: {_entity_source_path(data_dir, entity)}: {message}" for message in parsed.errors)
+    return errors
 
 
 def _subtitle(tables: EDATables, frames: list[pd.DataFrame]) -> str:
@@ -337,9 +466,10 @@ def _boolean_bar(ax, frame: pd.DataFrame, column: str, title: str) -> list[str]:
     if frame.empty or column not in frame:
         render_warning_panel(ax, title, f"Unavailable: optional column {column} is not present.")
         return [f"{column} unavailable"]
-    mapped = frame[column].map(lambda value: "Missing" if pd.isna(value) else "Yes" if _as_bool(value) else "No")
+    parsed = _parse_optional_boolean(frame[column], role=column, source_column=column)
+    mapped = _boolean_state_labels(parsed)
     local = pd.DataFrame({column: mapped})
-    return _count_bar(ax, local, column, title)
+    return [*parsed.warnings, *_count_bar(ax, local, column, title)]
 
 
 def _risk_indicator_panel(ax, participants: pd.DataFrame) -> list[str]:
@@ -355,16 +485,29 @@ def _risk_indicator_panel(ax, participants: pd.DataFrame) -> list[str]:
     if not available:
         render_warning_panel(ax, "Comorbidities / Risk Indicators", "Unavailable: optional risk indicator columns are not present.")
         return ["risk indicators unavailable"]
-    counts = [int(participants[col].map(_as_bool).sum()) for _, col in available]
+    parsed_items = [
+        (label, _parse_optional_boolean(participants[col], role=f"participant.{col}", source_column=col))
+        for label, col in available
+    ]
+    counts = [parsed.counts["true"] for _, parsed in parsed_items]
     style_card(ax, "Comorbidities / Risk Indicators")
     bars = ax.barh(range(len(available)), counts, color=DEFAULT_STYLE.palette[2])
     ax.set_yticks(range(len(available)), [label for label, _ in available])
     ax.set_xlabel("Participants")
     ax.set_xlim(0, max(float(max(counts)) * 1.22, 1.0))
     total = len(participants)
-    for bar, count in zip(bars, counts, strict=False):
-        ax.text(bar.get_width(), bar.get_y() + bar.get_height() / 2, f" {count:,} ({count / total:.0%})", va="center", fontsize=8)
-    return []
+    for bar, (_label, parsed) in zip(bars, parsed_items, strict=False):
+        count = parsed.counts["true"]
+        no_count = parsed.counts["false"]
+        missing = parsed.counts["missing_unknown"]
+        ax.text(
+            bar.get_width(),
+            bar.get_y() + bar.get_height() / 2,
+            f" {count:,} yes ({count / total:.0%}); no {no_count:,}; missing {missing:,}",
+            va="center",
+            fontsize=8,
+        )
+    return [warning for _, parsed in parsed_items for warning in parsed.warnings]
 
 
 def _psychosocial_panel(ax, participants: pd.DataFrame) -> list[str]:
@@ -391,40 +534,57 @@ def _optional_outcome_context(ax, outcomes: pd.DataFrame) -> list[str]:
     if outcomes.empty:
         render_warning_panel(ax, "Clinical Outcomes Context", "Unavailable: optional clinical_outcomes table not found.")
         return ["clinical outcomes unavailable for cohort overview"]
-    cv = _outcome_series(outcomes, "cv_event")
-    ed = _outcome_series(outcomes, "ed_visit")
-    hosp = _outcome_series(outcomes, "hospitalized")
-    data = pd.Series({"CV event": int(cv.sum()), "ED visit": int(ed.sum()), "Hospitalized": int(hosp.sum())})
+    measures = [
+        ("CV event", _outcome_series(outcomes, "cv_event", required=False)),
+        ("ED visit", _outcome_series(outcomes, "ed_visit", required=False)),
+        ("Hospitalized", _outcome_series(outcomes, "hospitalized", required=False)),
+    ]
+    data = pd.Series({label: parsed.counts["true"] for label, parsed in measures})
     style_card(ax, "Clinical Outcomes Context")
     bars = ax.barh(range(len(data)), data.values, color=DEFAULT_STYLE.palette[1])
     ax.set_yticks(range(len(data)), data.index)
     ax.set_xlim(0, max(float(data.max()) * 1.22, 1.0))
     total = len(outcomes)
-    for bar, count in zip(bars, data.values, strict=False):
-        ax.text(bar.get_width(), bar.get_y() + bar.get_height() / 2, f" {count:,} ({count / total:.0%})", va="center", fontsize=8)
-    return []
+    for bar, (label, parsed) in zip(bars, measures, strict=False):
+        count = parsed.counts["true"]
+        missing = parsed.counts["missing_unknown"]
+        ax.text(bar.get_width(), bar.get_y() + bar.get_height() / 2, f" {count:,} ({count / total:.0%}); missing {missing:,}", va="center", fontsize=8)
+    return [warning for _, parsed in measures for warning in parsed.warnings]
 
 
-def _outcome_series(outcomes: pd.DataFrame, column: str) -> pd.Series:
+def _outcome_series(outcomes: pd.DataFrame, column: str, *, required: bool) -> ParsedBooleanSeries:
     if column not in outcomes:
-        return pd.Series([False] * len(outcomes), index=outcomes.index)
-    return outcomes[column].map(_as_bool).fillna(False).astype(bool)
+        return _all_missing_boolean(len(outcomes), outcomes.index, warning=f"{column} unavailable")
+    return parse_domain_boolean_series(
+        outcomes[column],
+        DomainBooleanParsePolicy(role=f"outcome.{column}", required=required),
+        source_column=column,
+    )
 
 
-def _heat_illness_series(outcomes: pd.DataFrame) -> pd.Series:
+def _heat_illness_series(outcomes: pd.DataFrame) -> ParsedBooleanSeries:
     if "heat_illness" in outcomes:
-        return outcomes["heat_illness"].map(_as_bool).fillna(False).astype(bool)
+        return parse_domain_boolean_series(
+            outcomes["heat_illness"],
+            DomainBooleanParsePolicy(role="outcome.heat_illness", required=False),
+            source_column="heat_illness",
+        )
     if "heat_illness_episodes" in outcomes:
-        return pd.to_numeric(outcomes["heat_illness_episodes"], errors="coerce").fillna(0).gt(0)
-    return pd.Series([False] * len(outcomes), index=outcomes.index)
+        numeric = pd.to_numeric(outcomes["heat_illness_episodes"], errors="coerce")
+        true_mask = numeric.gt(0).fillna(False)
+        false_mask = numeric.eq(0).fillna(False)
+        missing_mask = numeric.isna()
+        invalid_mask = pd.Series(False, index=outcomes.index)
+        return ParsedBooleanSeries(true_mask, false_mask, missing_mask, invalid_mask)
+    return _all_missing_boolean(len(outcomes), outcomes.index, warning="heat_illness unavailable")
 
 
-def _class_imbalance_panel(ax, positive: int, negative: int) -> None:
+def _class_imbalance_panel(ax, positive: int, negative: int, missing: int) -> None:
     style_card(ax, "CV Event Class Imbalance")
-    total = positive + negative
-    labels = ["CV positive", "CV negative"]
-    values = [positive, negative]
-    bars = ax.bar(labels, values, color=[DEFAULT_STYLE.warning_color, DEFAULT_STYLE.palette[0]])
+    total = positive + negative + missing
+    labels = ["CV positive", "CV negative", "Missing/unknown"]
+    values = [positive, negative, missing]
+    bars = ax.bar(labels, values, color=[DEFAULT_STYLE.warning_color, DEFAULT_STYLE.palette[0], DEFAULT_STYLE.muted_text_color])
     ax.set_ylabel("Participants")
     for bar, value in zip(bars, values, strict=False):
         ax.text(bar.get_x() + bar.get_width() / 2, value, f"{value:,} ({_percent(value, total)})", ha="center", va="bottom", fontsize=10, fontweight="bold")
@@ -432,16 +592,23 @@ def _class_imbalance_panel(ax, positive: int, negative: int) -> None:
         ax.text(0.02, 0.92, f"Near target rare-event rate: {positive}/{total} ({positive / total:.1%})", transform=ax.transAxes, ha="left", va="top", fontsize=9, color=DEFAULT_STYLE.warning_color)
 
 
-def _prevalence_panel(ax, measures: list[tuple[str, pd.Series, str]], denominator: int) -> None:
+def _prevalence_panel(ax, measures: list[BooleanMeasure], denominator: int) -> None:
     style_card(ax, "Outcome Prevalence")
-    labels = [label for label, _, _ in measures]
-    values = [int(series.sum()) for _, series, _ in measures]
+    labels = [measure.label for measure in measures]
+    values = [measure.positive for measure in measures]
     bars = ax.barh(range(len(labels)), values, color=DEFAULT_STYLE.palette[: len(labels)])
     ax.set_yticks(range(len(labels)), labels)
     ax.set_xlabel("Participants")
     ax.set_xlim(0, max(float(max(values)) * 1.22, 1.0))
-    for bar, value in zip(bars, values, strict=False):
-        ax.text(bar.get_width(), bar.get_y() + bar.get_height() / 2, f" {value:,} ({_percent(value, denominator)})", va="center", fontsize=9)
+    for bar, measure in zip(bars, measures, strict=False):
+        value = measure.positive
+        ax.text(
+            bar.get_width(),
+            bar.get_y() + bar.get_height() / 2,
+            f" {value:,} ({_percent(value, denominator)}); missing {measure.missing_unknown:,}",
+            va="center",
+            fontsize=9,
+        )
 
 
 def _rare_outcome_warning(ax, positive: int, denominator: int) -> None:
@@ -454,16 +621,22 @@ def _rare_outcome_warning(ax, positive: int, denominator: int) -> None:
         ax.text(0.03, 0.20, f"CV event positives: {positive:,}/{denominator:,} ({positive / denominator:.1%})", transform=ax.transAxes, fontsize=10, fontweight="bold")
 
 
-def _outcome_context_panel(ax, measures: list[tuple[str, pd.Series, str]], denominator: int) -> None:
+def _outcome_context_panel(ax, measures: list[BooleanMeasure], denominator: int) -> None:
     style_card(ax, "Count and Percent Tiles")
     ax.set_xticks([])
     ax.set_yticks([])
-    for idx, (label, series, _) in enumerate(measures):
+    for idx, measure in enumerate(measures):
         x = 0.05 + (idx % 2) * 0.48
         y = 0.72 - (idx // 2) * 0.42
-        count = int(series.sum())
+        count = measure.positive
         ax.text(x, y, f"{count:,}", transform=ax.transAxes, fontsize=20, fontweight="bold")
-        ax.text(x, y - 0.12, f"{label}: {_percent(count, denominator)}", transform=ax.transAxes, fontsize=9)
+        ax.text(
+            x,
+            y - 0.12,
+            f"{measure.label}: {_percent(count, denominator)}; no {measure.negative:,}; missing {measure.missing_unknown:,}",
+            transform=ax.transAxes,
+            fontsize=9,
+        )
 
 
 def _vital_specs() -> list[dict[str, str]]:
@@ -577,15 +750,24 @@ def _capture_worthy_rows(daily: pd.DataFrame, specs: list[dict[str, str]]) -> li
     return sorted(rows, key=lambda row: row["distance"], reverse=True)
 
 
-def _trigger_reason_panel(ax, alerts: pd.DataFrame) -> None:
+def _trigger_reason_panel(ax, alerts: pd.DataFrame) -> list[str]:
     if alerts.empty or "trigger_reasons" not in alerts:
         render_warning_panel(ax, "Trigger Reasons", "Unavailable: trigger reason column not present.")
-        return
+        return ["trigger_reasons unavailable"]
     reasons: list[str] = []
     for value in alerts["trigger_reasons"].fillna("Missing"):
         parts = [part.strip() for part in str(value).replace(",", ";").split(";") if part.strip()]
         reasons.extend(parts or ["Missing"])
-    counts = pd.Series(reasons).value_counts().head(8).sort_values(ascending=True)
+    all_counts = pd.Series(reasons).value_counts()
+    overflow_warning: list[str] = []
+    if len(all_counts) > 10:
+        displayed = all_counts.head(8)
+        overflow = all_counts.iloc[8:]
+        counts = pd.concat([displayed, pd.Series({"Other categories": int(overflow.sum())})]).sort_values(ascending=True)
+        overflow_text = "; ".join(f"{label}={int(count)}" for label, count in overflow.items())
+        overflow_warning = [f"trigger_reasons overflow categories preserved: {overflow_text}"]
+    else:
+        counts = all_counts.sort_values(ascending=True)
     style_card(ax, "Trigger Reasons")
     bars = ax.barh(range(len(counts)), counts.values, color=DEFAULT_STYLE.palette[2])
     ax.set_yticks(range(len(counts)), [_wrap_label(label, width=18) for label in counts.index])
@@ -593,32 +775,46 @@ def _trigger_reason_panel(ax, alerts: pd.DataFrame) -> None:
     ax.set_xlim(0, max(float(counts.max()) * 1.22, 1.0))
     for bar, count in zip(bars, counts.values, strict=False):
         ax.text(bar.get_width(), bar.get_y() + bar.get_height() / 2, f" {count:,}", va="center", fontsize=8)
+    if overflow_warning:
+        ax.text(
+            0.02,
+            0.02,
+            "Overflow preserved in manifest warnings.",
+            transform=ax.transAxes,
+            fontsize=7,
+            color=DEFAULT_STYLE.muted_text_color,
+        )
+    return overflow_warning
 
 
-def _survey_state_panel(ax, alerts: pd.DataFrame) -> None:
-    states = _survey_states(alerts)
+def _survey_state_panel(ax, alerts: pd.DataFrame) -> list[str]:
+    states, warnings = _survey_states(alerts)
     local = pd.DataFrame({"state": states})
     _count_bar(ax, local, "state", "Survey State")
+    return warnings
 
 
-def _contact_state_panel(ax, contacts: pd.DataFrame) -> None:
+def _contact_state_panel(ax, contacts: pd.DataFrame) -> list[str]:
     if contacts.empty:
         render_warning_panel(ax, "Staff Contact State", "Unavailable: staff_contacts table not present.")
-        return
-    completion = _completion_series(contacts)
+        return ["staff_contacts unavailable"]
+    completion, warnings = _completion_series(contacts)
     states = completion.map(lambda value: "Missing/unknown" if pd.isna(value) else "Completed" if value else "Not completed")
     _count_bar(ax, pd.DataFrame({"state": states}), "state", "Staff Contact State")
+    return warnings
 
 
-def _funnel_panel(ax, alerts: pd.DataFrame, contacts: pd.DataFrame) -> None:
+def _funnel_panel(ax, alerts: pd.DataFrame, contacts: pd.DataFrame) -> list[str]:
     generated = len(alerts)
-    survey_completed = int((_survey_states(alerts) == "completed").sum()) if generated else 0
-    call_attempted = _call_attempted_count(alerts, contacts)
-    call_completed = _call_completed_count(alerts, contacts)
+    survey_states, survey_warnings = _survey_states(alerts)
+    survey_completed = int((survey_states == "completed").sum()) if generated else 0
+    survey_terminal = int(survey_states.isin(["completed", "dismissed", "abandoned"]).sum()) if generated else 0
+    call_attempted, call_warnings = _call_attempted_count(alerts, contacts)
+    call_completed, completion_warnings = _call_completed_count(alerts, contacts)
     stages = [
         ("Alert generated", generated, generated),
-        ("Survey completed", survey_completed, generated),
-        ("Staff call attempted", call_attempted, survey_completed or generated),
+        ("Survey completed/dismissed/abandoned", survey_terminal, generated),
+        ("Staff call attempted", call_attempted, survey_terminal or generated),
         ("Staff contact completed", call_completed, call_attempted),
     ]
     style_card(ax, "Engagement Funnel")
@@ -631,52 +827,68 @@ def _funnel_panel(ax, alerts: pd.DataFrame, contacts: pd.DataFrame) -> None:
     for bar, (_stage, count, denominator) in zip(bars, stages, strict=False):
         pct = count / denominator if denominator else 0
         ax.text(bar.get_width(), bar.get_y() + bar.get_height() / 2, f" {count:,} ({pct:.0%})", va="center", fontsize=9, fontweight="bold")
-    missing_survey = int((_survey_states(alerts) == "missing/unknown").sum()) if generated else 0
-    missing_contact = int(_completion_series(contacts).isna().sum()) if not contacts.empty else 0
-    ax.text(0.02, 0.05, f"Missing survey state: {missing_survey:,}; missing contact state: {missing_contact:,}. Completion is never inferred from missing state.", transform=ax.transAxes, fontsize=8, color=DEFAULT_STYLE.muted_text_color)
+    missing_survey = int((survey_states == "missing/unknown").sum()) if generated else 0
+    completion, contact_warnings = _completion_series(contacts)
+    missing_contact = int(completion.isna().sum()) if not contacts.empty else 0
+    ax.text(0.02, 0.05, f"Missing survey state: {missing_survey:,}; completed surveys: {survey_completed:,}; missing contact state: {missing_contact:,}. Completion is never inferred from missing state.", transform=ax.transAxes, fontsize=8, color=DEFAULT_STYLE.muted_text_color)
+    return survey_warnings + call_warnings + completion_warnings + contact_warnings
 
 
-def _survey_states(alerts: pd.DataFrame) -> pd.Series:
+def _survey_states(alerts: pd.DataFrame) -> tuple[pd.Series, list[str]]:
     if alerts.empty:
-        return pd.Series(dtype=str)
+        return pd.Series(dtype=str), []
     if "survey_completion" in alerts:
-        return alerts["survey_completion"].fillna("missing/unknown").astype(str).str.lower().replace({"": "missing/unknown"})
+        states = alerts["survey_completion"].map(_normalize_survey_state)
+        return states, []
     if "survey_completed" in alerts:
-        return alerts["survey_completed"].map(lambda value: "missing/unknown" if pd.isna(value) else "completed" if _as_bool(value) else "abandoned")
-    return pd.Series(["missing/unknown"] * len(alerts), index=alerts.index)
+        parsed = _parse_optional_boolean(alerts["survey_completed"], role="alert.survey_completed", source_column="survey_completed")
+        states = pd.Series("missing/unknown", index=alerts.index, dtype=object)
+        states.loc[parsed.true_mask] = "completed"
+        states.loc[parsed.false_mask] = "abandoned"
+        return states, parsed.warnings
+    return pd.Series(["missing/unknown"] * len(alerts), index=alerts.index), ["survey state unavailable"]
 
 
-def _call_attempted_count(alerts: pd.DataFrame, contacts: pd.DataFrame) -> int:
+def _call_attempted_count(alerts: pd.DataFrame, contacts: pd.DataFrame) -> tuple[int, list[str]]:
     if not alerts.empty and "called_nurse" in alerts:
-        return int(alerts["called_nurse"].map(_as_bool).sum())
+        parsed = _parse_optional_boolean(alerts["called_nurse"], role="alert.called_nurse", source_column="called_nurse")
+        return int(parsed.true_mask.sum()), parsed.warnings
     if not contacts.empty and "contact_type" in contacts:
-        return int(contacts["contact_type"].astype(str).str.contains("call|nurse", case=False, regex=True).sum())
-    return 0
+        return int(contacts["contact_type"].astype(str).str.contains("call|nurse", case=False, regex=True).sum()), []
+    return 0, ["call attempted state unavailable"]
 
 
-def _call_completed_count(alerts: pd.DataFrame, contacts: pd.DataFrame) -> int:
+def _call_completed_count(alerts: pd.DataFrame, contacts: pd.DataFrame) -> tuple[int, list[str]]:
     if not alerts.empty and {"called_nurse", "nurse_outcome"}.issubset(alerts.columns):
-        called = alerts["called_nurse"].map(_as_bool)
-        return int(alerts.loc[called, "nurse_outcome"].notna().sum())
+        called = _parse_optional_boolean(alerts["called_nurse"], role="alert.called_nurse", source_column="called_nurse")
+        outcomes = alerts.loc[called.true_mask, "nurse_outcome"].map(_explicit_completion_state)
+        return int(outcomes.eq(True).sum()), called.warnings
     if contacts.empty:
-        return 0
-    completion = _completion_series(contacts)
+        return 0, ["staff_contacts unavailable"]
+    completion, warnings = _completion_series(contacts)
     if "contact_type" in contacts:
         nurse_mask = contacts["contact_type"].astype(str).str.contains("call|nurse", case=False, regex=True)
-        return int(completion[nurse_mask].fillna(False).sum())
-    return int(completion.fillna(False).sum())
+        return int(completion[nurse_mask].eq(True).sum()), warnings
+    return int(completion.eq(True).sum()), warnings
 
 
-def _completion_series(contacts: pd.DataFrame) -> pd.Series:
+def _completion_series(contacts: pd.DataFrame) -> tuple[pd.Series, list[str]]:
     if "completed" in contacts:
-        return contacts["completed"].map(lambda value: np.nan if pd.isna(value) else _as_bool(value))
+        parsed = _completion_boolean(contacts["completed"], source_column="completed")
+        return parsed.as_nullable_boolean(), parsed.warnings
     if "participant_reached" in contacts:
-        return contacts["participant_reached"].map(lambda value: np.nan if pd.isna(value) else _as_bool(value))
-    return pd.Series([np.nan] * len(contacts), index=contacts.index)
+        parsed = _completion_boolean(contacts["participant_reached"], source_column="participant_reached")
+        return parsed.as_nullable_boolean(), parsed.warnings
+    return pd.Series([np.nan] * len(contacts), index=contacts.index), ["contact completion state unavailable"]
 
 
 def _register_results(results: list[PanelResult], manifest_path: str | Path, tables: EDATables, out_dir: Path) -> None:
-    if not _is_under_outputs_figures(out_dir):
+    if not _is_repo_relative(out_dir):
+        py_warnings.warn(
+            f"Generated artifacts under {out_dir} are outside the repository and were not registered in {manifest_path}",
+            RuntimeWarning,
+            stacklevel=2,
+        )
         return
     for result in results:
         artifact = FigureArtifact(
@@ -688,6 +900,7 @@ def _register_results(results: list[PanelResult], manifest_path: str | Path, tab
             required_roles=_required_roles_for_result(result.artifact_id),
             optional_roles_used=_optional_roles_for_result(result.artifact_id),
             warnings=result.warnings,
+            metadata=result.metadata,
             deterministic=True,
         )
         _upsert_artifact(manifest_path, artifact)
@@ -761,15 +974,79 @@ def _first_present(df: pd.DataFrame, *columns: str) -> str | None:
     return None
 
 
-def _as_bool(value: Any) -> bool:
+def _parse_optional_boolean(series: pd.Series, *, role: str, source_column: str) -> ParsedBooleanSeries:
+    return parse_domain_boolean_series(
+        series,
+        DomainBooleanParsePolicy(role=role, required=False),
+        source_column=source_column,
+    )
+
+
+def _completion_boolean(series: pd.Series, *, source_column: str) -> ParsedBooleanSeries:
+    true_tokens = DEFAULT_TRUE_TOKENS | frozenset({"completed", "complete", "reached", "participant_reached", "resolved"})
+    false_tokens = DEFAULT_FALSE_TOKENS | frozenset(
+        {
+            "abandoned",
+            "declined",
+            "dismissed",
+            "failed",
+            "left voicemail",
+            "left_voicemail",
+            "no answer",
+            "no_answer",
+            "not completed",
+            "not_completed",
+            "pending",
+            "unreached",
+        }
+    )
+    return parse_domain_boolean_series(
+        series,
+        DomainBooleanParsePolicy(
+            role="contact.completed",
+            required=False,
+            true_tokens=true_tokens,
+            false_tokens=false_tokens,
+        ),
+        source_column=source_column,
+    )
+
+
+def _explicit_completion_state(value: Any) -> bool | None:
+    parsed = _completion_boolean(pd.Series([value]), source_column="nurse_outcome").as_nullable_boolean().iloc[0]
+    if pd.isna(parsed):
+        return None
+    return bool(parsed)
+
+
+def _normalize_survey_state(value: Any) -> str:
     if pd.isna(value):
-        return False
-    if isinstance(value, (bool, np.bool_)):
-        return bool(value)
-    if isinstance(value, (int, float, np.integer, np.floating)):
-        return float(value) != 0.0
-    text = str(value).strip().lower()
-    return text in {"1", "true", "t", "yes", "y", "completed", "reached"}
+        return "missing/unknown"
+    text = str(value).strip().lower().replace("_", " ")
+    if not text:
+        return "missing/unknown"
+    if text in {"complete", "completed", "yes", "true", "1"}:
+        return "completed"
+    if text in {"dismissed", "dismiss"}:
+        return "dismissed"
+    if text in {"abandoned", "abandon", "no", "false", "0"}:
+        return "abandoned"
+    if text in {"missing", "unknown", "not available", "not_available", "na", "n/a"}:
+        return "missing/unknown"
+    return text
+
+
+def _boolean_state_labels(parsed: ParsedBooleanSeries) -> pd.Series:
+    labels = pd.Series("Missing/Unknown", index=parsed.true_mask.index, dtype=object)
+    labels.loc[parsed.true_mask] = "Yes"
+    labels.loc[parsed.false_mask] = "No"
+    return labels
+
+
+def _all_missing_boolean(length: int, index: pd.Index, *, warning: str = "") -> ParsedBooleanSeries:
+    false = pd.Series(False, index=index)
+    missing = pd.Series(True, index=index)
+    return ParsedBooleanSeries(false, false.copy(), missing, false.copy(), warnings=[warning] if warning else [])
 
 
 def _percent(numerator: int | float, denominator: int | float) -> str:
@@ -801,9 +1078,8 @@ def _distance_outside(value: float, bounds: tuple[float | None, float | None] | 
     return max(distances) if distances else 0.0
 
 
-def _is_under_outputs_figures(path: Path) -> bool:
-    rel = Path(_repo_relative(path))
-    return len(rel.parts) >= 2 and rel.parts[0] == "outputs" and rel.parts[1] == "figures"
+def _is_repo_relative(path: Path) -> bool:
+    return not Path(_repo_relative(path)).is_absolute()
 
 
 def _repo_relative(path: Path) -> str:

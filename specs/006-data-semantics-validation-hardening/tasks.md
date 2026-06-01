@@ -36,10 +36,10 @@ description: "Implementation task list for data semantics, missingness, validati
 
 **Purpose**: Add the shared semantic parsing surface and focused test entry points.
 
-- [ ] T001 Create `src/validation/semantics.py` with exported names for domain boolean parsing, parsed counts, warnings, and errors.
-- [ ] T002 Update `src/validation/__init__.py` to expose the shared semantics helpers to ingestion, simulation, visualization, and tests.
-- [ ] T003 [P] Create `tests/unit/test_boolean_semantics.py` with token-matrix fixture helpers for true, false, missing, and invalid values.
-- [ ] T004 [P] Add reusable EDA fixture helpers for missingness and required-input cases in `tests/test_eda_missingness_policy.py`.
+- [X] T001 Create `src/validation/semantics.py` with exported names for domain boolean parsing, parsed counts, warnings, and errors.
+- [X] T002 Update `src/validation/__init__.py` to expose the shared semantics helpers to ingestion, simulation, visualization, and tests.
+- [X] T003 [P] Create `tests/unit/test_boolean_semantics.py` with token-matrix fixture helpers for true, false, missing, and invalid values.
+- [X] T004 [P] Add reusable EDA fixture helpers for missingness and required-input cases in `tests/test_eda_missingness_policy.py`.
 
 ---
 
@@ -49,12 +49,12 @@ description: "Implementation task list for data semantics, missingness, validati
 
 **Blocking rule**: No user story implementation should start until T005-T010 are complete.
 
-- [ ] T005 Implement `DomainBooleanParsePolicy`, `ParsedBooleanSeries`, and `parse_domain_boolean_series()` in `src/validation/semantics.py`.
-- [ ] T006 Implement deterministic scalar normalization for native booleans, numeric flags, common string flags, blanks, nulls, and invalid tokens in `src/validation/semantics.py`.
-- [ ] T007 [P] Add accepted-token tests for native, numeric, string, blank, and null values in `tests/unit/test_boolean_semantics.py`.
-- [ ] T008 [P] Add required-role invalid token failure tests in `tests/unit/test_boolean_semantics.py`.
-- [ ] T009 [P] Add optional-role invalid token warning-as-missing tests in `tests/unit/test_boolean_semantics.py`.
-- [ ] T010 Add a regression guard in `tests/unit/test_boolean_semantics.py` that fails on generic `.astype(bool)` use for domain boolean fields in `src/ingestion/`, `src/simulation/`, and `src/visualization/`.
+- [X] T005 Implement `DomainBooleanParsePolicy`, `ParsedBooleanSeries`, and `parse_domain_boolean_series()` in `src/validation/semantics.py`.
+- [X] T006 Implement deterministic scalar normalization for native booleans, numeric flags, common string flags, blanks, nulls, and invalid tokens in `src/validation/semantics.py`.
+- [X] T007 [P] Add accepted-token tests for native, numeric, string, blank, and null values in `tests/unit/test_boolean_semantics.py`.
+- [X] T008 [P] Add required-role invalid token failure tests in `tests/unit/test_boolean_semantics.py`.
+- [X] T009 [P] Add optional-role invalid token warning-as-missing tests in `tests/unit/test_boolean_semantics.py`.
+- [X] T010 Add a regression guard in `tests/unit/test_boolean_semantics.py` that fails on generic `.astype(bool)` use for domain boolean fields in `src/ingestion/`, `src/simulation/`, and `src/visualization/`.
 
 **Checkpoint**: Shared boolean parsing is testable and ready for callers.
 
@@ -68,18 +68,18 @@ description: "Implementation task list for data semantics, missingness, validati
 
 ### Tests for User Story 1
 
-- [ ] T011 [P] [US1] Add outcome prevalence fixture tests in `tests/test_eda_missingness_policy.py` for positive, negative, missing/unknown, denominator, and class-imbalance counts.
-- [ ] T012 [P] [US1] Add risk-indicator fixture tests in `tests/test_eda_missingness_policy.py` for yes, no, and missing/unknown counts.
-- [ ] T013 [P] [US1] Add alert funnel fixture tests in `tests/test_eda_missingness_policy.py` for missing survey, call, and contact states.
-- [ ] T014 [P] [US1] Add optional invalid boolean warning tests in `tests/test_eda_missingness_policy.py` that verify invalid optional values render as `Missing/Unknown`.
+- [X] T011 [P] [US1] Add outcome prevalence fixture tests in `tests/test_eda_missingness_policy.py` for positive, negative, missing/unknown, denominator, and class-imbalance counts.
+- [X] T012 [P] [US1] Add risk-indicator fixture tests in `tests/test_eda_missingness_policy.py` for yes, no, and missing/unknown counts.
+- [X] T013 [P] [US1] Add alert funnel fixture tests in `tests/test_eda_missingness_policy.py` for missing survey, call, and contact states.
+- [X] T014 [P] [US1] Add optional invalid boolean warning tests in `tests/test_eda_missingness_policy.py` that verify invalid optional values render as `Missing/Unknown`.
 
 ### Implementation for User Story 1
 
-- [ ] T015 [US1] Replace `_outcome_series()` and `_heat_illness_series()` in `src/visualization/eda_core.py` with parser-backed tri-state outcome helpers.
-- [ ] T016 [US1] Update `render_outcome_prevalence()`, `_class_imbalance_panel()`, `_prevalence_panel()`, and `_outcome_context_panel()` in `src/visualization/eda_core.py` to display positive, negative, missing/unknown, denominator, and warning annotations.
-- [ ] T017 [US1] Update `_risk_indicator_panel()`, `_boolean_bar()`, and `_optional_outcome_context()` in `src/visualization/eda_core.py` to count yes, no, and missing/unknown separately.
-- [ ] T018 [US1] Update `_survey_states()`, `_completion_series()`, `_call_attempted_count()`, `_call_completed_count()`, `_contact_state_panel()`, and `_funnel_panel()` in `src/visualization/eda_core.py` to keep missing states explicit and use only explicit completed states.
-- [ ] T019 [US1] Propagate optional-role parser warnings into `PanelResult.warnings` in `src/visualization/eda_core.py`.
+- [X] T015 [US1] Replace `_outcome_series()` and `_heat_illness_series()` in `src/visualization/eda_core.py` with parser-backed tri-state outcome helpers.
+- [X] T016 [US1] Update `render_outcome_prevalence()`, `_class_imbalance_panel()`, `_prevalence_panel()`, and `_outcome_context_panel()` in `src/visualization/eda_core.py` to display positive, negative, missing/unknown, denominator, and warning annotations.
+- [X] T017 [US1] Update `_risk_indicator_panel()`, `_boolean_bar()`, and `_optional_outcome_context()` in `src/visualization/eda_core.py` to count yes, no, and missing/unknown separately.
+- [X] T018 [US1] Update `_survey_states()`, `_completion_series()`, `_call_attempted_count()`, `_call_completed_count()`, `_contact_state_panel()`, and `_funnel_panel()` in `src/visualization/eda_core.py` to keep missing states explicit and use only explicit completed states.
+- [X] T019 [US1] Propagate optional-role parser warnings into `PanelResult.warnings` in `src/visualization/eda_core.py`.
 
 **Checkpoint**: Missingness is visible in EDA output and no longer silently counted as false.
 
@@ -93,18 +93,18 @@ description: "Implementation task list for data semantics, missingness, validati
 
 ### Tests for User Story 2
 
-- [ ] T020 [P] [US2] Add `_stream_pending` string and numeric boolean tests in `tests/unit/test_stream_adapter_unit.py`.
-- [ ] T021 [P] [US2] Add simulator diagnostic equivalence tests for native boolean versus CSV/string boolean inputs in `tests/unit/test_simulation_targets.py`.
-- [ ] T022 [P] [US2] Add CSV-loaded expectation tests in `tests/unit/test_simulation_schema_validation.py` that use the shared parser instead of `.astype(bool)`.
-- [ ] T023 [P] [US2] Add invalid required diagnostic token tests in `tests/unit/test_simulation_targets.py` that assert readiness diagnostics fail clearly.
+- [X] T020 [P] [US2] Add `_stream_pending` string and numeric boolean tests in `tests/unit/test_stream_adapter_unit.py`.
+- [X] T021 [P] [US2] Add simulator diagnostic equivalence tests for native boolean versus CSV/string boolean inputs in `tests/unit/test_simulation_targets.py`.
+- [X] T022 [P] [US2] Add CSV-loaded expectation tests in `tests/unit/test_simulation_schema_validation.py` that use the shared parser instead of `.astype(bool)`.
+- [X] T023 [P] [US2] Add invalid required diagnostic token tests in `tests/unit/test_simulation_targets.py` that assert readiness diagnostics fail clearly.
 
 ### Implementation for User Story 2
 
-- [ ] T024 [US2] Replace `_stream_pending` `.astype(bool)` parsing in `src/ingestion/stream/adapter.py` with the shared domain boolean parser.
-- [ ] T025 [US2] Replace event-rate, adherence, physiology, and missingness `.astype(bool)` parsing in `src/simulation/export.py` with the shared domain boolean parser.
-- [ ] T026 [US2] Update boolean-derived expected-rate assertions in `tests/unit/test_simulation_targets.py` to use parser-backed masks.
-- [ ] T027 [US2] Update boolean-derived expected-set assertions in `tests/unit/test_simulation_schema_validation.py` to use parser-backed masks.
-- [ ] T028 [US2] Audit `rg "astype\\(bool\\)" src tests --glob '!*.md'` and leave only native/generated-safe uses with explicit tests or comments.
+- [X] T024 [US2] Replace `_stream_pending` `.astype(bool)` parsing in `src/ingestion/stream/adapter.py` with the shared domain boolean parser.
+- [X] T025 [US2] Replace event-rate, adherence, physiology, and missingness `.astype(bool)` parsing in `src/simulation/export.py` with the shared domain boolean parser.
+- [X] T026 [US2] Update boolean-derived expected-rate assertions in `tests/unit/test_simulation_targets.py` to use parser-backed masks.
+- [X] T027 [US2] Update boolean-derived expected-set assertions in `tests/unit/test_simulation_schema_validation.py` to use parser-backed masks.
+- [X] T028 [US2] Audit `rg "astype\\(bool\\)" src tests --glob '!*.md'` and leave only native/generated-safe uses with explicit tests or comments.
 
 **Checkpoint**: String `"False"` and `"0"` are false everywhere domain booleans are parsed.
 
@@ -118,22 +118,22 @@ description: "Implementation task list for data semantics, missingness, validati
 
 ### Tests for User Story 3
 
-- [ ] T029 [P] [US3] Add required table missing test in `tests/test_eda_core_outputs.py` that asserts generation fails before writing requested panel artifacts.
-- [ ] T030 [P] [US3] Add schema-invalid required role test in `tests/test_eda_core_outputs.py` that asserts the error names the entity, path, and role.
-- [ ] T031 [P] [US3] Add optional entity missing test in `tests/test_eda_missingness_policy.py` that asserts labeled unavailable cards and warnings.
-- [ ] T032 [P] [US3] Add repo-relative alternate output registration tests in `tests/unit/test_artifact_manifest.py`.
-- [ ] T033 [P] [US3] Add outside-repository output warning and no-absolute-path tests in `tests/unit/test_artifact_manifest.py`.
-- [ ] T034 [P] [US3] Add CLI nonzero exit test for required input failure in `tests/test_eda_core_outputs.py`.
+- [X] T029 [P] [US3] Add required table missing test in `tests/test_eda_core_outputs.py` that asserts generation fails before writing requested panel artifacts.
+- [X] T030 [P] [US3] Add schema-invalid required role test in `tests/test_eda_core_outputs.py` that asserts the error names the entity, path, and role.
+- [X] T031 [P] [US3] Add optional entity missing test in `tests/test_eda_missingness_policy.py` that asserts labeled unavailable cards and warnings.
+- [X] T032 [P] [US3] Add repo-relative alternate output registration tests in `tests/unit/test_artifact_manifest.py`.
+- [X] T033 [P] [US3] Add outside-repository output warning and no-absolute-path tests in `tests/unit/test_artifact_manifest.py`.
+- [X] T034 [P] [US3] Add CLI nonzero exit test for required input failure in `tests/test_eda_core_outputs.py`.
 
 ### Implementation for User Story 3
 
-- [ ] T035 [US3] Add required and optional panel input preflight helpers in `src/visualization/eda_core.py`.
-- [ ] T036 [US3] Replace `_load_entity_or_empty()` in `src/visualization/eda_core.py` with loader behavior that separates required failures from optional unavailable tables.
-- [ ] T037 [US3] Update `generate_core_dashboards()` in `src/visualization/eda_core.py` to preflight all requested core panels before creating output directories, writing PNGs, or registering artifacts.
-- [ ] T038 [US3] Update `src/visualization/generate_eda.py` to return nonzero status with actionable messages for required input failures.
-- [ ] T039 [US3] Update `_register_results()` in `src/visualization/eda_core.py` to register every generated repo-relative artifact and warn for outside-repo outputs.
-- [ ] T040 [US3] Relax `_validate_entry_path()` in `src/visualization/artifacts.py` so any safe repository-relative artifact path is valid in the default manifest.
-- [ ] T041 [US3] Ensure optional warnings and required/optional role lists remain attached to each `FigureArtifact` entry in `src/visualization/eda_core.py`.
+- [X] T035 [US3] Add required and optional panel input preflight helpers in `src/visualization/eda_core.py`.
+- [X] T036 [US3] Replace `_load_entity_or_empty()` in `src/visualization/eda_core.py` with loader behavior that separates required failures from optional unavailable tables.
+- [X] T037 [US3] Update `generate_core_dashboards()` in `src/visualization/eda_core.py` to preflight all requested core panels before creating output directories, writing PNGs, or registering artifacts.
+- [X] T038 [US3] Update `src/visualization/generate_eda.py` to return nonzero status with actionable messages for required input failures.
+- [X] T039 [US3] Update `_register_results()` in `src/visualization/eda_core.py` to register every generated repo-relative artifact and warn for outside-repo outputs.
+- [X] T040 [US3] Relax `_validate_entry_path()` in `src/visualization/artifacts.py` so any safe repository-relative artifact path is valid in the default manifest.
+- [X] T041 [US3] Ensure optional warnings and required/optional role lists remain attached to each `FigureArtifact` entry in `src/visualization/eda_core.py`.
 
 **Checkpoint**: Required failures are loud and artifact provenance remains accurate.
 
@@ -147,16 +147,16 @@ description: "Implementation task list for data semantics, missingness, validati
 
 ### Tests for User Story 4
 
-- [ ] T042 [P] [US4] Add alert trigger reason fixture tests with more than eight categories in `tests/test_eda_core_outputs.py`.
-- [ ] T043 [P] [US4] Add low-count demographic and equity category tests in `tests/test_eda_core_outputs.py`.
-- [ ] T044 [P] [US4] Add overflow metadata assertion tests for grouped categories in `tests/test_eda_core_outputs.py`.
+- [X] T042 [P] [US4] Add alert trigger reason fixture tests with more than eight categories in `tests/test_eda_core_outputs.py`.
+- [X] T043 [P] [US4] Add low-count demographic and equity category tests in `tests/test_eda_core_outputs.py`.
+- [X] T044 [P] [US4] Add overflow metadata assertion tests for grouped categories in `tests/test_eda_core_outputs.py`.
 
 ### Implementation for User Story 4
 
-- [ ] T045 [US4] Remove silent `.head(8)` truncation from `_trigger_reason_panel()` in `src/visualization/eda_core.py`.
-- [ ] T046 [US4] Add category overflow rendering or `CategoryCompletenessRecord` metadata support in `src/visualization/eda_core.py`.
-- [ ] T047 [US4] Update cohort overview category panels in `src/visualization/eda_core.py` so low-count demographic and equity-relevant categories are not suppressed.
-- [ ] T048 [US4] Propagate grouped or overflow category counts into artifact warnings or manifest metadata in `src/visualization/eda_core.py`.
+- [X] T045 [US4] Remove silent `.head(8)` truncation from `_trigger_reason_panel()` in `src/visualization/eda_core.py`.
+- [X] T046 [US4] Add category overflow rendering or `CategoryCompletenessRecord` metadata support in `src/visualization/eda_core.py`.
+- [X] T047 [US4] Update cohort overview category panels in `src/visualization/eda_core.py` so low-count demographic and equity-relevant categories are not suppressed.
+- [X] T048 [US4] Propagate grouped or overflow category counts into artifact warnings or manifest metadata in `src/visualization/eda_core.py`.
 
 **Checkpoint**: Descriptive categories are complete and auditable.
 
@@ -166,13 +166,13 @@ description: "Implementation task list for data semantics, missingness, validati
 
 **Purpose**: Verify the full hardening pass and refresh tracked acceptance artifacts.
 
-- [ ] T049 Run focused hardening tests from `specs/006-data-semantics-validation-hardening/quickstart.md`.
-- [ ] T050 Run `rg "astype\\(bool\\)" src tests --glob '!*.md'` and confirm domain boolean parsing has no unsafe truthiness paths.
-- [ ] T051 Regenerate default EDA artifacts with `.venv/bin/python -m src.visualization.generate_eda --data-dir data/raw --out-dir outputs/figures/eda --panels core`.
-- [ ] T052 Run optional synthetic EDA generation with `.venv/bin/python -m src.visualization.generate_eda --data-dir data/synthetic/longitudinal --out-dir outputs/figures/eda_synthetic --panels core`.
-- [ ] T053 Verify regenerated PNG dimensions and manifest entries for affected artifacts in `outputs/figures/eda/` and `outputs/figures/manifest.json`.
-- [ ] T054 Run the full local test suite with `.venv/bin/pytest`.
-- [ ] T055 Update `CHANGELOG.md` with the completed SPEC-006 hardening entry after tests and regenerated artifacts pass.
+- [X] T049 Run focused hardening tests from `specs/006-data-semantics-validation-hardening/quickstart.md`.
+- [X] T050 Run `rg "astype\\(bool\\)" src tests --glob '!*.md'` and confirm domain boolean parsing has no unsafe truthiness paths.
+- [X] T051 Regenerate default EDA artifacts with `.venv/bin/python -m src.visualization.generate_eda --data-dir data/raw --out-dir outputs/figures/eda --panels core`.
+- [X] T052 Run optional synthetic EDA generation with `.venv/bin/python -m src.visualization.generate_eda --data-dir data/synthetic/longitudinal --out-dir outputs/figures/eda_synthetic --panels core`.
+- [X] T053 Verify regenerated PNG dimensions and manifest entries for affected artifacts in `outputs/figures/eda/` and `outputs/figures/manifest.json`.
+- [X] T054 Run the full local test suite with `.venv/bin/pytest`.
+- [X] T055 Update `CHANGELOG.md` with the completed SPEC-006 hardening entry after tests and regenerated artifacts pass.
 
 ---
 
