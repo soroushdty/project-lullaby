@@ -70,14 +70,18 @@ class RemoteLinkAdapter(BatchAdapter[RemoteLinkAdapterConfig]):
         content_type = response.headers.get("Content-Type", "").lower()
         final_url = response.url.lower()
         if "text/html" in content_type or any(ind in final_url for ind in _LOGIN_INDICATORS[1:]):
-            raise ConnectorError(
+            exc = ConnectorError(
                 adapter=self._name,
                 cause=RuntimeError(
-                    f"Authentication required — direct-download URL expected, "
-                    f"got HTML response from {config.url}"
+                    "Authentication required — direct-download URL expected"
                 ),
                 attempts=1,
             )
+            exc.args = (
+                "Authentication required — direct-download URL expected "
+                f"({exc.args[0]})",
+            )
+            raise exc
 
     def _parse_response(self, response: requests.Response, config: RemoteLinkAdapterConfig) -> dict[str, pd.DataFrame]:
         content_type = response.headers.get("Content-Type", "").lower()

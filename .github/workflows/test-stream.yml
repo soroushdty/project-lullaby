@@ -1,0 +1,23 @@
+name: Streaming Ingestion Tests
+
+on:
+  push:
+    branches: ["003-streaming-ingestion", "main"]
+  pull_request:
+
+jobs:
+  test-stream:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install package
+        run: python -m pip install -e ".[dev]"
+      - name: Run streaming tests
+        run: |
+          pytest tests/unit/test_stream_adapter_unit.py \
+                 tests/contract/test_stream_adapter_contract.py \
+                 tests/integration/test_stream_equivalence.py -v
