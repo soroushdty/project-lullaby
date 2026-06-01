@@ -30,11 +30,11 @@ description: "Executable task list for changelog policy validation and CI merge 
 
 **Purpose**: Create project files and wiring scaffolding for validator and policy checks.
 
-- [ ] T001 Create validator CLI scaffold with argparse entrypoint in tools/changelog_validator.py
-- [ ] T002 Create unit test module scaffold for validator behavior in tests/unit/test_changelog_validator.py
-- [ ] T003 Create contract test module scaffold for changelog contracts in tests/contract/test_changelog_contract.py
-- [ ] T004 Create integration test module scaffold for CI gate behavior in tests/integration/test_changelog_ci_gate.py
-- [ ] T005 Create GitHub Actions workflow scaffold for changelog policy in .github/workflows/changelog-policy.yml
+- [X] T001 Create validator CLI scaffold with argparse entrypoint in tools/changelog_validator.py
+- [X] T002 Create unit test module scaffold for validator behavior in tests/unit/test_changelog_validator.py
+- [X] T003 Create contract test module scaffold for changelog contracts in tests/contract/test_changelog_contract.py
+- [X] T004 Create integration test module scaffold for CI gate behavior in tests/integration/test_changelog_ci_gate.py
+- [X] T005 Create GitHub Actions workflow scaffold for changelog policy in .github/workflows/changelog-policy.yml
 
 ---
 
@@ -44,11 +44,11 @@ description: "Executable task list for changelog policy validation and CI merge 
 
 **⚠️ CRITICAL**: No user story work begins until this phase is complete.
 
-- [ ] T006 Implement changelog entry section parser and heading detection in tools/changelog_validator.py
-- [ ] T007 [P] Implement normalized validation error/report structures in tools/changelog_validator.py
-- [ ] T008 Implement markdown field extraction for Date/Spec/Summary/Rationale/Impact/Targets in tools/changelog_validator.py
-- [ ] T009 [P] Implement spec-id extraction from Spec links and identifier normalization in tools/changelog_validator.py
-- [ ] T010 Implement CLI output formatter for success summary and actionable failure diagnostics in tools/changelog_validator.py
+- [X] T006 Implement changelog entry section parser and heading detection in tools/changelog_validator.py
+- [X] T007 [P] Implement normalized validation error/report structures in tools/changelog_validator.py
+- [X] T008 Implement markdown field extraction for Date/Spec/Summary/Rationale/Impact/Targets in tools/changelog_validator.py
+- [X] T009 [P] Implement spec-id extraction from Spec links and identifier normalization in tools/changelog_validator.py
+- [X] T010 Implement CLI output formatter for success summary and actionable failure diagnostics in tools/changelog_validator.py
 
 **Checkpoint**: Parser and validation primitives are ready for story-level rules.
 
@@ -62,15 +62,15 @@ description: "Executable task list for changelog policy validation and CI merge 
 
 ### Tests for User Story 1
 
-- [ ] T011 [P] [US1] Add unit tests for required field presence and missing-field failures in tests/unit/test_changelog_validator.py
-- [ ] T012 [P] [US1] Add unit tests for duplicate spec-id detection and exactly-one rule in tests/unit/test_changelog_validator.py
-- [ ] T013 [US1] Add contract tests asserting required entry fields from contract docs in tests/contract/test_changelog_contract.py
+- [X] T011 [P] [US1] Add unit tests for required field presence and missing-field failures in tests/unit/test_changelog_validator.py
+- [X] T012 [P] [US1] Add unit tests for duplicate spec-id detection and exactly-one rule in tests/unit/test_changelog_validator.py
+- [X] T013 [US1] Add contract tests asserting required entry fields from contract docs in tests/contract/test_changelog_contract.py
 
 ### Implementation for User Story 1
 
-- [ ] T014 [US1] Implement required field validation rules for each parsed entry in tools/changelog_validator.py
-- [ ] T015 [US1] Implement uniqueness enforcement for spec-id across all CHANGELOG entries in tools/changelog_validator.py
-- [ ] T016 [US1] Implement failure codes/messages for missing fields and duplicate spec-id in tools/changelog_validator.py
+- [X] T014 [US1] Implement required field validation rules for each parsed entry in tools/changelog_validator.py
+- [X] T015 [US1] Implement uniqueness enforcement for spec-id across all CHANGELOG entries in tools/changelog_validator.py
+- [X] T016 [US1] Implement failure codes/messages for missing fields and duplicate spec-id in tools/changelog_validator.py
 
 **Checkpoint**: US1 is independently functional and testable as MVP scope.
 
@@ -84,14 +84,14 @@ description: "Executable task list for changelog policy validation and CI merge 
 
 ### Tests for User Story 2
 
-- [ ] T017 [P] [US2] Add unit tests for valid and invalid Targets grammar parsing in tests/unit/test_changelog_validator.py
-- [ ] T018 [P] [US2] Add contract tests for TargetDelta constraints (non-empty path, non-negative ints) in tests/contract/test_changelog_contract.py
+- [X] T017 [P] [US2] Add unit tests for valid and invalid Targets grammar parsing in tests/unit/test_changelog_validator.py
+- [X] T018 [P] [US2] Add contract tests for TargetDelta constraints (non-empty path, non-negative ints) in tests/contract/test_changelog_contract.py
 
 ### Implementation for User Story 2
 
-- [ ] T019 [US2] Implement Targets line parser for `path | +added -removed` grammar in tools/changelog_validator.py
-- [ ] T020 [US2] Implement TargetDelta semantic validation for repository-relative non-empty path and integer bounds in tools/changelog_validator.py
-- [ ] T021 [US2] Extend diagnostics to include violation code, field, and failing spec-id when available in tools/changelog_validator.py
+- [X] T019 [US2] Implement Targets line parser for `path | +added -removed` grammar in tools/changelog_validator.py
+- [X] T020 [US2] Implement TargetDelta semantic validation for repository-relative non-empty path and integer bounds in tools/changelog_validator.py
+- [X] T021 [US2] Extend diagnostics to include violation code, field, and failing spec-id when available in tools/changelog_validator.py
 
 **Checkpoint**: US2 validation and diagnostics are independently functional.
 
@@ -105,14 +105,14 @@ description: "Executable task list for changelog policy validation and CI merge 
 
 ### Tests for User Story 3
 
-- [ ] T022 [P] [US3] Add integration test covering validator CLI exit-code behavior for pass/fail scenarios in tests/integration/test_changelog_ci_gate.py
-- [ ] T023 [P] [US3] Add unit tests for ISO date parsing and merge-date policy gate branches in tests/unit/test_changelog_validator.py
+- [X] T022 [P] [US3] Add integration test covering validator CLI exit-code behavior for pass/fail scenarios in tests/integration/test_changelog_ci_gate.py
+- [X] T023 [P] [US3] Add unit tests for ISO date parsing and merge-date policy gate branches in tests/unit/test_changelog_validator.py
 
 ### Implementation for User Story 3
 
-- [ ] T024 [US3] Implement Date ISO parsing and merge-date policy validation hooks in tools/changelog_validator.py
-- [ ] T025 [US3] Implement GitHub Actions workflow steps to run validator on pull requests in .github/workflows/changelog-policy.yml
-- [ ] T026 [US3] Configure workflow output and failure behavior to satisfy required status-check contract in .github/workflows/changelog-policy.yml
+- [X] T024 [US3] Implement Date ISO parsing and merge-date policy validation hooks in tools/changelog_validator.py
+- [X] T025 [US3] Implement GitHub Actions workflow steps to run validator on pull requests in .github/workflows/changelog-policy.yml
+- [X] T026 [US3] Configure workflow output and failure behavior to satisfy required status-check contract in .github/workflows/changelog-policy.yml
 
 **Checkpoint**: US3 CI gate behavior is independently functional.
 
