@@ -1,0 +1,63 @@
+seed: 20260601
+n_participants: 200
+study_days: 84
+output_dir: data/synthetic/longitudinal
+event_rate:
+  cv_event: 0.075
+  heat_illness: 0.05
+  ed_visit: 0.10
+  hospitalization: 0.04
+summer_heat:
+  enabled: true
+  start_date: "2026-06-01"
+  baseline_temp_f: 94
+  heat_wave_probability: 0.20
+  heat_wave_temp_f: 108
+  heat_index_noise_sd: 4
+adherence:
+  initial_wear_hours_mean: 18
+  weekly_decline_hours: 0.8
+  scale_initial_probability: 0.85
+  scale_weekly_decline: 0.08
+missingness:
+  random_cell_missing_rate: 0.03
+  participant_dropout_rate: 0.08
+  clustered_gap_probability: 0.15
+  hot_afternoon_gap_multiplier: 2.0
+physiology:
+  cv_bp_slope_per_day: [0.6, 1.4]
+  cv_hr_slope_per_day: [0.2, 0.8]
+  cv_body_water_slope_per_day: [0.05, 0.20]
+  heat_hr_spike: [10, 28]
+  heat_skin_temp_spike_f: [1.0, 4.0]
+  heat_body_water_drop: [0.3, 1.5]
+alerts:
+  meows_thresholds_path: config/meows_thresholds.synthetic.yaml
+  survey_completion_probability: 0.65
+  call_completion_probability: 0.55
+archetypes:
+  - name: diligent_monitor
+    target_weight: 0.30
+    adherence_level: high
+    missingness_pattern: low_random
+    physiologic_risk: low_to_moderate
+  - name: overwhelmed_mom
+    target_weight: 0.30
+    adherence_level: declining
+    missingness_pattern: clustered_overnight_and_feeding
+    physiologic_risk: moderate
+  - name: heat_stressed
+    target_weight: 0.15
+    adherence_level: moderate
+    missingness_pattern: hot_afternoon_gaps
+    physiologic_risk: heat_strain
+  - name: true_emergency
+    target_weight: 0.06
+    adherence_level: variable
+    missingness_pattern: variable
+    physiologic_risk: cv_event
+  - name: silent_decliner
+    target_weight: 0.14
+    adherence_level: declining
+    missingness_pattern: increasing_dropout
+    physiologic_risk: gradual_cv_decline

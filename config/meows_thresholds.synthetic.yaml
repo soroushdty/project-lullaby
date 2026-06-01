@@ -1,0 +1,21 @@
+yellow:
+  systolic_bp_min: 140
+  diastolic_bp_min: 90
+  heart_rate_min: 110
+  respiratory_rate_min: 22
+  skin_temperature_c_min: 38.0
+red:
+  systolic_bp_min: 160
+  diastolic_bp_min: 110
+  heart_rate_min: 130
+  respiratory_rate_min: 28
+  skin_temperature_c_min: 39.0
+heat:
+  heart_rate_min: 105
+  skin_temperature_c_min: 37.8
+  heat_index_c_min: 38.0
+composite:
+  systolic_bp_min: 150
+  diastolic_bp_min: 100
+  heart_rate_min: 118
+  heat_index_c_min: 37.0

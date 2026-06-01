@@ -58,3 +58,9 @@ def visualization_paths(tmp_path):
         "manifest": tmp_path / "outputs" / "figures" / "manifest.json",
         "output_root": tmp_path / "outputs" / "figures",
     }
+
+
+@pytest.fixture
+def simulation_output_dir(tmp_path):
+    """Temporary output directory for synthetic longitudinal generation tests."""
+    return tmp_path / "synthetic" / "longitudinal"
