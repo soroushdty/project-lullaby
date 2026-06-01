@@ -25,6 +25,16 @@ related: []
 
 **Input**: User description: "SPEC-001 · Canonical Schema & Validation"
 
+## Clarifications
+
+### Session 2026-06-01
+
+- Q: Which validation engine is normative for ingestion boundary and CI? -> A: Pandera-only.
+- Q: How should timestamps be normalized across heterogeneous sources? -> A: Normalize all event timestamps to UTC at ingestion, store UTC only.
+- Q: How should custom schema objects be selected at runtime? -> A: Support alias OR Python import path (`package.module:ClassName`).
+- Q: What is validation failure policy at table level? -> A: Reject whole table load if any row violates schema.
+- Q: What environment pinning policy should CI enforce? -> A: Pin Python version and validator dependency major versions in CI.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Ingest Bundled Data (Priority: P1)
@@ -56,6 +66,7 @@ A data engineer provides an alternate schema object implementing the same ABC in
 ### Edge Cases
 - Late-arriving timestamps out of order must be normalized by ingestion but validated for missingness.
 - Cadence carried as data: ingestion accepts `cadence` metadata and does not require code changes when cadence changes.
+- Source timezone ambiguity: records missing timezone info MUST fail validation with actionable errors.
 
 ## Requirements *(mandatory)*
 
@@ -65,14 +76,21 @@ A data engineer provides an alternate schema object implementing the same ABC in
 - **FR-003**: The repository MUST ship a default concrete `LullabySchema` subclass implementing the ABC for the five canonical tables.
 - **FR-004**: Users MAY subclass the ABC and inject their own schema object at runtime without editing pipeline code.
 - **FR-005**: The data dictionary (column-level descriptions, types, units) is the authoritative reference and must live in `schemas/data-dictionary.md`.
-- **FR-006**: Validation-as-code (using Pandera or Great Expectations) MUST run at the ingestion boundary and enforce active schema rules.
+- **FR-006**: Validation-as-code (Pandera-only) MUST run at the ingestion boundary and enforce active schema rules.
 - **FR-007**: Informative missingness MUST be preserved at ingestion; the validator may flag but MUST NOT impute missing values.
 - **FR-008**: Non-conforming data MUST be rejected with precise, actionable error messages (column, constraint, example rows where possible).
 - **FR-009**: CI MUST run validation on the bundled synthetic data and fail the build on validation errors.
+- **FR-010**: Ingestion MUST normalize all event timestamps to UTC and persist UTC values only.
+- **FR-011**: Inputs with missing or invalid timezone metadata for event timestamps MUST be rejected at validation.
+- **FR-012**: Runtime schema selection MUST support either a built-in alias (for bundled schemas) or a Python import path (`package.module:ClassName`) for custom schema classes.
+- **FR-013**: If runtime schema resolution fails (missing alias, import failure, or non-conforming class), ingestion MUST fail fast with actionable diagnostics.
+- **FR-014**: Validation policy is strict: if any row violates schema in a table, the entire table load MUST be rejected.
+- **FR-015**: CI MUST pin Python runtime version and validator dependency major versions to ensure deterministic schema-validation behavior.
 
 ## Key Entities
 - **Participant**: identifier, enrollment timestamp, demographic metadata.
 - **DailyVital**: timestamp, participant_id, vitals (HR, BP, temp...), cadence metadata.
+- **DailyVital**: UTC timestamp, participant_id, vitals (HR, BP, temp...), cadence metadata.
 - **Alert**: timestamp, participant_id, alert_type, severity, source.
 - **ClinicalOutcome**: timestamp, participant_id, outcome_label, adjudication_metadata.
 - **StaffContact**: staff_id, role, contact_method, availability windows.
@@ -82,18 +100,23 @@ A data engineer provides an alternate schema object implementing the same ABC in
 - **SC-001**: Clone -> run ingestion on bundled data reproduces canonical tables and passes CI validation in <= 10 minutes on a standard dev machine.
 - **SC-002**: A conforming alternate schema object can be injected and runs the pipeline unchanged.
 - **SC-003**: Non-conforming inputs are rejected with errors that include table, column, and failing constraint.
+- **SC-003**: Non-conforming inputs are rejected with errors that include table, column, and failing constraint; no partial table acceptance is allowed.
 - **SC-004**: CI executes validation checks on each push and fails on regressions.
+- **SC-004**: CI executes validation checks on each push and fails on regressions, using pinned Python and validator major versions.
 
 ## Assumptions
 - The default `LullabySchema` is sufficient for the bundled synthetic cohort.
-- Validation tooling will be implemented using Pandera or Great Expectations depending on maintainers' preference.
+- Validation tooling will be implemented using Pandera as the single validation engine.
+- Source data provides parseable timestamp and timezone information for event fields.
 - Performance and scale targets will be defined in a later plan when real-data targets are considered.
+- CI environment uses pinned Python version and pinned validator major versions for reproducibility.
 
 ## Implementation Notes
 - Place `schemas/` module containing the ABC and `LullabySchema` implementation.
 - Add `schemas/data-dictionary.md` to document columns and units.
-- Implement `validation/` with Pandera/GE suites executed at ingestion.
+- Implement `validation/` with Pandera schemas/checks executed at ingestion.
 - Expose a runtime injection point (config/env) to select schema subclass.
+- Runtime schema selector accepts alias or Python import path (`package.module:ClassName`).
 
 ## Acceptance Tests
 - Add CI job `validate-schema` that runs ingestion + validation on bundled data and marks PR green only if validation passes.

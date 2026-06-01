@@ -1,3 +1,20 @@
+---
+id:            # e.g. PLAN-001
+title:         # human title
+status:        draft
+version:       0.1.0
+created:       # YYYY-MM-DD
+updated:       # YYYY-MM-DD
+author:        
+depends_on:    []
+implements:    []
+supersedes:    null
+superseded_by: null
+related:       []
+---
+
+<!-- Conforms to Project Lullaby Constitution v1.0.0 -->
+
 # Implementation Plan: [FEATURE]
 
 **Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
