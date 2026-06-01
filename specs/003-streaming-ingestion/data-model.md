@@ -73,14 +73,15 @@ Public helper class. Lives in `src/ingestion/stream/accumulator.py`.
 **Method**: `accumulate(adapter: StreamAdapter) -> dict[str, pd.DataFrame]`
 
 Exhausts the generator. For each table, concatenates all window DataFrames, applies
-last-write-wins dedup by primary key, sorts by timestamp column, resets index.
+last-write-wins dedup by primary key, sorts by timestamp column when present (otherwise
+by primary key), resets index.
 
 ```
 accumulated[table] = (
     pd.concat([window_frames[table] for (_, window_frames) in all_windows
                if table in window_frames], ignore_index=True)
       .drop_duplicates(subset=primary_key, keep='last')
-      .sort_values(timestamp_column)
+      .sort_values(timestamp_column if timestamp_column else primary_key)
       .reset_index(drop=True)
 )
 ```
@@ -145,5 +146,5 @@ LullabySchema ◄──────────────────── �
 - `skew_tolerance_s ≥ 0` — zero means no late records are tolerated
 - `speed_factor > 0` — pydantic `Field(gt=0)`
 - `backpressure_timeout_s > 0` — pydantic `Field(gt=0)`
-- Null or unparseable `timestamp_column` values → `StreamAdapterError` (not `LateArrivalWarning`)
+- Null or unparseable timestamp values in tables with `timestamp_column != ""` → `StreamAdapterError` (not `LateArrivalWarning`)
 - Schema-invalid records in a window → `StreamAdapterError` before any frames are yielded

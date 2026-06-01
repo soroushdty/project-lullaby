@@ -106,7 +106,8 @@ A CI job runs the stream adapter over the bundled synthetic cohort in accelerate
 
 ### Edge Cases
 
-- A window containing zero records (empty interval) MUST be emitted as an empty `dict[str, pd.DataFrame]` — not skipped — so consumers can detect gaps.
+- A cadence interval containing zero timestamped records and no static-table emission MUST be emitted as an empty `dict[str, pd.DataFrame]` — not skipped — so consumers can detect gaps.
+- A schema table with `timestamp_column == ""` MUST be treated as static reference data: deduplicated by primary key, emitted once in the first stream window, included in the accumulated canonical store, and not repeated in later windows.
 - A record whose event timestamp column is null or unparseable MUST raise `StreamAdapterError` for that window — it cannot be silently assigned to any window.
 - The synthetic cohort timestamps may not span multiple natural 1-minute windows; the adapter MUST support a virtual-clock mode (accelerated replay) driven purely by event timestamps — window boundaries advance with the data, not wall-clock time, and no `time.sleep()` calls are made.
 - Stream replay from the same source twice MUST produce the same sequence of windows (deterministic).
@@ -121,14 +122,14 @@ A CI job runs the stream adapter over the bundled synthetic cohort in accelerate
 - **FR-001**: The system MUST provide a `StreamAdapter` reference implementation that consumes the same source types as `BatchAdapter` (SPEC-002) and emits canonical `dict[str, pd.DataFrame]` windows on a configurable cadence (default: 60-second windows). `StreamAdapter` MUST implement `__iter__`, yielding `(window_start: datetime, frames: dict[str, pd.DataFrame])` tuples; consumers iterate with a standard `for` loop.
 - **FR-002**: The `StreamAdapter` MUST produce output conforming to the same `LullabySchema` canonical contract as batch adapters — downstream pipeline receives no indication of whether data arrived via batch or stream.
 - **FR-003**: Each emitted window MUST be deduplicated by schema-defined primary keys (read from `LullabySchema.table_contract` at runtime, matching SPEC-002 dedup semantics; last-write-wins).
-- **FR-004**: Records within each window MUST be sorted ascending by the table's canonical timestamp column before emission.
+- **FR-004**: Records within each window MUST be sorted ascending by the table's canonical timestamp column before emission. Tables without a timestamp column MUST be sorted deterministically by primary key.
 - **FR-005**: The `StreamAdapter` MUST accept a configurable clock-skew tolerance (default: 300 seconds); records whose event timestamp falls within the tolerance behind the current stream clock MUST be accepted into their correct target window.
 - **FR-006**: Records whose event timestamp falls beyond the declared skew tolerance MUST be excluded from all windows; a `LateArrivalWarning` MUST be emitted via `logging.warning(...)` per excluded record (adapter name, record timestamp, skew amount) and the adapter's `late_arrival_count` counter MUST be incremented. This is non-fatal.
 - **FR-007**: Records with a future event timestamp MUST be held in a pending buffer until their target window opens — they MUST NOT be dropped or assigned to an incorrect window. If the source is exhausted while the pending buffer is non-empty (records whose target window never opened), `StreamAdapterError` MUST be raised with the count of undeliverable records and their timestamp range.
 - **FR-008**: A window containing any malformed, schema-invalid, or null-timestamp record MUST cause `StreamAdapterError` to be raised before any frames are returned; the canonical store MUST remain uncorrupted.
 - **FR-009**: When the consumer is slower than the producer (backpressure), the producer MUST block until the consumer resumes; it MUST NOT drop records or buffer without bound. A configurable maximum backpressure wait (default: 30 seconds) triggers `StreamAdapterError` on timeout.
-- **FR-010**: An empty window (no records in the interval) MUST be emitted as an empty `dict[str, pd.DataFrame]` — not silently skipped.
-- **FR-011**: The `StreamAdapter` MUST support a configurable speed factor (default: 1×; also: 10×, 100×) implemented as a virtual clock driven by event timestamps in the data — window boundaries are computed from event timestamp ranges, not wall-clock time. No `time.sleep()` calls are made; the speed factor controls the virtual clock step size only. Event timestamps in emitted frames are never altered.
+- **FR-010**: An empty window (no records in the interval and no static-table emission) MUST be emitted as an empty `dict[str, pd.DataFrame]` — not silently skipped. Non-empty windows MUST include one key per schema table; tables with no rows in that interval are represented as empty DataFrames with schema columns.
+- **FR-011**: The `StreamAdapter` MUST support a configurable speed factor (default: 1×; also: 10×, 100×) for replay configuration compatibility. Window boundaries are computed from event timestamp ranges and `cadence_s`, not wall-clock time or `speed_factor`. No `time.sleep()` calls are made. Event timestamps in emitted frames are never altered.
 - **FR-012**: Re-running the `StreamAdapter` with the same source and config MUST produce the same sequence of windows (deterministic replay).
 - **FR-013**: A CI equivalence job MUST run the `StreamAdapter` over the bundled synthetic cohort, use `StreamAccumulator` to merge all windows into a final canonical store, and assert that the result equals the batch load of the same data. The job MUST assert `adapter.late_arrival_count == 0` after replay — any non-zero value fails the job.
 
@@ -167,7 +168,7 @@ A CI job runs the stream adapter over the bundled synthetic cohort in accelerate
 - "Batch and stream indistinguishable downstream" means the final accumulated canonical store (after all windows have been consumed and merged) equals the batch-loaded store — not that individual windows equal individual batches.
 - The `StreamAdapter` is a reference/simulation implementation (in-process replay); it does not integrate with Kafka, Spark, or any external streaming platform.
 - Clock skew tolerance applies to event timestamps carried in the data, not to wall-clock ingestion time.
-- The synthetic cohort's five canonical tables (`participants`, `daily_vitals`, `alerts`, `clinical_outcomes`, `staff_contacts`) have timestamps spanning at least one 1-minute window in virtual-clock accelerated mode.
+- The synthetic cohort's timestamped canonical tables (`participants`, `daily_vitals`, `alerts`, `clinical_outcomes`) have timestamps spanning at least one 1-minute window in virtual-clock accelerated mode; `staff_contacts` is static reference data with no timestamp column.
 - The `StreamAdapter` wraps the same source interface as `BatchAdapter` (SPEC-002) — it does not define new source connectors.
 - Primary keys and timestamp columns are read from `LullabySchema.table_contract` at runtime, never hardcoded, consistent with P3 (Schema-Driven Extensibility).
 

@@ -20,7 +20,7 @@ related:       [QUICKSTART-002]
 
 - Python 3.11
 - SPEC-001 (`LullabySchema`) and SPEC-002 (`BatchAdapter`, `FileAdapter`) implemented
-- Bundled synthetic cohort available at `data/synthetic_cohort/`
+- Bundled synthetic cohort available at `data/synthetic/`
 
 No new dependencies required beyond those installed for SPEC-002.
 
@@ -36,7 +36,7 @@ from src.schemas.lullaby import LullabySchema
 
 schema = LullabySchema()
 batch_adapter = FileAdapter()
-source_config = FileAdapterConfig(path="data/synthetic_cohort/")
+source_config = FileAdapterConfig(path="data/synthetic/")
 
 stream_adapter = StreamAdapter(
     batch_adapter=batch_adapter,
@@ -58,7 +58,7 @@ print(f"Late arrivals: {stream_adapter.late_arrival_count}")
 ```python
 stream_adapter = StreamAdapter(
     batch_adapter=FileAdapter(),
-    source_config=FileAdapterConfig(path="data/synthetic_cohort/"),
+    source_config=FileAdapterConfig(path="data/synthetic/"),
     schema=schema,
     config=StreamAdapterConfig(speed_factor=100.0),
 )
@@ -75,11 +75,20 @@ for table_name, df in accumulated.items():
 
 ```python
 # Run in pytest (tests/integration/test_stream_equivalence.py)
-batch_frames = FileAdapter().load(FileAdapterConfig(path="data/synthetic_cohort/"))
+import pandas as pd
+
+batch_frames = FileAdapter().load(FileAdapterConfig(path="data/synthetic/"))
+for table in schema.table_names():
+    tc = schema.table_contract(table)
+    if tc.timestamp_column:
+        batch_frames[table][tc.timestamp_column] = pd.to_datetime(
+            batch_frames[table][tc.timestamp_column],
+            utc=True,
+        )
 
 stream_adapter = StreamAdapter(
     batch_adapter=FileAdapter(),
-    source_config=FileAdapterConfig(path="data/synthetic_cohort/"),
+    source_config=FileAdapterConfig(path="data/synthetic/"),
     schema=schema,
     config=StreamAdapterConfig(speed_factor=100.0),
 )
@@ -88,12 +97,13 @@ accumulated = StreamAccumulator.accumulate(stream_adapter, schema)
 assert stream_adapter.late_arrival_count == 0
 
 for table in schema.table_names():
+    tc = schema.table_contract(table)
+    sort_cols = [tc.timestamp_column] + tc.primary_key if tc.timestamp_column else tc.primary_key
     pd.testing.assert_frame_equal(
-        accumulated[table].sort_values(schema.table_contract(table).primary_key)
-                          .reset_index(drop=True),
-        batch_frames[table].sort_values(schema.table_contract(table).primary_key)
-                           .reset_index(drop=True),
+        accumulated[table].sort_values(sort_cols).reset_index(drop=True),
+        batch_frames[table].sort_values(sort_cols).reset_index(drop=True),
         check_like=True,
+        check_dtype=False,
     )
 ```
 

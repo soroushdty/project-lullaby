@@ -26,7 +26,7 @@ related:       [CONTRACT-002-CONFIG]
 |-------|------|---------|---------------------|-------------|
 | `cadence_s` | `int` | `60` | `ge=1` | Window size in seconds. Each yielded window covers `[window_start, window_start + cadence_s)`. |
 | `skew_tolerance_s` | `int` | `300` | `ge=0` | Late-arrival tolerance. Records with `event_ts < window_start - skew_tolerance_s` are excluded and logged. `0` means zero tolerance. |
-| `speed_factor` | `float` | `1.0` | `gt=0` | Virtual clock multiplier. Stored and exposed; does not trigger any sleep calls. Typical values: `1.0`, `10.0`, `100.0`. |
+| `speed_factor` | `float` | `1.0` | `gt=0` | Replay configuration compatibility field. Stored and exposed; does not alter window boundaries, emitted timestamps, or wall-clock timing. Typical values: `1.0`, `10.0`, `100.0`. |
 | `backpressure_timeout_s` | `float` | `30.0` | `gt=0` | Maximum elapsed seconds between a window being yielded and the consumer calling `next()`. Exceeded → `StreamAdapterError`. |
 
 Inherited from `AdapterConfig`:

@@ -33,6 +33,34 @@ Notes
 - For large specs that touch many files, include only the file paths and line counts; avoid pasting whole files into the changelog.
 - Use a single changelog entry per implemented spec. If multiple specs are implemented on the same date, add separate dated entries.
 
+## Changelog Entry: SPEC-003
+
+Date: 2026-06-01
+Spec: /specs/003-streaming-ingestion/spec.md
+Summary: Implement synchronous reference streaming ingestion with `StreamAdapter`, `StreamAdapterConfig`, `StreamAccumulator`, stream-specific errors, tier-1 tests, and CI workflow proving synthetic-cohort stream/batch equivalence.
+Rationale: Project Lullaby needs real-time replay semantics that normalize to the same canonical schema as batch ingestion, preserve schema-driven dedup/order behavior, tolerate controlled clock skew, and fail loudly on corrupt or partial stream windows.
+Impact:
+  - Broke/Changed requirements: no; SPEC-003 clarifies empty-window semantics, static no-timestamp table handling, and `speed_factor` as a compatibility field that does not alter timing.
+  - Docs/Constitution changes: no constitution changes; SPEC-003 plan, research, data-model, contracts, quickstart, and tasks updated for implementation consistency.
+Targets:
+  - src/ingestion/stream/__init__.py | +12 -0
+  - src/ingestion/stream/adapter.py | +315 -0
+  - src/ingestion/stream/accumulator.py | +38 -0
+  - src/ingestion/stream/errors.py | +13 -0
+  - src/ingestion/adapters/remote_link_adapter.py | +7 -3
+  - tests/unit/test_stream_adapter_unit.py | +353 -0
+  - tests/contract/test_stream_adapter_contract.py | +168 -0
+  - tests/integration/test_stream_equivalence.py | +100 -0
+  - .github/workflows/test-stream.yml | +23 -0
+  - specs/003-streaming-ingestion/tasks.md | +296 -0
+  - specs/003-streaming-ingestion/spec.md | +6 -5
+  - specs/003-streaming-ingestion/plan.md | +6 -5
+  - specs/003-streaming-ingestion/research.md | +20 -5
+  - specs/003-streaming-ingestion/data-model.md | +4 -3
+  - specs/003-streaming-ingestion/quickstart.md | +19 -9
+  - specs/003-streaming-ingestion/contracts/stream-adapter-interface.md | +10 -5
+  - specs/003-streaming-ingestion/contracts/stream-config-schema.md | +1 -1
+
 ## Changelog Entry: SPEC-002
 
 Date: 2026-06-01

@@ -55,7 +55,7 @@ Providing it as a library class ensures consistent dedup semantics and a single 
 accumulated[table] = (
     pd.concat([window[table] for window in all_windows if table in window])
     .drop_duplicates(subset=primary_key, keep='last')
-    .sort_values(timestamp_column)
+    .sort_values(timestamp_column if timestamp_column else primary_key)
     .reset_index(drop=True)
 )
 ```
@@ -75,12 +75,16 @@ does not affect execution timing.
 
 **Windowing algorithm**:
 1. Load all source data via `batch_adapter.load(source_config)`.
-2. For each table, parse the timestamp column (`LullabySchema.table_contract(t).timestamp_column`).
-3. For each record in each table, compute its window assignment:
+2. For each table with a timestamp column, parse the timestamp column
+   (`LullabySchema.table_contract(t).timestamp_column`).
+3. For each timestamped record in each table, compute its window assignment:
    `window_start = epoch_floor(event_ts, cadence_s)` where
    `epoch_floor(ts, c) = datetime.fromtimestamp(floor(ts.timestamp() / c) * c, tz=ts.tzinfo)`.
-4. Collect all unique `window_start` values across all tables; sort ascending → `window_timeline`.
-5. Iterate `window_timeline`, yielding one window per step.
+4. Collect all unique `window_start` values across timestamped tables; sort ascending →
+   `window_timeline`.
+5. Treat tables with `timestamp_column == ""` as static reference tables: deduplicate by
+   primary key and emit once in the first stream window.
+6. Iterate `window_timeline`, yielding one window per step.
 
 **Rationale**: For a reference simulation, wall-clock speed is irrelevant — correctness and
 determinism matter. Removing `time.sleep()` eliminates flakiness, makes tests instantaneous,
@@ -155,11 +159,15 @@ function __iter__():
 
     for each table in source_frames:
         ts_col ← schema.table_contract(table).timestamp_column
+        if ts_col == "":
+            continue
         if any null in source_frames[table][ts_col]:
             raise StreamAdapterError("Null timestamp in table {table}")
 
     window_timeline ← sorted(unique(epoch_floor(ts, cadence_s)
                               for table in source_frames
+                              for ts_col in [schema.table_contract(table).timestamp_column]
+                              if ts_col != ""
                               for ts in source_frames[table][ts_col]))
 
     pending_buffer ← {}   # window_start → {table → [rows]}
@@ -171,6 +179,13 @@ function __iter__():
             ts_col ← schema.table_contract(table).timestamp_column
             pk     ← schema.table_contract(table).primary_key
             df     ← source_frames[table]
+
+            if ts_col == "":
+                in_window ← df if window_start == window_timeline[0] else empty DataFrame
+                if pk:
+                    in_window ← in_window.drop_duplicates(subset=pk, keep='last').sort_values(pk)
+                window_frames[table] ← in_window.reset_index(drop=True)
+                continue
 
             # Partition records for this window
             assigned_window ← epoch_floor(df[ts_col], cadence_s)

@@ -25,11 +25,12 @@ related:       [SPEC-003, SPEC-002, SPEC-001, PLAN-002]
 
 Implement a `StreamAdapter` generator class and companion `StreamAccumulator` helper under
 `src/ingestion/stream/`. `StreamAdapter` wraps any existing `BatchAdapter` source, partitions
-its records into cadence-bounded windows using an event-timestamp-driven virtual clock (no
-`time.sleep()` calls), applies per-window dedup and timestamp ordering, and exposes a
-synchronous Python generator interface (`__iter__`) yielding `(window_start, dict[str,
-pd.DataFrame])` tuples. `StreamAccumulator` consumes the generator and merges all windows
-into a final canonical store with cross-window last-write-wins dedup. A CI equivalence job
+timestamped records into cadence-bounded windows using an event-timestamp-driven virtual
+clock (no `time.sleep()` calls), emits no-timestamp static reference tables once, applies
+per-window dedup and deterministic ordering, and exposes a synchronous Python generator
+interface (`__iter__`) yielding `(window_start, dict[str, pd.DataFrame])` tuples.
+`StreamAccumulator` consumes the generator and merges all windows into a final canonical
+store with cross-window last-write-wins dedup. A CI equivalence job
 asserts that the accumulated stream output is row-for-row equal to the batch load of the same
 synthetic cohort and that `adapter.late_arrival_count == 0`.
 

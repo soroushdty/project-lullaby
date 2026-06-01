@@ -48,10 +48,15 @@ for window_start, frames in adapter:
 ```
 
 - Yields windows in ascending `window_start` order.
-- Each `frames` dict contains one key per canonical table; empty tables yield an empty
-  `pd.DataFrame` (with correct columns), never omitted.
-- All frames within a window are deduplicated by primary key (last-write-wins) and sorted
-  ascending by timestamp column before yielding.
+- An empty cadence interval yields an empty `dict[str, pd.DataFrame]`. Non-empty windows
+  contain one key per canonical table; tables with no rows in that interval yield an empty
+  `pd.DataFrame` with correct schema columns.
+- Tables whose schema contract has `timestamp_column == ""` are static reference tables:
+  deduplicated by primary key, emitted once in the first stream window, and not repeated in
+  later windows.
+- All frames within a window are deduplicated by primary key (last-write-wins). Timestamped
+  tables are sorted ascending by timestamp column before yielding; static reference tables
+  are sorted deterministically by primary key.
 - Raises `StreamAdapterError` on: null/unparseable timestamp, schema-invalid record,
   backpressure timeout, or non-empty pending buffer at end-of-stream.
 
@@ -88,7 +93,7 @@ Exhausts the `adapter` generator and merges all emitted windows into a single ca
 store.
 
 **Merge semantics**:
-- For each table: `pd.concat` all per-window DataFrames → `drop_duplicates(subset=pk, keep='last')` → `sort_values(ts_col)` → `reset_index(drop=True)`.
+- For each table: `pd.concat` all per-window DataFrames → `drop_duplicates(subset=pk, keep='last')` → sort by timestamp column when present, otherwise by primary key → `reset_index(drop=True)`.
 - Tables present in `schema` but absent from all windows → empty `pd.DataFrame` with the
   correct columns.
 - The returned store is row-for-row equivalent to a batch load of the same source data when
