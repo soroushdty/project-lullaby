@@ -1,0 +1,4 @@
+staff_id,role,contact_method,availability_window
+STAFF-01,nurse,phone,Mon-Fri 08:00-17:00 MST
+STAFF-02,nurse,phone,Mon-Fri 17:00-23:00 MST
+STAFF-03,physician,secure_message,Mon-Fri 09:00-16:00 MST

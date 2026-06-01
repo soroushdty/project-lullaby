@@ -33,6 +33,35 @@ Notes
 - For large specs that touch many files, include only the file paths and line counts; avoid pasting whole files into the changelog.
 - Use a single changelog entry per implemented spec. If multiple specs are implemented on the same date, add separate dated entries.
 
+## Changelog Entry: 001-canonical-schema-validation
+
+Date: 2026-06-01
+Spec: /specs/001-canonical-schema-validation/spec.md
+Summary: Implement canonical time-series schema ABC, LullabySchema for five tables, Pandera validation engine, ingestion pipeline, and CI gate.
+Rationale: Project Lullaby requires a schema-first data contract so ingestion boundaries enforce correctness, informative missingness is preserved without imputation, and alternate schemas can be injected at runtime without code changes.
+Impact:
+  - Broke/Changed requirements: no
+  - Docs/Constitution changes: added schemas/data-dictionary.md as authoritative column reference (FR-005)
+Targets:
+  - src/schemas/base.py | +48 -0
+  - src/schemas/lullaby.py | +184 -0
+  - src/schemas/registry.py | +43 -0
+  - src/validation/pandera_models.py | +14 -0
+  - src/validation/engine.py | +34 -0
+  - src/ingestion/pipeline.py | +66 -0
+  - src/ingestion/adapters/csv_adapter.py | +14 -0
+  - src/cli/validate_schema.py | +65 -0
+  - .github/workflows/validate-schema.yml | +34 -0
+  - schemas/data-dictionary.md | +103 -0
+  - data/synthetic/ | +5 files (canonical CSVs)
+  - tests/unit/test_lullaby_schema.py | +69 -0
+  - tests/unit/test_pandera_models.py | +78 -0
+  - tests/contract/test_schema_interface.py | +44 -0
+  - tests/contract/test_validation_contract.py | +70 -0
+  - tests/integration/test_ingestion_validation_pipeline.py | +88 -0
+  - tests/conftest.py | +42 -0
+  - specs/001-canonical-schema-validation/tasks.md | +204 -0
+
 ## Changelog Entry: 000-changelog-creation
 
 Date: 2026-06-01

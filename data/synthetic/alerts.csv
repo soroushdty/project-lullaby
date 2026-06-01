@@ -1,0 +1,4 @@
+alert_id,participant_id,event_ts,alert_level,source
+A-0001,LUL-2000,2025-06-03T08:00:00+00:00,red,weight_sensor
+A-0002,LUL-2000,2025-06-08T15:00:00+00:00,yellow,weight_sensor
+A-0003,LUL-2001,2025-06-05T09:00:00+00:00,composite-red,bp_sensor

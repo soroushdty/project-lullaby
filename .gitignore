@@ -20,6 +20,9 @@ build/
 .coverage
 coverage/
 
+# Generated validation output
+artifacts/
+
 # Editor/OS
 .DS_Store
 Thumbs.db
