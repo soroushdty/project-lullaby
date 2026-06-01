@@ -49,7 +49,7 @@ Notes
 ## Changelog Entry: 000-changelog-creation
 
 Date: 2026-06-01
-Spec: specs/000-changelog-creation/spec.md
+Spec: /specs/000-changelog-creation/spec.md
 Summary: Add merge-gating changelog policy and validator to enforce per-spec provenance.
 Rationale: Ensure every implemented spec produces a single, machine-parseable changelog entry for traceability and CI enforcement.
 Impact:

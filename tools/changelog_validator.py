@@ -204,9 +204,15 @@ def validate_entries(
         if date_value:
             try:
                 parsed_date = parse_iso_date(date_value)
+                # If a specific required_spec_id is provided, only apply the merge-date
+                # equality policy to the entry that matches that spec-id. Otherwise,
+                # apply the merge-date check to all entries when merge_date is given.
                 if merge_date:
                     merge_dt = parse_iso_date(merge_date)
-                    if parsed_date.date() != merge_dt.date():
+                    should_check = True
+                    if normalized_required_spec_id:
+                        should_check = entry.spec_id == normalized_required_spec_id
+                    if should_check and parsed_date.date() != merge_dt.date():
                         errors.append(
                             ValidationError(
                                 code="E_DATE_POLICY",
