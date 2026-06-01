@@ -1,0 +1,25 @@
+output_root: outputs/figures
+manifest_path: outputs/figures/manifest.json
+validation_report_path: artifacts/validation-report.json
+data_dir: data
+image:
+  dpi: 220
+  min_width_px: 1600
+  min_height_px: 900
+  format: png
+style:
+  font_family: DejaVu Sans
+  colorblind_safe: true
+  show_units: true
+  direct_labels: true
+eda:
+  default_participant_id: null
+  default_week_start: null
+  default_week_end: null
+  max_participants_heatmap: 250
+missingness:
+  render_missing_as: explicit
+  gap_cluster_windows:
+    overnight: [0, 6]
+    feeding: [6, 9]
+    hot_afternoon: [13, 18]
