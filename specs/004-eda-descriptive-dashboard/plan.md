@@ -1,16 +1,16 @@
 ---
-id: PLAN-004A
+id: PLAN-004
 title: Visualization Foundation and Schema Registry Implementation Plan
 status: draft
 version: 0.1.0
 created: 2026-06-01
 updated: 2026-06-01
 author: Soroush Dianaty
-depends_on: [SPEC-004A, SPEC-001]
+depends_on: [SPEC-004, SPEC-001]
 implements: [P1, P2, P3, P5, P7, P10]
 supersedes: null
 superseded_by: null
-related: [SPEC-001, SPEC-004B, SPEC-005, SPEC-006, SPEC-007]
+related: [SPEC-001, SPEC-005, SPEC-006, SPEC-007, SPEC-008]
 ---
 
 <!-- Conforms to Project Lullaby Constitution v1.0.0 -->
@@ -38,7 +38,7 @@ clarified `data/` CSV target while still accepting `--data-dir`.
 **Primary Dependencies**:
 - Existing: pandas, pandera, pydantic, pytest
 - Add: matplotlib for deterministic static dashboard-grade figures
-- No seaborn, Plotly, notebooks, network services, or runtime web stack required for SPEC-004A
+- No seaborn, Plotly, notebooks, network services, or runtime web stack required for SPEC-004
 
 **Storage**:
 - Local CSV inputs under `data/` by default, with `--data-dir` override
@@ -80,7 +80,7 @@ runtime for validation and tests
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-- **P1 Specification-Driven Development**: PASS. The plan is derived from SPEC-004A and its
+- **P1 Specification-Driven Development**: PASS. The plan is derived from SPEC-004 and its
   2026-06-01 clarifications.
 - **P2 Reproducibility by Default**: PASS. Root commands use local bundled data, deterministic
   JSON reports, a fixed manifest path, and static figure outputs.
@@ -93,7 +93,7 @@ runtime for validation and tests
 - **P10 Equity-Centered & Accessible Design**: PASS. The design contract requires accessible
   palettes, explicit labels, warnings, no-data panels, and non-color encodings.
 - **Provenance / Traceability**: PASS. Planning artifacts carry frontmatter and link back to
-  SPEC-004A and SPEC-001.
+  SPEC-004 and SPEC-001.
 
 ## Project Structure
 
@@ -164,7 +164,7 @@ command placement.
 
 ## Post-Design Constitution Check
 
-- **P1**: PASS. Research, data model, contracts, and quickstart map to SPEC-004A requirements
+- **P1**: PASS. Research, data model, contracts, and quickstart map to SPEC-004 requirements
   and clarifications.
 - **P2**: PASS. Quickstart uses local commands only and records expected deterministic output
   locations.

@@ -1,23 +1,23 @@
 ---
-id: SPEC-007
+id: SPEC-008
 title: Implementation Acceptance and Provenance Remediation
 status: draft
 version: 0.1.0
 created: 2026-06-01
 updated: 2026-06-01
 author: Soroush Dianaty
-depends_on: [SPEC-000, SPEC-001, SPEC-002, SPEC-003, SPEC-004A, SPEC-005, SPEC-006]
+depends_on: [SPEC-000, SPEC-001, SPEC-002, SPEC-003, SPEC-004, SPEC-005, SPEC-006, SPEC-007]
 implements: [P1, P2, P3, P5, P7]
 supersedes: null
 superseded_by: null
-related: [SPEC-000, SPEC-001, SPEC-002, SPEC-003, SPEC-004A, SPEC-005, SPEC-006]
+related: [SPEC-000, SPEC-001, SPEC-002, SPEC-003, SPEC-004, SPEC-005, SPEC-006, SPEC-007]
 ---
 
 <!-- Conforms to Project Lullaby Constitution v1.0.0 -->
 
 # Feature Specification: Implementation Acceptance and Provenance Remediation
 
-**Feature Branch**: `007-implementation-acceptance-remediation`
+**Feature Branch**: `008-implementation-acceptance-remediation`
 
 **Created**: 2026-06-01
 
@@ -36,12 +36,12 @@ Focused and full-suite checks found:
 - SPEC-001 schema tests: `52 passed`, `validate_schema --input data/synthetic` passes, but `validate_schema --input data` fails because root files use `lullaby_*.csv` names.
 - SPEC-002 adapter tests: `49 passed, 4 skipped`; skipped tests are explicit cloud emulator and MySQL Docker placeholders.
 - SPEC-003 stream tests: `24 passed`, but `_stream_pending` uses pandas truthiness and misreads string booleans.
-- SPEC-004A visualization foundation tests: `39 passed`, but its changelog entry is missing.
+- SPEC-004 visualization foundation tests: `39 passed`, but its changelog entry is missing.
 - SPEC-005 simulator tests: `17 passed` and default generation succeeds, but simulator diagnostics use unsafe `.astype(bool)` patterns and its changelog entry is missing.
 
 Known concrete issues:
 
-- `CHANGELOG.md` lacks entries for SPEC-004A and SPEC-005.
+- `CHANGELOG.md` lacks entries for SPEC-004 and SPEC-005.
 - `CHANGELOG.md` currently fails `tools/changelog_validator.py --changelog CHANGELOG.md --spec-dir specs`.
 - SPEC-002 local emulator acceptance coverage is incomplete for S3/MinIO, Azure/Azurite, GCS/fake-gcs-server, and MySQL Docker.
 - SPEC-003 stream pending parsing treats string `"False"` and `"0"` as true.
@@ -56,12 +56,12 @@ A maintainer needs the repository changelog to be valid and complete before clai
 
 **Why this priority**: SPEC-000 exists to make implementation provenance enforceable. If the changelog itself fails validation, the repo cannot honestly claim spec-driven traceability.
 
-**Independent Test**: Run the changelog validator against the real repository `CHANGELOG.md` and targeted spec IDs for SPEC-004A and SPEC-005.
+**Independent Test**: Run the changelog validator against the real repository `CHANGELOG.md` and targeted spec IDs for SPEC-004 and SPEC-005.
 
 **Acceptance Scenarios**:
 
 1. **Given** the current repository changelog, **when** `tools/changelog_validator.py --changelog CHANGELOG.md --spec-dir specs` runs, **then** it exits 0.
-2. **Given** SPEC-004A is implemented, **when** validation runs with `--spec-id SPEC-004A`, **then** exactly one valid changelog entry is found.
+2. **Given** SPEC-004 is implemented, **when** validation runs with `--spec-id SPEC-004`, **then** exactly one valid changelog entry is found.
 3. **Given** SPEC-005 is implemented, **when** validation runs with `--spec-id SPEC-005`, **then** exactly one valid changelog entry is found.
 4. **Given** existing changelog entries for SPEC-001, SPEC-002, and SPEC-003, **when** validation runs, **then** every `Targets` line is machine-parseable and entry boundaries are not mistaken for targets.
 
@@ -147,7 +147,7 @@ A maintainer needs a compact per-spec completion ledger that distinguishes imple
 
 - **FR-001**: The repository MUST contain exactly one valid changelog entry for every implemented spec from SPEC-000 through SPEC-005.
 - **FR-002**: `CHANGELOG.md` MUST pass the real repository changelog validator with no target-format, duplicate-spec, missing-field, or missing-spec-entry errors.
-- **FR-003**: SPEC-004A and SPEC-005 MUST be added to `CHANGELOG.md` with valid `Date`, `Spec`, `Summary`, `Rationale`, `Impact`, and machine-parseable `Targets`.
+- **FR-003**: SPEC-004 and SPEC-005 MUST be added to `CHANGELOG.md` with valid `Date`, `Spec`, `Summary`, `Rationale`, `Impact`, and machine-parseable `Targets`.
 - **FR-004**: Existing changelog entries MUST be corrected so section headings are not parsed as target lines.
 - **FR-005**: SPEC-002 cloud emulator tests for S3/MinIO, Azure/Azurite, and GCS/fake-gcs-server MUST execute against Docker Compose services or be explicitly rescoped in SPEC-002 documentation.
 - **FR-006**: SPEC-002 MySQL Docker integration tests MUST execute happy path, missing-column, and bad-connection scenarios or be explicitly rescoped in SPEC-002 documentation.
@@ -175,7 +175,7 @@ A maintainer needs a compact per-spec completion ledger that distinguishes imple
 ### Measurable Outcomes
 
 - **SC-001**: `tools/changelog_validator.py --changelog CHANGELOG.md --spec-dir specs` exits 0.
-- **SC-002**: Targeted changelog validation for SPEC-004A and SPEC-005 each finds exactly one valid entry.
+- **SC-002**: Targeted changelog validation for SPEC-004 and SPEC-005 each finds exactly one valid entry.
 - **SC-003**: Adapter acceptance tests either execute S3, Azure, GCS, and MySQL integration coverage with zero required skips, or SPEC-002 is formally amended to narrow those claims.
 - **SC-004**: Schema validation commands documented for bundled data exit 0 from the repository root.
 - **SC-005**: Stream pending tests prove `"False"` and `"0"` are not treated as pending.

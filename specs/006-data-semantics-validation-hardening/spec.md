@@ -6,11 +6,11 @@ version: 0.1.0
 created: 2026-06-01
 updated: 2026-06-01
 author: Soroush Dianaty
-depends_on: [SPEC-001, SPEC-003, SPEC-004A, SPEC-005]
+depends_on: [SPEC-001, SPEC-003, SPEC-004, SPEC-005]
 implements: [P3, P5, P7, P10]
 supersedes: null
 superseded_by: null
-related: [SPEC-003, SPEC-004A, SPEC-005]
+related: [SPEC-003, SPEC-004, SPEC-005]
 ---
 
 <!-- Conforms to Project Lullaby Constitution v1.0.0 -->
@@ -176,7 +176,7 @@ A clinical analyst reviewing descriptive dashboards needs low-count categories a
 
 ## Assumptions
 
-- SPEC-001 and SPEC-004A remain the authoritative sources for canonical schema roles and visualization validation behavior.
+- SPEC-001 and SPEC-004 remain the authoritative sources for canonical schema roles and visualization validation behavior.
 - This spec is intentionally deferred until the current implementation thread is ready to address hardening work.
 - Missingness is meaningful evidence and should be preserved unless a later feature explicitly defines imputation behavior.
 - Existing synthetic data may remain valid, but diagnostics must also be safe for exported CSVs and external tables that use string or object-typed boolean values.

@@ -10,7 +10,7 @@ depends_on: [SPEC-005, PLAN-005]
 implements: [P2, P3, P5, P7, P8, P9]
 supersedes: null
 superseded_by: null
-related: [SPEC-001, SPEC-004A, SPEC-004B, SPEC-006, SPEC-007]
+related: [SPEC-001, SPEC-004, SPEC-006, SPEC-007, SPEC-008]
 ---
 
 <!-- Conforms to Project Lullaby Constitution v1.0.0 -->
@@ -44,7 +44,7 @@ supports missingness dashboards, and avoids inferring non-observation only from 
 ## Decision: Keep configuration in dataclass-style structures loaded from YAML
 
 **Rationale**: Existing configuration modules use dataclasses plus PyYAML. Reusing that pattern
-keeps the simulator lightweight, testable, and consistent with SPEC-004A while still allowing
+keeps the simulator lightweight, testable, and consistent with SPEC-004 while still allowing
 normalization of archetype weights and capture of the effective configuration.
 
 **Alternatives considered**:
@@ -52,9 +52,9 @@ normalization of archetype weights and capture of the effective configuration.
   already dataclass-based and the validation needs are straightforward.
 - Hardcoded defaults only. Rejected because SPEC-005 requires configurable scenario variants.
 
-## Decision: Extend SPEC-004A registry instead of creating a second schema validator
+## Decision: Extend SPEC-004 registry instead of creating a second schema validator
 
-**Rationale**: Generated tables must validate against the schema registry from SPEC-004A. The
+**Rationale**: Generated tables must validate against the schema registry from SPEC-004. The
 current registry already supports current and future optional entities; SPEC-005 should add
 source filenames and roles for `environment` and `recruitment`, plus any required aliases for
 synthetic longitudinal columns such as body water, scale adherence, and weight.

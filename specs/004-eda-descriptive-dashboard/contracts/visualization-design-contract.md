@@ -1,16 +1,16 @@
 ---
-id: CONTRACT-004A-DESIGN
+id: CONTRACT-004-DESIGN
 title: Visualization Design System Contract
 status: draft
 version: 0.1.0
 created: 2026-06-01
 updated: 2026-06-01
 author: Soroush Dianaty
-depends_on: [SPEC-004A, PLAN-004A]
+depends_on: [SPEC-004, PLAN-004]
 implements: [P2, P5, P10]
 supersedes: null
 superseded_by: null
-related: [SPEC-004B, SPEC-006, SPEC-007]
+related: [SPEC-006, SPEC-007, SPEC-008]
 ---
 
 <!-- Conforms to Project Lullaby Constitution v1.0.0 -->

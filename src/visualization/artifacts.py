@@ -158,7 +158,7 @@ def participant_compatibility_artifact(
         artifact_id="participant_visualization_compatibility",
         path=_repo_relative(path),
         title="Participant Visualization Compatibility",
-        spec="SPEC-004A",
+        spec="SPEC-004",
         inputs=["participants"],
         required_roles=["participant.id"],
         optional_roles_used=[],

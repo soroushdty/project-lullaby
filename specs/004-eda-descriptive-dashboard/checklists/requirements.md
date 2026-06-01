@@ -1,16 +1,16 @@
 ---
-id: CHK-004A-REQ
+id: CHK-004-REQ
 title: Specification Quality Checklist - Visualization Foundation and Schema Registry
 status: complete
 version: 0.1.0
 created: 2026-06-01
 updated: 2026-06-01
 author: Soroush Dianaty
-depends_on: [SPEC-004A]
+depends_on: [SPEC-004]
 implements: [P1]
 supersedes: null
 superseded_by: null
-related: [SPEC-004A]
+related: [SPEC-004]
 ---
 
 <!-- Conforms to Project Lullaby Constitution v1.0.0 -->

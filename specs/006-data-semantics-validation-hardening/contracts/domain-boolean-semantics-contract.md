@@ -6,11 +6,11 @@ version: 0.1.0
 created: 2026-06-01
 updated: 2026-06-01
 author: Soroush Dianaty
-depends_on: [SPEC-006, SPEC-001, SPEC-003, SPEC-004A, SPEC-005]
+depends_on: [SPEC-006, SPEC-001, SPEC-003, SPEC-004, SPEC-005]
 implements: [P3, P5, P7]
 supersedes: null
 superseded_by: null
-related: [SPEC-003, SPEC-004A, SPEC-005]
+related: [SPEC-003, SPEC-004, SPEC-005]
 ---
 
 <!-- Conforms to Project Lullaby Constitution v1.0.0 -->

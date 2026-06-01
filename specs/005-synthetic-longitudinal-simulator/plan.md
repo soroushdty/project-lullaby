@@ -6,11 +6,11 @@ version: 0.1.0
 created: 2026-06-01
 updated: 2026-06-01
 author: Soroush Dianaty
-depends_on: [SPEC-005, SPEC-001, SPEC-004A]
+depends_on: [SPEC-005, SPEC-001, SPEC-004]
 implements: [P1, P2, P3, P5, P7, P8, P9]
 supersedes: null
 superseded_by: null
-related: [SPEC-004A, SPEC-004B, SPEC-006, SPEC-007]
+related: [SPEC-004, SPEC-006, SPEC-007, SPEC-008]
 ---
 
 <!-- Conforms to Project Lullaby Constitution v1.0.0 -->
@@ -26,7 +26,7 @@ related: [SPEC-004A, SPEC-004B, SPEC-006, SPEC-007]
 Implement a canonical, seeded longitudinal synthetic cohort simulator that produces a full
 participant-day grid and related cohort tables under `data/synthetic/longitudinal/`. The
 implementation adds a `src/simulation/` package, default YAML configuration, and a clone-to-run
-generation script while extending SPEC-004A's schema registry so all generated tables validate
+generation script while extending SPEC-004's schema registry so all generated tables validate
 before downstream dashboards or model workflows consume them. Generation preserves missingness
 as evidence, encodes cardiovascular, heat-strain, and overlap physiology, and writes a structured
 summary that gates readiness on schema validation and target diagnostics.
@@ -84,7 +84,7 @@ runtime
   2026-06-01 clarification record.
 - **P2 Reproducibility by Default**: PASS. The design uses fixed seeds, effective config capture,
   deterministic export ordering, and clone-to-run commands.
-- **P3 Schema-Driven Extensibility**: PASS. Generated columns validate through SPEC-004A's
+- **P3 Schema-Driven Extensibility**: PASS. Generated columns validate through SPEC-004's
   schema registry, which is extended for environment and recruitment.
 - **P5 Resilience / Graceful Degradation**: PASS. Missingness is preserved, validation fails
   loud, and failed runs remain inspectable without being marked ready.
@@ -95,7 +95,7 @@ runtime
 - **P9 Privacy & Synthetic-Data Transparency**: PASS. Outputs are synthetic-only and include
   explicit synthetic provenance in config and summary.
 - **Provenance / Traceability**: PASS. Planning artifacts carry frontmatter and link to SPEC-005,
-  SPEC-001, and SPEC-004A.
+  SPEC-001, and SPEC-004.
 
 ## Project Structure
 
@@ -153,7 +153,7 @@ tests/
 configuration, cohort assignment, environment generation, physiology, missingness, and export.
 Keep CLI entry through a small `scripts/generate_synthetic.py` wrapper to match the SPEC-005
 clone-to-run command, while public generation functions remain importable from `src.simulation`.
-Reuse SPEC-004A visualization validation instead of adding a parallel schema gate.
+Reuse SPEC-004 visualization validation instead of adding a parallel schema gate.
 
 ## Complexity Tracking
 

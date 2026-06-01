@@ -10,7 +10,7 @@ depends_on: [SPEC-006, PLAN-006, DATA-006, RESEARCH-006]
 implements: [P3, P5, P7, P10]
 supersedes: null
 superseded_by: null
-related: [SPEC-001, SPEC-003, SPEC-004A, SPEC-005]
+related: [SPEC-001, SPEC-003, SPEC-004, SPEC-005]
 description: "Implementation task list for data semantics, missingness, validation, manifest, simulator diagnostic, and category-completeness hardening."
 ---
 

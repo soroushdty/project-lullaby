@@ -1,16 +1,16 @@
 ---
-id: TASKS-004A
+id: TASKS-004
 title: Visualization Foundation and Schema Registry Tasks
 status: draft
 version: 0.1.0
 created: 2026-06-01
 updated: 2026-06-01
 author: Soroush Dianaty
-depends_on: [PLAN-004A, SPEC-004A, SPEC-001]
+depends_on: [PLAN-004, SPEC-004, SPEC-001]
 implements: [P1, P2, P3, P5, P7, P10]
 supersedes: null
 superseded_by: null
-related: [SPEC-004A, SPEC-001, SPEC-004B, SPEC-005, SPEC-006, SPEC-007]
+related: [SPEC-004, SPEC-001, SPEC-005, SPEC-006, SPEC-007, SPEC-008]
 description: "Executable task list for the visualization foundation, semantic schema registry, validation command, design helpers, and figure artifact manifest"
 ---
 
@@ -22,7 +22,7 @@ description: "Executable task list for the visualization foundation, semantic sc
 
 **Prerequisites**: plan.md, spec.md, research.md, data-model.md, quickstart.md, contracts/
 
-**Tests**: Included because SPEC-004A, quickstart.md, and contracts require focused registry, validation, visualization, manifest, and CLI tests.
+**Tests**: Included because SPEC-004, quickstart.md, and contracts require focused registry, validation, visualization, manifest, and CLI tests.
 
 **Organization**: Tasks are grouped by user story to enable independent implementation and testing.
 
@@ -278,4 +278,4 @@ Task: "T032 [P] [US4] Add artifact manifest unit tests for sorted serialization,
 - [US1] through [US5] labels map directly to user stories in spec.md.
 - Every implementation task names the concrete target file.
 - Verify tests fail before implementation tasks for the same story.
-- Do not implement later EDA dashboards in SPEC-004A; this task list creates the shared foundation only.
+- Do not implement later EDA dashboards in SPEC-004; this task list creates the shared foundation only.
