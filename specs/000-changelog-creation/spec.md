@@ -20,11 +20,21 @@ related: []
 ## Purpose
 Each implemented spec must generate exactly one valid entry in `CHANGELOG.md`.
 
+## Clarifications
+
+### Session 2026-06-01
+
+- Q: When must the required changelog entry be created/required? -> A: At merge time, when implementation is complete.
+- Q: Should duplicate changelog entries be allowed for the same spec id? -> A: No, exactly one changelog entry per spec-id.
+- Q: What format should `Targets` use in changelog entries? -> A: Structured format `path | +added -removed`.
+- Q: How should policy compliance be enforced? -> A: CI-required check parses `CHANGELOG.md` and blocks merge on violations.
+- Q: What should the changelog `Date` represent? -> A: Merge date of the implementation PR.
+
 ## Required fields (YAML frontmatter recommended)
 - `id`: unique spec identifier (e.g., `speckit-001`)
 - `title`: short, descriptive title
 - `authors`: list of author names/handles
-- `date`: ISO 8601 date when spec was published
+- `date`: ISO 8601 merge date of the implementation PR
 - `status`: `draft` | `accepted` | `implemented` | `deprecated`
 - `related`: links to related issues/PRs (optional)
 
@@ -59,7 +69,11 @@ Each implemented design decision must include provenance, rationale, and file-le
 ## Specification
 - Implementations MUST add a single entry to `CHANGELOG.md` with a link to the canonical spec document.
 - Each entry MUST include `Date`, `Spec` (link), `Summary`, `Rationale`, `Impact`, and `Targets` as described in `CHANGELOG.md`.
-- `Targets` SHOULD list affected files and either brief unified-diff snippets or explicit line ranges.
+- `Targets` MUST use a structured, machine-parseable format: `path | +added -removed` per affected file.
+- The required `CHANGELOG.md` entry MUST be present and validated before merge to the target branch.
+- `spec-id` uniqueness MUST be enforced: exactly one changelog entry is allowed per spec-id.
+- Compliance MUST be enforced by a required CI status check that parses `CHANGELOG.md` and blocks merge on violations.
+- `Date` in the changelog entry MUST use the merge date of the implementation PR.
 
 ## Files and diff format guidance
 - Prefer per-file line counts for adds/removes (for example: `+3 -1`).
@@ -68,7 +82,9 @@ Each implemented design decision must include provenance, rationale, and file-le
 
 ## Verification
 - PR implementing a spec should include the spec id in the PR title or body.
-- PR must add corresponding `CHANGELOG.md` entry before merge.
+- PR must add corresponding `CHANGELOG.md` entry before merge; merge is blocked if absent.
+- CI or pre-merge validation MUST fail if a duplicate `spec-id` entry is detected in `CHANGELOG.md`.
+- CI MUST validate required changelog fields and the structured `Targets` format.
 - Tests or CI steps verifying behavior should be linked from the spec or changelog entry.
 
 ## Example usage
