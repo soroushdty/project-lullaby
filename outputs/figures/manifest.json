@@ -2,7 +2,7 @@
   "entries": [
     {
       "artifact_id": "eda_core_01_cohort_overview",
-      "created_at_utc": "2026-06-01T20:04:36.052520+00:00",
+      "created_at_utc": "2026-06-01T21:23:43.369271+00:00",
       "deterministic": true,
       "inputs": [
         "participants",
@@ -24,7 +24,7 @@
     },
     {
       "artifact_id": "eda_core_02_outcome_prevalence",
-      "created_at_utc": "2026-06-01T20:04:36.053335+00:00",
+      "created_at_utc": "2026-06-01T21:23:43.370319+00:00",
       "deterministic": true,
       "inputs": [
         "clinical_outcomes",
@@ -47,7 +47,7 @@
     },
     {
       "artifact_id": "eda_core_03_distribution_outliers",
-      "created_at_utc": "2026-06-01T20:04:36.064349+00:00",
+      "created_at_utc": "2026-06-01T21:23:43.371105+00:00",
       "deterministic": true,
       "inputs": [
         "daily_vitals",
@@ -77,7 +77,7 @@
     },
     {
       "artifact_id": "eda_core_04_alert_engagement_funnel",
-      "created_at_utc": "2026-06-01T20:04:36.064864+00:00",
+      "created_at_utc": "2026-06-01T21:23:43.371871+00:00",
       "deterministic": true,
       "inputs": [
         "alerts",
@@ -1033,6 +1033,364 @@
       "title": "Missingness-Mechanism Diagnostics",
       "warnings": [
         "archetype stratifier unavailable"
+      ]
+    },
+    {
+      "artifact_id": "eda_relationships_10_relationships",
+      "created_at_utc": "2026-06-01T20:32:44.244386+00:00",
+      "deterministic": true,
+      "inputs": [
+        "daily_vitals",
+        "participants",
+        "environment",
+        "clinical_outcomes"
+      ],
+      "metadata": {
+        "discriminator_counts": {
+          "cv_risk_like_intervals": 518,
+          "cv_risk_observed_intervals": 7583,
+          "heat_strain_like_intervals": 794,
+          "heat_strain_observed_intervals": 7626
+        },
+        "heat_source": "daily_vitals heat_index_c proxy",
+        "observed_data_policy": "Observed pairs only; pairwise complete observations are used with no imputation or causal interpretation.",
+        "pairwise_n": {
+          "body_water_vs_hr": {
+            "descriptive_r": -0.008278434364594998,
+            "observed_pairs": 7626
+          },
+          "body_water_vs_sbp": {
+            "descriptive_r": 0.012941148617625544,
+            "observed_pairs": 7603
+          },
+          "body_water_vs_skin_temp": {
+            "descriptive_r": -0.018223891738292145,
+            "observed_pairs": 7654
+          },
+          "correlation_heatmap": {
+            "Active Minutes": {
+              "Active Minutes": 15597,
+              "Body Water": 10799,
+              "Diastolic BP": 15597,
+              "Heart Rate": 15573,
+              "Respiratory Rate": 15597,
+              "Skin Temperature": 15597,
+              "Sleep": 15407,
+              "Steps": 15597,
+              "Systolic BP": 15533,
+              "Weight": 10799
+            },
+            "Body Water": {
+              "Active Minutes": 10799,
+              "Body Water": 10856,
+              "Diastolic BP": 10856,
+              "Heart Rate": 10827,
+              "Respiratory Rate": 10856,
+              "Skin Temperature": 10856,
+              "Sleep": 10692,
+              "Steps": 10799,
+              "Systolic BP": 10808,
+              "Weight": 10856
+            },
+            "Diastolic BP": {
+              "Active Minutes": 15597,
+              "Body Water": 10856,
+              "Diastolic BP": 15731,
+              "Heart Rate": 15681,
+              "Respiratory Rate": 15731,
+              "Skin Temperature": 15731,
+              "Sleep": 15407,
+              "Steps": 15597,
+              "Systolic BP": 15630,
+              "Weight": 10856
+            },
+            "Heart Rate": {
+              "Active Minutes": 15573,
+              "Body Water": 10827,
+              "Diastolic BP": 15681,
+              "Heart Rate": 15681,
+              "Respiratory Rate": 15681,
+              "Skin Temperature": 15681,
+              "Sleep": 15407,
+              "Steps": 15573,
+              "Systolic BP": 15594,
+              "Weight": 10827
+            },
+            "Respiratory Rate": {
+              "Active Minutes": 15597,
+              "Body Water": 10856,
+              "Diastolic BP": 15731,
+              "Heart Rate": 15681,
+              "Respiratory Rate": 15731,
+              "Skin Temperature": 15731,
+              "Sleep": 15407,
+              "Steps": 15597,
+              "Systolic BP": 15630,
+              "Weight": 10856
+            },
+            "Skin Temperature": {
+              "Active Minutes": 15597,
+              "Body Water": 10856,
+              "Diastolic BP": 15731,
+              "Heart Rate": 15681,
+              "Respiratory Rate": 15731,
+              "Skin Temperature": 15731,
+              "Sleep": 15407,
+              "Steps": 15597,
+              "Systolic BP": 15630,
+              "Weight": 10856
+            },
+            "Sleep": {
+              "Active Minutes": 15407,
+              "Body Water": 10692,
+              "Diastolic BP": 15407,
+              "Heart Rate": 15407,
+              "Respiratory Rate": 15407,
+              "Skin Temperature": 15407,
+              "Sleep": 15407,
+              "Steps": 15407,
+              "Systolic BP": 15407,
+              "Weight": 10692
+            },
+            "Steps": {
+              "Active Minutes": 15597,
+              "Body Water": 10799,
+              "Diastolic BP": 15597,
+              "Heart Rate": 15573,
+              "Respiratory Rate": 15597,
+              "Skin Temperature": 15597,
+              "Sleep": 15407,
+              "Steps": 15597,
+              "Systolic BP": 15533,
+              "Weight": 10799
+            },
+            "Systolic BP": {
+              "Active Minutes": 15533,
+              "Body Water": 10808,
+              "Diastolic BP": 15630,
+              "Heart Rate": 15594,
+              "Respiratory Rate": 15630,
+              "Skin Temperature": 15630,
+              "Sleep": 15407,
+              "Steps": 15533,
+              "Systolic BP": 15630,
+              "Weight": 10808
+            },
+            "Weight": {
+              "Active Minutes": 10799,
+              "Body Water": 10856,
+              "Diastolic BP": 10856,
+              "Heart Rate": 10827,
+              "Respiratory Rate": 10856,
+              "Skin Temperature": 10856,
+              "Sleep": 10692,
+              "Steps": 10799,
+              "Systolic BP": 10808,
+              "Weight": 10856
+            }
+          },
+          "heat_index_bivariates": {
+            "heart_rate": 15681,
+            "skin_temperature_c": 15731
+          }
+        }
+      },
+      "optional_roles_used": [
+        "vital.systolic_bp",
+        "vital.diastolic_bp",
+        "vital.heart_rate",
+        "vital.respiratory_rate",
+        "vital.skin_temperature_c",
+        "vital.weight_kg",
+        "vital.body_water_pct",
+        "vital.sleep_hours",
+        "vital.steps",
+        "vital.active_minutes",
+        "vital.heat_index_c",
+        "environment.heat_index_c"
+      ],
+      "path": "outputs/figures/eda/10_relationships.png",
+      "required_roles": [
+        "vital.participant_id",
+        "vital.date",
+        "vital.systolic_bp"
+      ],
+      "spec": "SPEC-010",
+      "title": "Relationships and Descriptive Discriminators",
+      "warnings": [
+        "environment table unavailable; heat-index bivariate uses observed daily_vitals heat_index_c proxy"
+      ]
+    },
+    {
+      "artifact_id": "eda_relationships_11_heat_environment",
+      "created_at_utc": "2026-06-01T20:32:44.245336+00:00",
+      "deterministic": true,
+      "inputs": [
+        "environment",
+        "daily_vitals",
+        "participants"
+      ],
+      "metadata": {
+        "environment_available": false,
+        "environment_data_fabricated": false,
+        "environment_missingness": {},
+        "high_heat_definition": "unavailable",
+        "vital_response_rows": []
+      },
+      "optional_roles_used": [
+        "environment.heat_wave",
+        "environment.heat_exposure_level",
+        "participant.has_ac",
+        "vital.heart_rate",
+        "vital.skin_temperature_c"
+      ],
+      "path": "outputs/figures/eda/11_heat_environment.png",
+      "required_roles": [
+        "environment.date",
+        "environment.ambient_temp_c",
+        "environment.heat_index_c",
+        "participant.id",
+        "vital.participant_id",
+        "vital.date"
+      ],
+      "spec": "SPEC-010",
+      "title": "Heat Exposure and Environmental Context",
+      "warnings": [
+        "environment table unavailable; rendered explicit unavailable panel"
+      ]
+    },
+    {
+      "artifact_id": "eda_relationships_12_archetype_explorer",
+      "created_at_utc": "2026-06-01T20:32:44.246057+00:00",
+      "deterministic": true,
+      "inputs": [
+        "participants",
+        "daily_vitals",
+        "clinical_outcomes",
+        "alerts"
+      ],
+      "metadata": {
+        "alert_burden_source": "alerts table",
+        "label_source": "provisional",
+        "label_source_detail": "transparent rules from participants and daily_vitals",
+        "provisional": true,
+        "rule_summary": [
+          "true emergency: observed event flag or severe BP range",
+          "heat-stressed: repeated high heat with elevated HR or skin temperature",
+          "silent decliner: low adherence or high late missingness",
+          "overwhelmed mom: high missingness or psychosocial burden proxies",
+          "diligent monitor: high adherence, low missingness, and low alert burden"
+        ],
+        "segments": [
+          {
+            "ac_access": 1.0,
+            "adherence": 1.0,
+            "alert_burden": 1.0,
+            "archetype": "diligent monitor",
+            "event_prevalence": 0.0,
+            "missingness": 0.12325581395348838,
+            "n": 1,
+            "pih_severity": "Moderate PIH (1)"
+          },
+          {
+            "ac_access": 0.898876404494382,
+            "adherence": 1.0,
+            "alert_burden": 10.681818181818182,
+            "archetype": "overwhelmed mom",
+            "event_prevalence": 0.0,
+            "missingness": 0.06540099272339195,
+            "n": 89,
+            "pih_severity": "Moderate PIH (39)"
+          },
+          {
+            "ac_access": 0.5714285714285714,
+            "adherence": 1.0,
+            "alert_burden": 23.61904761904762,
+            "archetype": "heat-stressed",
+            "event_prevalence": 0.0,
+            "missingness": 0.08710865409017093,
+            "n": 21,
+            "pih_severity": "Mild PIH (8)"
+          },
+          {
+            "ac_access": 0.43820224719101125,
+            "adherence": 1.0,
+            "alert_burden": 29.46067415730337,
+            "archetype": "true emergency",
+            "event_prevalence": 0.797752808988764,
+            "missingness": 0.06819427855805733,
+            "n": 89,
+            "pih_severity": "Mild PIH (31)"
+          },
+          {
+            "ac_access": null,
+            "adherence": null,
+            "alert_burden": null,
+            "archetype": "silent decliner",
+            "event_prevalence": null,
+            "missingness": null,
+            "n": 0,
+            "pih_severity": "unavailable"
+          }
+        ]
+      },
+      "optional_roles_used": [
+        "participant.archetype",
+        "participant.has_ac",
+        "participant.pih_severity",
+        "outcome.cv_event",
+        "alert.level",
+        "vital.sensor_wear_hours",
+        "vital.scale_used"
+      ],
+      "path": "outputs/figures/eda/12_archetype_explorer.png",
+      "required_roles": [
+        "participant.id",
+        "vital.participant_id",
+        "vital.date"
+      ],
+      "spec": "SPEC-010",
+      "title": "Participant-Archetype Explorer",
+      "warnings": [
+        "archetype labels unavailable; assigned provisional descriptive segments"
+      ]
+    },
+    {
+      "artifact_id": "eda_relationships_13_recruitment_timeline",
+      "created_at_utc": "2026-06-01T20:32:44.246596+00:00",
+      "deterministic": true,
+      "inputs": [
+        "participants",
+        "recruitment",
+        "environment",
+        "daily_vitals"
+      ],
+      "metadata": {
+        "calendar_aware": true,
+        "display_downsampled": true,
+        "display_participants": 75,
+        "observation_density_source": "daily_vitals dates",
+        "participants": 200,
+        "participants_missing_timeline_enrollment": 0,
+        "recruitment_source": "inferred from participant enrollment/observation/daily dates"
+      },
+      "optional_roles_used": [
+        "participant.enrollment_date",
+        "participant.delivery_date",
+        "participant.observation_start_date",
+        "recruitment.date",
+        "environment.heat_wave",
+        "environment.heat_exposure_level"
+      ],
+      "path": "outputs/figures/eda/13_recruitment_timeline.png",
+      "required_roles": [
+        "participant.id"
+      ],
+      "spec": "SPEC-010",
+      "title": "Enrollment and Recruitment Timeline",
+      "warnings": [
+        "recruitment table unavailable; inferred recruitment timeline from participant and observation dates",
+        "participant timeline display downsampled; metadata counts all participants"
       ]
     },
     {

@@ -6,6 +6,7 @@ from pathlib import Path
 
 from src.visualization.eda_core import generate_core_dashboards
 from src.visualization.eda_longitudinal import LongitudinalInputError, generate_longitudinal_dashboards
+from src.visualization.eda_relationships import RelationshipInputError, generate_relationship_dashboards
 
 
 def _parse_bool(value: str) -> bool:
@@ -21,7 +22,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Generate Project Lullaby descriptive EDA dashboards.")
     parser.add_argument("--data-dir", default="data/raw", help="Canonical table directory")
     parser.add_argument("--out-dir", default="outputs/figures/eda", help="Output directory for EDA PNG artifacts")
-    parser.add_argument("--panels", default="core", choices=["core", "longitudinal"], help="Dashboard panel set to generate")
+    parser.add_argument("--panels", default="core", choices=["core", "longitudinal", "relationships", "all"], help="Dashboard panel set to generate")
     parser.add_argument("--manifest", default="outputs/figures/manifest.json", help="Figure artifact manifest path")
     parser.add_argument("--participant-id", default=None, help="Participant id for participant-focused longitudinal panels")
     parser.add_argument("--week-start", type=int, default=None, help="Inclusive 1-based starting study week for longitudinal panels")
@@ -44,6 +45,41 @@ def main(argv: list[str] | None = None) -> int:
                 overlay_environment=args.overlay_environment,
             )
             panel_label = "longitudinal"
+        elif args.panels == "relationships":
+            results = generate_relationship_dashboards(
+                Path(args.data_dir),
+                Path(args.out_dir),
+                manifest_path=Path(args.manifest),
+            )
+            panel_label = "relationships"
+        elif args.panels == "all":
+            results = []
+            results.extend(
+                generate_core_dashboards(
+                    Path(args.data_dir),
+                    Path(args.out_dir),
+                    manifest_path=Path(args.manifest),
+                )
+            )
+            results.extend(
+                generate_longitudinal_dashboards(
+                    Path(args.data_dir),
+                    Path(args.out_dir),
+                    manifest_path=Path(args.manifest),
+                    participant_id=args.participant_id,
+                    week_start=args.week_start,
+                    week_end=args.week_end,
+                    overlay_environment=args.overlay_environment,
+                )
+            )
+            results.extend(
+                generate_relationship_dashboards(
+                    Path(args.data_dir),
+                    Path(args.out_dir),
+                    manifest_path=Path(args.manifest),
+                )
+            )
+            panel_label = "all"
         else:
             results = generate_core_dashboards(
                 Path(args.data_dir),
@@ -51,7 +87,7 @@ def main(argv: list[str] | None = None) -> int:
                 manifest_path=Path(args.manifest),
             )
             panel_label = "core"
-    except (OSError, ValueError, RuntimeError, LongitudinalInputError) as exc:
+    except (OSError, ValueError, RuntimeError, LongitudinalInputError, RelationshipInputError) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 2
     print(f"Generated {len(results)} EDA {panel_label} dashboard artifacts")
