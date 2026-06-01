@@ -122,9 +122,9 @@ description: "Executable task list for changelog policy validation and CI merge 
 
 **Purpose**: Final hardening and documentation alignment across all stories.
 
-- [ ] T027 [P] Add end-to-end contract + integration test command coverage to quickstart guidance in specs/000-changelog-creation/quickstart.md
-- [ ] T028 [P] Document validator usage and changelog authoring checklist in README.md
-- [ ] T029 Run full validation test selection from quickstart and adjust failing expectations in tests/unit/test_changelog_validator.py
+- [X] T027 [P] Add end-to-end contract + integration test command coverage to quickstart guidance in specs/000-changelog-creation/quickstart.md
+- [X] T028 [P] Document validator usage and changelog authoring checklist in README.md
+- [X] T029 Run full validation test selection from quickstart and adjust failing expectations in tests/unit/test_changelog_validator.py
 
 ---
 
