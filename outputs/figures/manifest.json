@@ -2,7 +2,7 @@
   "entries": [
     {
       "artifact_id": "eda_core_01_cohort_overview",
-      "created_at_utc": "2026-06-01T19:18:55.450866+00:00",
+      "created_at_utc": "2026-06-01T20:04:36.052520+00:00",
       "deterministic": true,
       "inputs": [
         "participants",
@@ -24,7 +24,7 @@
     },
     {
       "artifact_id": "eda_core_02_outcome_prevalence",
-      "created_at_utc": "2026-06-01T19:18:55.451334+00:00",
+      "created_at_utc": "2026-06-01T20:04:36.053335+00:00",
       "deterministic": true,
       "inputs": [
         "clinical_outcomes",
@@ -47,7 +47,7 @@
     },
     {
       "artifact_id": "eda_core_03_distribution_outliers",
-      "created_at_utc": "2026-06-01T19:18:55.452206+00:00",
+      "created_at_utc": "2026-06-01T20:04:36.064349+00:00",
       "deterministic": true,
       "inputs": [
         "daily_vitals",
@@ -77,7 +77,7 @@
     },
     {
       "artifact_id": "eda_core_04_alert_engagement_funnel",
-      "created_at_utc": "2026-06-01T19:18:55.452433+00:00",
+      "created_at_utc": "2026-06-01T20:04:36.064864+00:00",
       "deterministic": true,
       "inputs": [
         "alerts",
@@ -107,6 +107,932 @@
       "title": "Alerts and Engagement Funnel",
       "warnings": [
         "trigger_reasons overflow categories preserved: WeightGain>2lb/24h=101; dBP>=100=24; RR_abnormal=5; dBP>110=5; Composite_sBP+HR+Weight=3"
+      ]
+    },
+    {
+      "artifact_id": "eda_longitudinal_05_vital_trajectories",
+      "created_at_utc": "2026-06-01T20:01:54.317176+00:00",
+      "deterministic": true,
+      "inputs": [
+        "daily_vitals",
+        "participants",
+        "alerts",
+        "clinical_outcomes",
+        "environment"
+      ],
+      "metadata": {
+        "imputation_performed": false,
+        "observed_denominators": {
+          "vital.body_water_pct": {
+            "expected_days": 84,
+            "observed_days": 51
+          },
+          "vital.diastolic_bp": {
+            "expected_days": 84,
+            "observed_days": 84
+          },
+          "vital.heart_rate": {
+            "expected_days": 84,
+            "observed_days": 84
+          },
+          "vital.respiratory_rate": {
+            "expected_days": 84,
+            "observed_days": 84
+          },
+          "vital.skin_temperature_c": {
+            "expected_days": 84,
+            "observed_days": 84
+          },
+          "vital.sleep_hours": {
+            "expected_days": 84,
+            "observed_days": 81
+          },
+          "vital.steps": {
+            "expected_days": 84,
+            "observed_days": 83
+          },
+          "vital.systolic_bp": {
+            "expected_days": 84,
+            "observed_days": 83
+          },
+          "vital.weight_kg": {
+            "expected_days": 84,
+            "observed_days": 51
+          }
+        },
+        "overlay_environment": false,
+        "selected_participant": {
+          "distinct_alert_days": 76,
+          "distinct_outcome_events": 0,
+          "observed_vital_days": 84,
+          "observed_vital_variable_count": 685,
+          "participant_id": "LUL-2179",
+          "selection_mode": "automatic",
+          "selection_score": 160,
+          "tie_breakers_applied": [
+            "observed_vital_variable_count",
+            "lexicographic_participant_id"
+          ]
+        },
+        "week_filter": {
+          "week_end": null,
+          "week_start": null
+        }
+      },
+      "optional_roles_used": [
+        "vital.systolic_bp",
+        "vital.diastolic_bp",
+        "vital.heart_rate",
+        "vital.respiratory_rate",
+        "vital.skin_temperature_c",
+        "vital.weight_kg",
+        "vital.body_water_pct",
+        "vital.sleep_hours",
+        "vital.steps",
+        "environment.ambient_temp_c",
+        "environment.heat_index_c"
+      ],
+      "path": "outputs/figures/eda/05_vital_trajectories.png",
+      "required_roles": [
+        "vital.participant_id",
+        "vital.date",
+        "vital.systolic_bp"
+      ],
+      "spec": "SPEC-009",
+      "title": "Vital Trajectories",
+      "warnings": []
+    },
+    {
+      "artifact_id": "eda_longitudinal_06_missingness_adherence",
+      "created_at_utc": "2026-06-01T20:01:54.317944+00:00",
+      "deterministic": true,
+      "inputs": [
+        "daily_vitals",
+        "staff_contacts",
+        "alerts"
+      ],
+      "metadata": {
+        "display_downsampled": false,
+        "display_rows": 200,
+        "gap_cluster_summary": {
+          "feeding_morning": "unavailable",
+          "hot_afternoon": 249,
+          "late_study_decline": 791,
+          "overnight": "unavailable",
+          "total_missing_participant_days": 1069
+        },
+        "imputation_performed": false,
+        "matrix": {
+          "participants": 200,
+          "study_days": 84
+        },
+        "metric_rows": 200,
+        "non_color_encoding": [
+          "labels",
+          "legend",
+          "filled_vs_white_square"
+        ],
+        "week_filter": {
+          "week_end": null,
+          "week_start": null
+        }
+      },
+      "optional_roles_used": [
+        "vital.sensor_wear_hours",
+        "vital.scale_used",
+        "alert.hour"
+      ],
+      "path": "outputs/figures/eda/06_missingness_adherence.png",
+      "required_roles": [
+        "vital.participant_id",
+        "vital.date",
+        "contact.type"
+      ],
+      "spec": "SPEC-009",
+      "title": "Missingness and Adherence",
+      "warnings": [
+        "overnight gap clustering unavailable: no overnight timestamp proxy",
+        "feeding/morning gap clustering unavailable: no feeding/morning timestamp proxy"
+      ]
+    },
+    {
+      "artifact_id": "eda_longitudinal_07_patient_timeline",
+      "created_at_utc": "2026-06-01T20:01:54.318631+00:00",
+      "deterministic": true,
+      "inputs": [
+        "participants",
+        "daily_vitals",
+        "alerts",
+        "staff_contacts",
+        "clinical_outcomes",
+        "environment"
+      ],
+      "metadata": {
+        "has_missingness_wear_track": true,
+        "imputation_performed": false,
+        "selected_participant": {
+          "distinct_alert_days": 76,
+          "distinct_outcome_events": 0,
+          "observed_vital_days": 84,
+          "observed_vital_variable_count": 685,
+          "participant_id": "LUL-2179",
+          "selection_mode": "automatic",
+          "selection_score": 160,
+          "tie_breakers_applied": [
+            "observed_vital_variable_count",
+            "lexicographic_participant_id"
+          ]
+        },
+        "summary_fields": {
+          "ac_access": 1,
+          "anxiety": 48,
+          "depression": 12,
+          "health_literacy": 11,
+          "insurance": "AHCCCS",
+          "parity": 2,
+          "pih_severity": "Moderate PIH",
+          "social_support": 56
+        },
+        "track_counts": {
+          "alert_markers": 76,
+          "contact_markers": 3,
+          "outcome_markers": 0,
+          "vital_tracks": 9
+        },
+        "vital_gap_days": {
+          "vital.body_water_pct": [
+            17,
+            20,
+            22,
+            24,
+            25,
+            28,
+            34,
+            35,
+            36,
+            38,
+            43,
+            46,
+            48,
+            51,
+            55,
+            58,
+            59,
+            60,
+            62,
+            63,
+            64,
+            65,
+            67,
+            69,
+            71,
+            72,
+            73,
+            74,
+            78,
+            80,
+            81,
+            82,
+            84
+          ],
+          "vital.sleep_hours": [
+            29,
+            52,
+            83
+          ],
+          "vital.steps": [
+            52
+          ],
+          "vital.systolic_bp": [
+            29
+          ],
+          "vital.weight_kg": [
+            17,
+            20,
+            22,
+            24,
+            25,
+            28,
+            34,
+            35,
+            36,
+            38,
+            43,
+            46,
+            48,
+            51,
+            55,
+            58,
+            59,
+            60,
+            62,
+            63,
+            64,
+            65,
+            67,
+            69,
+            71,
+            72,
+            73,
+            74,
+            78,
+            80,
+            81,
+            82,
+            84
+          ]
+        },
+        "week_filter": {
+          "week_end": null,
+          "week_start": null
+        }
+      },
+      "optional_roles_used": [
+        "vital.systolic_bp",
+        "vital.diastolic_bp",
+        "vital.heart_rate",
+        "vital.respiratory_rate",
+        "vital.skin_temperature_c",
+        "vital.weight_kg",
+        "vital.body_water_pct",
+        "vital.sleep_hours",
+        "vital.steps",
+        "participant.insurance",
+        "participant.parity",
+        "participant.health_literacy",
+        "participant.social_support",
+        "participant.depression",
+        "participant.anxiety"
+      ],
+      "path": "outputs/figures/eda/07_patient_timeline.png",
+      "required_roles": [
+        "participant.id",
+        "vital.participant_id",
+        "vital.date",
+        "vital.systolic_bp",
+        "alert.participant_id",
+        "alert.date",
+        "alert.level",
+        "contact.participant_id",
+        "contact.date",
+        "contact.type",
+        "outcome.participant_id",
+        "outcome.cv_event",
+        "outcome.cv_event_date"
+      ],
+      "spec": "SPEC-009",
+      "title": "Single-Participant Clinical Timeline",
+      "warnings": []
+    },
+    {
+      "artifact_id": "eda_longitudinal_08_data_quality_scorecard",
+      "created_at_utc": "2026-06-01T20:01:54.319152+00:00",
+      "deterministic": true,
+      "inputs": [
+        "daily_vitals",
+        "staff_contacts"
+      ],
+      "metadata": {
+        "quality_score_formula": {
+          "adjusted_weights": {
+            "contact_traceability": 0.15,
+            "scale_adherence": 0.25,
+            "vital_completeness": 0.2,
+            "wear_completeness": 0.4
+          },
+          "base_weights": {
+            "contact_traceability": 0.15,
+            "scale_adherence": 0.25,
+            "vital_completeness": 0.2,
+            "wear_completeness": 0.4
+          },
+          "formula": "0.4 * wear_completeness + 0.25 * scale_adherence + 0.2 * vital_completeness + 0.15 * contact_traceability",
+          "unavailable_components": []
+        },
+        "rank_basis": "data completeness and signal quality, not clinical risk",
+        "top_participants": [
+          {
+            "participant_id": "LUL-2150",
+            "quality_score": 0.7709656084656085
+          },
+          {
+            "participant_id": "LUL-2032",
+            "quality_score": 0.7654695767195768
+          },
+          {
+            "participant_id": "LUL-2194",
+            "quality_score": 0.7641335978835979
+          },
+          {
+            "participant_id": "LUL-2136",
+            "quality_score": 0.7637037037037038
+          },
+          {
+            "participant_id": "LUL-2004",
+            "quality_score": 0.7632407407407408
+          },
+          {
+            "participant_id": "LUL-2066",
+            "quality_score": 0.7555224867724868
+          },
+          {
+            "participant_id": "LUL-2038",
+            "quality_score": 0.7522883597883598
+          },
+          {
+            "participant_id": "LUL-2087",
+            "quality_score": 0.7520304232804234
+          },
+          {
+            "participant_id": "LUL-2037",
+            "quality_score": 0.7508664021164021
+          },
+          {
+            "participant_id": "LUL-2138",
+            "quality_score": 0.7505555555555555
+          },
+          {
+            "participant_id": "LUL-2026",
+            "quality_score": 0.7500198412698412
+          },
+          {
+            "participant_id": "LUL-2144",
+            "quality_score": 0.7497883597883598
+          },
+          {
+            "participant_id": "LUL-2174",
+            "quality_score": 0.7474735449735449
+          },
+          {
+            "participant_id": "LUL-2113",
+            "quality_score": 0.7463822751322752
+          }
+        ],
+        "week_filter": {
+          "week_end": null,
+          "week_start": null
+        }
+      },
+      "optional_roles_used": [
+        "vital.sensor_wear_hours",
+        "vital.scale_used",
+        "contact.completed"
+      ],
+      "path": "outputs/figures/eda/08_data_quality_scorecard.png",
+      "required_roles": [
+        "vital.participant_id",
+        "vital.date",
+        "contact.type"
+      ],
+      "spec": "SPEC-009",
+      "title": "Data-Quality and Signal-Quality Scorecard",
+      "warnings": []
+    },
+    {
+      "artifact_id": "eda_longitudinal_09_missingness_mechanism",
+      "created_at_utc": "2026-06-01T20:01:54.319702+00:00",
+      "deterministic": true,
+      "inputs": [
+        "participants",
+        "daily_vitals",
+        "environment",
+        "clinical_outcomes"
+      ],
+      "metadata": {
+        "context_rates": {
+          "AC access": [
+            {
+              "group": "0",
+              "missingness_rate": 0.3074243813015582
+            },
+            {
+              "group": "1",
+              "missingness_rate": 0.3271701050992604
+            }
+          ],
+          "PIH severity": [
+            {
+              "group": "Eclampsia",
+              "missingness_rate": 0.17857142857142858
+            },
+            {
+              "group": "HELLP syndrome",
+              "missingness_rate": 0.3125
+            },
+            {
+              "group": "Mild PIH",
+              "missingness_rate": 0.3071803146430012
+            },
+            {
+              "group": "Moderate PIH",
+              "missingness_rate": 0.32324455205811137
+            },
+            {
+              "group": "Severe preeclampsia",
+              "missingness_rate": 0.3340625683657843
+            }
+          ],
+          "health literacy": [
+            {
+              "group": "3",
+              "missingness_rate": 0.2922077922077922
+            },
+            {
+              "group": "4",
+              "missingness_rate": 0.4028103044496487
+            },
+            {
+              "group": "5",
+              "missingness_rate": 0.32926829268292684
+            },
+            {
+              "group": "6",
+              "missingness_rate": 0.3378076062639821
+            },
+            {
+              "group": "7",
+              "missingness_rate": 0.37609649122807015
+            },
+            {
+              "group": "8",
+              "missingness_rate": 0.2817725752508361
+            },
+            {
+              "group": "9",
+              "missingness_rate": 0.3134743875278396
+            },
+            {
+              "group": "10",
+              "missingness_rate": 0.31414868105515587
+            },
+            {
+              "group": "11",
+              "missingness_rate": 0.31364468864468864
+            },
+            {
+              "group": "12",
+              "missingness_rate": 0.33779761904761907
+            },
+            {
+              "group": "13",
+              "missingness_rate": 0.24285714285714285
+            },
+            {
+              "group": "14",
+              "missingness_rate": 0.20238095238095238
+            }
+          ],
+          "insurance": [
+            {
+              "group": "AHCCCS",
+              "missingness_rate": 0.31045382704899527
+            },
+            {
+              "group": "Medicaid",
+              "missingness_rate": 0.3228274731280743
+            },
+            {
+              "group": "Other",
+              "missingness_rate": 0.34022394487510765
+            },
+            {
+              "group": "Private",
+              "missingness_rate": 0.3467784180199057
+            },
+            {
+              "group": "Uninsured",
+              "missingness_rate": 0.3044112285818447
+            }
+          ]
+        },
+        "heat_rates": {
+          "heat exposure": [
+            {
+              "group": "higher heat",
+              "missingness_rate": 0.3527503892060197
+            },
+            {
+              "group": "lower heat",
+              "missingness_rate": 0.2891686401595413
+            }
+          ]
+        },
+        "imputation_performed": false,
+        "mechanism_label": "exploratory signals consistent with MCAR, MAR, or MNAR hypotheses; not proof",
+        "missingness_rate_by_study_day": [
+          {
+            "missingness_rate": 0.175,
+            "study_day": 1
+          },
+          {
+            "missingness_rate": 0.22,
+            "study_day": 2
+          },
+          {
+            "missingness_rate": 0.17,
+            "study_day": 3
+          },
+          {
+            "missingness_rate": 0.14,
+            "study_day": 4
+          },
+          {
+            "missingness_rate": 0.185,
+            "study_day": 5
+          },
+          {
+            "missingness_rate": 0.205,
+            "study_day": 6
+          },
+          {
+            "missingness_rate": 0.235,
+            "study_day": 7
+          },
+          {
+            "missingness_rate": 0.25,
+            "study_day": 8
+          },
+          {
+            "missingness_rate": 0.23,
+            "study_day": 9
+          },
+          {
+            "missingness_rate": 0.22,
+            "study_day": 10
+          },
+          {
+            "missingness_rate": 0.2,
+            "study_day": 11
+          },
+          {
+            "missingness_rate": 0.265,
+            "study_day": 12
+          },
+          {
+            "missingness_rate": 0.225,
+            "study_day": 13
+          },
+          {
+            "missingness_rate": 0.205,
+            "study_day": 14
+          },
+          {
+            "missingness_rate": 0.205,
+            "study_day": 15
+          },
+          {
+            "missingness_rate": 0.235,
+            "study_day": 16
+          },
+          {
+            "missingness_rate": 0.24,
+            "study_day": 17
+          },
+          {
+            "missingness_rate": 0.29,
+            "study_day": 18
+          },
+          {
+            "missingness_rate": 0.255,
+            "study_day": 19
+          },
+          {
+            "missingness_rate": 0.23,
+            "study_day": 20
+          },
+          {
+            "missingness_rate": 0.265,
+            "study_day": 21
+          },
+          {
+            "missingness_rate": 0.265,
+            "study_day": 22
+          },
+          {
+            "missingness_rate": 0.295,
+            "study_day": 23
+          },
+          {
+            "missingness_rate": 0.255,
+            "study_day": 24
+          },
+          {
+            "missingness_rate": 0.31,
+            "study_day": 25
+          },
+          {
+            "missingness_rate": 0.2914572864321608,
+            "study_day": 26
+          },
+          {
+            "missingness_rate": 0.25125628140703515,
+            "study_day": 27
+          },
+          {
+            "missingness_rate": 0.27638190954773867,
+            "study_day": 28
+          },
+          {
+            "missingness_rate": 0.3015075376884422,
+            "study_day": 29
+          },
+          {
+            "missingness_rate": 0.20707070707070707,
+            "study_day": 30
+          },
+          {
+            "missingness_rate": 0.30303030303030304,
+            "study_day": 31
+          },
+          {
+            "missingness_rate": 0.27918781725888325,
+            "study_day": 32
+          },
+          {
+            "missingness_rate": 0.29949238578680204,
+            "study_day": 33
+          },
+          {
+            "missingness_rate": 0.30456852791878175,
+            "study_day": 34
+          },
+          {
+            "missingness_rate": 0.36548223350253806,
+            "study_day": 35
+          },
+          {
+            "missingness_rate": 0.3299492385786802,
+            "study_day": 36
+          },
+          {
+            "missingness_rate": 0.3163265306122449,
+            "study_day": 37
+          },
+          {
+            "missingness_rate": 0.27040816326530615,
+            "study_day": 38
+          },
+          {
+            "missingness_rate": 0.3163265306122449,
+            "study_day": 39
+          },
+          {
+            "missingness_rate": 0.35384615384615387,
+            "study_day": 40
+          },
+          {
+            "missingness_rate": 0.3125,
+            "study_day": 41
+          },
+          {
+            "missingness_rate": 0.3020833333333333,
+            "study_day": 42
+          },
+          {
+            "missingness_rate": 0.3368421052631579,
+            "study_day": 43
+          },
+          {
+            "missingness_rate": 0.31216931216931215,
+            "study_day": 44
+          },
+          {
+            "missingness_rate": 0.3351063829787234,
+            "study_day": 45
+          },
+          {
+            "missingness_rate": 0.3351063829787234,
+            "study_day": 46
+          },
+          {
+            "missingness_rate": 0.34759358288770054,
+            "study_day": 47
+          },
+          {
+            "missingness_rate": 0.3978494623655914,
+            "study_day": 48
+          },
+          {
+            "missingness_rate": 0.34408602150537637,
+            "study_day": 49
+          },
+          {
+            "missingness_rate": 0.3423913043478261,
+            "study_day": 50
+          },
+          {
+            "missingness_rate": 0.43169398907103823,
+            "study_day": 51
+          },
+          {
+            "missingness_rate": 0.34615384615384615,
+            "study_day": 52
+          },
+          {
+            "missingness_rate": 0.3370165745856354,
+            "study_day": 53
+          },
+          {
+            "missingness_rate": 0.31666666666666665,
+            "study_day": 54
+          },
+          {
+            "missingness_rate": 0.39106145251396646,
+            "study_day": 55
+          },
+          {
+            "missingness_rate": 0.37714285714285717,
+            "study_day": 56
+          },
+          {
+            "missingness_rate": 0.36,
+            "study_day": 57
+          },
+          {
+            "missingness_rate": 0.34285714285714286,
+            "study_day": 58
+          },
+          {
+            "missingness_rate": 0.3468208092485549,
+            "study_day": 59
+          },
+          {
+            "missingness_rate": 0.42196531791907516,
+            "study_day": 60
+          },
+          {
+            "missingness_rate": 0.3313953488372093,
+            "study_day": 61
+          },
+          {
+            "missingness_rate": 0.436046511627907,
+            "study_day": 62
+          },
+          {
+            "missingness_rate": 0.4418604651162791,
+            "study_day": 63
+          },
+          {
+            "missingness_rate": 0.43023255813953487,
+            "study_day": 64
+          },
+          {
+            "missingness_rate": 0.3953488372093023,
+            "study_day": 65
+          },
+          {
+            "missingness_rate": 0.38953488372093026,
+            "study_day": 66
+          },
+          {
+            "missingness_rate": 0.3546511627906977,
+            "study_day": 67
+          },
+          {
+            "missingness_rate": 0.45348837209302323,
+            "study_day": 68
+          },
+          {
+            "missingness_rate": 0.4127906976744186,
+            "study_day": 69
+          },
+          {
+            "missingness_rate": 0.3391812865497076,
+            "study_day": 70
+          },
+          {
+            "missingness_rate": 0.38011695906432746,
+            "study_day": 71
+          },
+          {
+            "missingness_rate": 0.4327485380116959,
+            "study_day": 72
+          },
+          {
+            "missingness_rate": 0.38596491228070173,
+            "study_day": 73
+          },
+          {
+            "missingness_rate": 0.4444444444444444,
+            "study_day": 74
+          },
+          {
+            "missingness_rate": 0.39766081871345027,
+            "study_day": 75
+          },
+          {
+            "missingness_rate": 0.3508771929824561,
+            "study_day": 76
+          },
+          {
+            "missingness_rate": 0.43859649122807015,
+            "study_day": 77
+          },
+          {
+            "missingness_rate": 0.43859649122807015,
+            "study_day": 78
+          },
+          {
+            "missingness_rate": 0.4619883040935672,
+            "study_day": 79
+          },
+          {
+            "missingness_rate": 0.47953216374269003,
+            "study_day": 80
+          },
+          {
+            "missingness_rate": 0.4678362573099415,
+            "study_day": 81
+          },
+          {
+            "missingness_rate": 0.4853801169590643,
+            "study_day": 82
+          },
+          {
+            "missingness_rate": 0.4619883040935672,
+            "study_day": 83
+          },
+          {
+            "missingness_rate": 0.42105263157894735,
+            "study_day": 84
+          }
+        ],
+        "recent_abnormal_vital_rates": {
+          "recent abnormal vitals": [
+            {
+              "group": "no recent abnormal vitals",
+              "missingness_rate": 0.28655592041723005
+            },
+            {
+              "group": "after recent abnormal vitals",
+              "missingness_rate": 0.3853449879114748
+            }
+          ]
+        },
+        "week_filter": {
+          "week_end": null,
+          "week_start": null
+        }
+      },
+      "optional_roles_used": [
+        "participant.archetype",
+        "participant.insurance",
+        "participant.pih_severity",
+        "participant.has_ac",
+        "participant.health_literacy",
+        "environment.heat_exposure_level"
+      ],
+      "path": "outputs/figures/eda/09_missingness_mechanism.png",
+      "required_roles": [
+        "participant.id",
+        "vital.participant_id",
+        "vital.date",
+        "vital.systolic_bp"
+      ],
+      "spec": "SPEC-009",
+      "title": "Missingness-Mechanism Diagnostics",
+      "warnings": [
+        "archetype stratifier unavailable"
       ]
     },
     {

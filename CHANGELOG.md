@@ -34,6 +34,40 @@ Notes
 - Use a single changelog entry per implemented spec. If multiple specs are implemented on the same date, add separate dated entries.
 
 Date: 2026-06-01
+Spec: /specs/009-longitudinal-vitals-missingness-timeline/spec.md
+Summary: Implement SPEC-009 longitudinal EDA dashboards, selected-participant clinical timeline, missingness/adherence diagnostics, signal-quality ranking, CLI filters, and manifest provenance.
+Rationale: SPEC-009 extends static descriptive EDA beyond cross-sectional summaries so reviewers can inspect study-day trajectories, visible missingness, adherence decline, event alignment, and data-quality evidence without implying prediction, imputation, or clinical-risk ranking.
+Impact:
+  - Broke/Changed requirements: yes; the EDA CLI now supports `--panels longitudinal`, participant selection, inclusive week filters, and optional environment overlays, and generated manifest entries now include SPEC-009 required roles, selected-participant metadata, quality-score formulas, missingness caveats, and no-imputation metadata.
+  - Docs/Constitution changes: no constitution changes; SPEC-009 plan, research, data model, contracts, quickstart, and tasks were added, with acceptance evidence recorded after full local validation.
+Targets:
+  - .specify/feature.json | +1 -1
+  - CHANGELOG.md | +34 -0
+  - src/visualization/__init__.py | +34 -0
+  - src/visualization/eda_longitudinal.py | +1254 -0
+  - src/visualization/generate_eda.py | +35 -8
+  - src/visualization/patient_view.py | +357 -0
+  - src/visualization/schema_registry.py | +3 -0
+  - tests/test_eda_longitudinal_outputs.py | +290 -0
+  - tests/test_patient_timeline.py | +85 -0
+  - outputs/figures/manifest.json | +930 -4
+  - outputs/figures/eda/05_vital_trajectories.png | +0 -0
+  - outputs/figures/eda/06_missingness_adherence.png | +0 -0
+  - outputs/figures/eda/07_patient_timeline.png | +0 -0
+  - outputs/figures/eda/08_data_quality_scorecard.png | +0 -0
+  - outputs/figures/eda/09_missingness_mechanism.png | +0 -0
+  - specs/009-longitudinal-vitals-missingness-timeline/spec.md | +229 -0
+  - specs/009-longitudinal-vitals-missingness-timeline/plan.md | +227 -0
+  - specs/009-longitudinal-vitals-missingness-timeline/research.md | +153 -0
+  - specs/009-longitudinal-vitals-missingness-timeline/data-model.md | +298 -0
+  - specs/009-longitudinal-vitals-missingness-timeline/quickstart.md | +133 -0
+  - specs/009-longitudinal-vitals-missingness-timeline/tasks.md | +308 -0
+  - specs/009-longitudinal-vitals-missingness-timeline/contracts/cli-contract.md | +74 -0
+  - specs/009-longitudinal-vitals-missingness-timeline/contracts/longitudinal-artifacts-contract.md | +103 -0
+  - specs/009-longitudinal-vitals-missingness-timeline/contracts/manifest-contract.md | +69 -0
+  - specs/009-longitudinal-vitals-missingness-timeline/contracts/quality-missingness-contract.md | +94 -0
+
+Date: 2026-06-01
 Spec: /specs/007-core-descriptive-eda-dashboards/spec.md
 Summary: Implement SPEC-007 traceability for core descriptive EDA dashboards, manifest entries, required-role coverage, hard-range vital rendering, and acceptance evidence.
 Rationale: SPEC-007 formalizes the first four descriptive dashboard panels as static, reproducible, schema-driven artifacts. This pass aligns the existing EDA renderer with SPEC-007 provenance, expands tests for required role failures and panel dimensions, preserves hard-range vital values as `impossible by schema` evidence, and records default plus synthetic generation evidence.

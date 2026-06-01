@@ -179,6 +179,9 @@ def _role(
 ROLES: dict[str, SemanticRole] = {
     "participant.id": _role("participant.id", "participants", True, "string", "Participant ID", ("participant_id", "record_id")),
     "participant.age": _role("participant.age", "participants", False, "number", "Age", ("age",)),
+    "participant.insurance": _role("participant.insurance", "participants", False, "category", "Insurance", ("insurance", "payer")),
+    "participant.parity": _role("participant.parity", "participants", False, "number", "Parity", ("para", "parity")),
+    "participant.archetype": _role("participant.archetype", "participants", False, "category", "Archetype", ("archetype", "risk_archetype")),
     "participant.enrollment_date": _role("participant.enrollment_date", "participants", False, "date", "Enrollment Date", ("enrollment_date", "enrollment_ts")),
     "participant.delivery_date": _role("participant.delivery_date", "participants", False, "date", "Delivery Date", ("delivery_date",)),
     "participant.observation_start_date": _role("participant.observation_start_date", "participants", False, "date", "Observation Start", ("observation_start_date",)),
