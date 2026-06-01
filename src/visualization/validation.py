@@ -10,6 +10,9 @@ import pandas as pd
 from src.visualization import schema_registry as registry
 
 
+LONGITUDINAL_ONLY_ENTITIES = {"environment", "recruitment"}
+
+
 @dataclass
 class EntityValidationResult:
     status: str
@@ -111,7 +114,17 @@ def validate_data_dir(
         report_path=str(report_path),
         manifest_path=str(manifest_path),
     )
+    longitudinal_context = _looks_like_synthetic_longitudinal(data_dir)
     for spec in registry.current_entities():
+        if (
+            spec.name in LONGITUDINAL_ONLY_ENTITIES
+            and not longitudinal_context
+            and not _has_any_source(data_dir, spec.source_filenames)
+        ):
+            result.warnings.append(
+                f"{spec.name}: required for synthetic longitudinal outputs only"
+            )
+            continue
         try:
             source_path = _find_source_path(data_dir, spec.source_filenames)
             df = registry.load_entity(data_dir, spec.name)
@@ -137,6 +150,30 @@ def validate_data_dir(
         result.capture_worthy_values.extend(entity_result.capture_worthy_values)
 
     for spec in registry.future_optional_entities():
+        if spec.name in LONGITUDINAL_ONLY_ENTITIES and longitudinal_context:
+            try:
+                source_path = _find_source_path(data_dir, spec.source_filenames)
+                entity_result = validate_entity(
+                    spec.name,
+                    registry.load_entity(data_dir, spec.name),
+                    source_file=str(source_path),
+                )
+            except registry.SchemaValidationError as exc:
+                entity_result = EntityValidationResult(
+                    status="fail",
+                    entity=spec.name,
+                    source_file=str(data_dir),
+                    row_count=0,
+                    errors=[str(exc)],
+                )
+            result.entities[spec.name] = entity_result
+            result.warnings.extend(
+                f"{spec.name}: {warning}" for warning in entity_result.warnings
+            )
+            result.errors.extend(f"{spec.name}: {error}" for error in entity_result.errors)
+            result.range_violations.extend(entity_result.range_violations)
+            result.capture_worthy_values.extend(entity_result.capture_worthy_values)
+            continue
         result.warnings.append(
             f"{spec.name}: optional future entity is not required until its producer spec lands"
         )
@@ -148,6 +185,20 @@ def validate_data_dir(
     else:
         result.status = "pass"
     return result
+
+
+def _looks_like_synthetic_longitudinal(data_dir: Path) -> bool:
+    markers = (
+        "simulation_config_used.yaml",
+        "simulation_summary.json",
+        "environment.csv",
+        "recruitment.csv",
+    )
+    return data_dir.name == "longitudinal" or any((data_dir / marker).exists() for marker in markers)
+
+
+def _has_any_source(data_dir: Path, filenames: tuple[str, ...]) -> bool:
+    return any((data_dir / filename).exists() for filename in filenames)
 
 
 def _find_source_path(data_dir: Path, filenames: tuple[str, ...]) -> Path:

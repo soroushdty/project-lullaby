@@ -1,0 +1,240 @@
+{
+  "contains_phi": false,
+  "errors": [],
+  "generated_at_utc": "2026-06-01T16:36:15.613779+00:00",
+  "n_participants": 200,
+  "output_dir": "data/synthetic/longitudinal",
+  "ready_for_downstream": true,
+  "schema_validation_status": "warn",
+  "seed": 20260601,
+  "status": "warn",
+  "study_days": 84,
+  "synthetic_data": true,
+  "synthetic_data_notice": "Generated synthetic data for Project Lullaby; contains no real PHI.",
+  "target_checks": [
+    {
+      "denominator": 200,
+      "details": {
+        "difference": 0.0
+      },
+      "name": "event_rate.cv_event",
+      "observed": 0.075,
+      "required": true,
+      "status": "pass",
+      "target": 0.075,
+      "tolerance": 0.03
+    },
+    {
+      "denominator": 200,
+      "details": {
+        "difference": 0.0
+      },
+      "name": "event_rate.heat_illness",
+      "observed": 0.05,
+      "required": true,
+      "status": "pass",
+      "target": 0.05,
+      "tolerance": 0.03
+    },
+    {
+      "denominator": 200,
+      "details": {
+        "difference": -0.005
+      },
+      "name": "event_rate.ed_visit",
+      "observed": 0.095,
+      "required": true,
+      "status": "pass",
+      "target": 0.1,
+      "tolerance": 0.03
+    },
+    {
+      "denominator": 200,
+      "details": {
+        "difference": 0.0
+      },
+      "name": "event_rate.hospitalized",
+      "observed": 0.04,
+      "required": true,
+      "status": "pass",
+      "target": 0.04,
+      "tolerance": 0.03
+    },
+    {
+      "denominator": 200,
+      "details": {
+        "difference": -0.000789
+      },
+      "name": "archetype_proportion.diligent_monitor",
+      "observed": 0.315,
+      "required": true,
+      "status": "pass",
+      "target": 0.315789,
+      "tolerance": 0.05
+    },
+    {
+      "denominator": 200,
+      "details": {
+        "difference": -0.000789
+      },
+      "name": "archetype_proportion.overwhelmed_mom",
+      "observed": 0.315,
+      "required": true,
+      "status": "pass",
+      "target": 0.315789,
+      "tolerance": 0.05
+    },
+    {
+      "denominator": 200,
+      "details": {
+        "difference": 0.002105
+      },
+      "name": "archetype_proportion.heat_stressed",
+      "observed": 0.16,
+      "required": true,
+      "status": "pass",
+      "target": 0.157895,
+      "tolerance": 0.05
+    },
+    {
+      "denominator": 200,
+      "details": {
+        "difference": 0.001842
+      },
+      "name": "archetype_proportion.true_emergency",
+      "observed": 0.065,
+      "required": true,
+      "status": "pass",
+      "target": 0.063158,
+      "tolerance": 0.05
+    },
+    {
+      "denominator": 200,
+      "details": {
+        "difference": -0.002368
+      },
+      "name": "archetype_proportion.silent_decliner",
+      "observed": 0.145,
+      "required": true,
+      "status": "pass",
+      "target": 0.147368,
+      "tolerance": 0.05
+    },
+    {
+      "denominator": 16800,
+      "details": {
+        "early_mean": 17.796578571428572,
+        "late_mean": 10.595805199844781
+      },
+      "name": "adherence.wear_hours_decline",
+      "observed": -7.2008,
+      "required": true,
+      "status": "pass",
+      "target": "late < early",
+      "tolerance": null
+    },
+    {
+      "denominator": 16800,
+      "details": {
+        "early_rate": 0.8225,
+        "late_rate": 0.21071012805587894
+      },
+      "name": "adherence.scale_use_decline",
+      "observed": -0.6118,
+      "required": true,
+      "status": "pass",
+      "target": "late < early",
+      "tolerance": null
+    },
+    {
+      "denominator": 15,
+      "details": {
+        "difference": 0.0
+      },
+      "name": "physiology.cv_body_water_pre_event_positive",
+      "observed": 0.8,
+      "required": true,
+      "status": "pass",
+      "target": 0.8,
+      "tolerance": 0.2
+    },
+    {
+      "denominator": 5,
+      "details": {
+        "difference": 0.25
+      },
+      "name": "physiology.heat_strain_direction",
+      "observed": 0.8,
+      "required": true,
+      "status": "pass",
+      "target": 0.55,
+      "tolerance": 0.1
+    },
+    {
+      "denominator": 13552,
+      "details": {
+        "interpretation": "single raw body-water measure is useful but not trivially separable"
+      },
+      "name": "physiology.overlap_body_water_auc",
+      "observed": 0.8821,
+      "required": true,
+      "status": "pass",
+      "target": "<=0.90",
+      "tolerance": null
+    },
+    {
+      "denominator": 16800,
+      "details": {
+        "difference": 0.208386
+      },
+      "name": "missingness.by_archetype_spread",
+      "observed": 0.258386,
+      "required": true,
+      "status": "pass",
+      "target": 0.05,
+      "tolerance": 0.05
+    },
+    {
+      "denominator": 16800,
+      "details": {
+        "difference": 0.170732
+      },
+      "name": "missingness.by_heat_exposure_spread",
+      "observed": 0.190732,
+      "required": true,
+      "status": "pass",
+      "target": 0.02,
+      "tolerance": 0.02
+    },
+    {
+      "denominator": 16800,
+      "details": {
+        "difference": 0.041808
+      },
+      "name": "missingness.worsening_state_lift",
+      "observed": 0.051808,
+      "required": true,
+      "status": "pass",
+      "target": 0.01,
+      "tolerance": 0.05
+    },
+    {
+      "denominator": 7,
+      "details": {
+        "errors": [],
+        "range_violations": []
+      },
+      "name": "schema_validation.status",
+      "observed": "warn",
+      "required": true,
+      "status": "pass",
+      "target": "not fail",
+      "tolerance": null
+    }
+  ],
+  "warnings": [
+    "participants: Missing optional role participant.age",
+    "model_predictions: optional future entity is not required until its producer spec lands",
+    "model_metrics: optional future entity is not required until its producer spec lands"
+  ]
+}
