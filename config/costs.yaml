@@ -1,0 +1,16 @@
+currency: USD
+nurse_hotline:
+  cost_per_call: 42.00
+  minutes_per_call: 18
+  nurse_hourly_cost: 85.00
+alert_workflow:
+  survey_review_minutes: 4
+  false_positive_call_probability: 0.65
+  true_positive_call_probability: 0.90
+volume_assumptions:
+  participants: 200
+  participant_days: 8400
+  alerts_to_calls_multiplier: 1.0
+sensitivity:
+  cost_per_call: [25, 42, 75]
+  false_positive_call_probability: [0.40, 0.65, 0.85]

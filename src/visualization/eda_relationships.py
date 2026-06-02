@@ -527,7 +527,8 @@ def _outcome_positive_by_participant(outcomes: pd.DataFrame) -> tuple[dict[str, 
     positive = signals[0].copy()
     for signal in signals[1:]:
         positive |= signal
-    return outcomes.assign(__event_positive=positive).groupby(participant_col)["__event_positive"].max().astype(bool).to_dict(), warnings
+    event_positive = outcomes.assign(__event_positive=positive).groupby(participant_col)["__event_positive"].max()
+    return event_positive.fillna(False).eq(True).to_dict(), warnings
 
 
 def _resolve_data_dir(path: Path) -> Path:

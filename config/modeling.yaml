@@ -1,0 +1,43 @@
+seed: 20260601
+target: outcome.cv_event
+participant_id_role: participant.id
+cv:
+  strategy: stratified_group_kfold
+  n_splits: 5
+  n_repeats: 10
+  group_by: participant.id
+  stratify_by: target
+features:
+  include_demographics: true
+  include_daily_vitals_summary: true
+  include_alert_history: true
+  include_environment: true
+  leakage_guard_days_before_event: 0
+imbalance:
+  class_weight: balanced
+  resampling: none
+  resampling_allowed_inside_fold_only: true
+  threshold_selection: inner_cv
+metrics:
+  primary:
+    - auprc
+    - recall_at_precision
+    - brier
+  recall_at_precision:
+    min_precision: 0.80
+  bootstrap_ci:
+    enabled: true
+    n_bootstrap: 1000
+    level: 0.95
+models:
+  baseline_meows_logistic:
+    enabled: true
+  random_forest:
+    enabled: true
+  gradient_boosting:
+    enabled: true
+  mlp:
+    enabled: true
+  deep_sequence_model:
+    enabled: false
+    note: enable only if sequence tensors are implemented and testable

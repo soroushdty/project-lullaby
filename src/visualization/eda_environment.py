@@ -151,7 +151,7 @@ def classify_high_heat(environment: pd.DataFrame, env_frame: pd.DataFrame) -> tu
     if heat_wave_col:
         heat_wave, heat_warnings = _boolean_series(environment, "environment.heat_wave", required=False)
         warnings.extend(heat_warnings)
-        aligned = heat_wave.reindex(environment.index).fillna(False).astype(bool)
+        aligned = heat_wave.reindex(environment.index).fillna(False).eq(True)
         high_heat = aligned.loc[env_frame.index] if set(env_frame.index).issubset(set(aligned.index)) else aligned.reset_index(drop=True).reindex(env_frame.index, fill_value=False)
         if high_heat.any():
             return high_heat.reset_index(drop=True), "environment.heat_wave true", warnings

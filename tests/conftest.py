@@ -2,13 +2,18 @@
 from __future__ import annotations
 
 import os
+from copy import deepcopy
+from pathlib import Path
 
 import pandera as pa
 import pytest
+import yaml
 
 from src.schemas.base import SchemaContract, TableContract
 
 os.environ.setdefault("MPLCONFIGDIR", "/tmp/project-lullaby-matplotlib")
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 class MinimalConformingSchema(SchemaContract):
@@ -64,3 +69,21 @@ def visualization_paths(tmp_path):
 def simulation_output_dir(tmp_path):
     """Temporary output directory for synthetic longitudinal generation tests."""
     return tmp_path / "synthetic" / "longitudinal"
+
+
+@pytest.fixture
+def default_modeling_config():
+    """Parsed default modeling config for SPEC-011 tests."""
+    with (REPO_ROOT / "config" / "modeling.yaml").open("r", encoding="utf-8") as handle:
+        return yaml.safe_load(handle)
+
+
+@pytest.fixture
+def fast_modeling_config_path(tmp_path, default_modeling_config):
+    """Small-repeat config so focused bake-off tests stay fast."""
+    config = deepcopy(default_modeling_config)
+    config["cv"]["n_repeats"] = 2
+    config["metrics"]["bootstrap_ci"]["n_bootstrap"] = 100
+    path = tmp_path / "modeling.yaml"
+    path.write_text(yaml.safe_dump(config), encoding="utf-8")
+    return path

@@ -34,6 +34,46 @@ Notes
 - Use a single changelog entry per implemented spec. If multiple specs are implemented on the same date, add separate dated entries.
 
 Date: 2026-06-01
+Spec: /specs/011-honest-model-bakeoff/spec.md
+Summary: Implement SPEC-011 participant-grouped modeling bake-off with rare-event metrics, fold-local preprocessing, calibration diagnostics, operating points, and required CLI/artifacts.
+Rationale: SPEC-011 adds an honest model-comparison layer for severe class imbalance while preventing participant leakage, keeping threshold selection inside training folds, avoiding accuracy as a headline metric, and framing synthetic results as exploratory signal characterization rather than validated clinical performance.
+Impact:
+  - Broke/Changed requirements: yes; runtime dependencies now include scikit-learn, the project adds a modeling package and bake-off CLI, unsupported non-default resampling modes fail validation unless implemented fold-locally, and synthetic modeling outputs carry explicit non-clinical-validation limitations.
+  - Docs/Constitution changes: no constitution changes; SPEC-011 plan, research, data model, contracts, quickstart, and tasks were added/updated with acceptance evidence and completion marks.
+Targets:
+  - CHANGELOG.md | +40 -0
+  - pyproject.toml | +1 -0
+  - config/modeling.yaml | +43 -0
+  - scripts/run_model_bakeoff.py | +41 -0
+  - src/modeling/__init__.py | +15 -0
+  - src/modeling/datasets.py | +416 -0
+  - src/modeling/splits.py | +98 -0
+  - src/modeling/models.py | +255 -0
+  - src/modeling/metrics.py | +250 -0
+  - src/modeling/calibration.py | +49 -0
+  - src/modeling/explainability.py | +26 -0
+  - src/modeling/bakeoff.py | +270 -0
+  - src/visualization/eda_archetypes.py | +1 -1
+  - src/visualization/eda_environment.py | +1 -1
+  - src/visualization/eda_relationships.py | +2 -1
+  - tests/conftest.py | +23 -0
+  - tests/test_grouped_cv_no_leakage.py | +44 -0
+  - tests/test_resampling_inside_fold.py | +56 -0
+  - tests/test_bakeoff_outputs.py | +109 -0
+  - tests/test_model_metrics_ci.py | +85 -0
+  - specs/011-honest-model-bakeoff/spec.md | +298 -0
+  - specs/011-honest-model-bakeoff/plan.md | +222 -0
+  - specs/011-honest-model-bakeoff/research.md | +184 -0
+  - specs/011-honest-model-bakeoff/data-model.md | +319 -0
+  - specs/011-honest-model-bakeoff/quickstart.md | +152 -0
+  - specs/011-honest-model-bakeoff/tasks.md | +342 -0
+  - specs/011-honest-model-bakeoff/contracts/bakeoff-cli-contract.md | +58 -0
+  - specs/011-honest-model-bakeoff/contracts/modeling-artifacts-contract.md | +148 -0
+  - specs/011-honest-model-bakeoff/contracts/cv-metrics-contract.md | +74 -0
+  - outputs/modeling/ | +0 -0
+  - outputs/modeling_synthetic/ | +0 -0
+
+Date: 2026-06-01
 Spec: /specs/009-longitudinal-vitals-missingness-timeline/spec.md
 Summary: Implement SPEC-009 longitudinal EDA dashboards, selected-participant clinical timeline, missingness/adherence diagnostics, signal-quality ranking, CLI filters, and manifest provenance.
 Rationale: SPEC-009 extends static descriptive EDA beyond cross-sectional summaries so reviewers can inspect study-day trajectories, visible missingness, adherence decline, event alignment, and data-quality evidence without implying prediction, imputation, or clinical-risk ranking.

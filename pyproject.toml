@@ -21,6 +21,7 @@ dependencies = [
     "pandera>=0.20",
     "matplotlib>=3.8",
     "PyYAML>=6.0",
+    "scikit-learn>=1.5",
 ]
 
 [project.optional-dependencies]

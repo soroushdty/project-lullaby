@@ -264,7 +264,7 @@ def _participant_metrics(tables: RelationshipEDATables) -> tuple[pd.DataFrame, l
     metrics["alert_burden"] = metrics["participant_id"].map(alert_counts)
     event_map, event_warnings = _outcome_positive_by_participant(tables.clinical_outcomes)
     warnings.extend(event_warnings if tables.clinical_outcomes.empty else [])
-    metrics["event_positive"] = metrics["participant_id"].map(event_map).fillna(False).astype(bool)
+    metrics["event_positive"] = metrics["participant_id"].map(event_map).eq(True)
     context = _participant_context(participants)
     metrics = metrics.merge(context, on="participant_id", how="left")
     return metrics, warnings
