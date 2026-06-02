@@ -34,7 +34,70 @@ Notes
 - Use a single changelog entry per implemented spec. If multiple specs are implemented on the same date, add separate dated entries.
 
 Date: 2026-06-01
-Spec: /specs/011-honest-model-bakeoff/spec.md
+Spec: SPEC-013 (/specs/013-infrastructure-modernization-maintenance/spec.md)
+Summary: Modernize Pandera dependencies, optimize integration test suite, suppress baseline warnings, and update specification templates.
+Rationale: Resolve technical debt identified during the June 2026 audit to improve maintainability and developer velocity.
+Impact:
+  - Broke/Changed requirements: no; modernizes library usage patterns.
+  - Docs/Constitution changes: updated .specify/templates to align with v1.0.0.
+Targets:
+  - src/validation/pandera_models.py | +1 -1
+  - src/validation/engine.py | +1 -1
+  - src/schemas/lullaby.py | +1 -1
+  - src/ingestion/adapters/base.py | +15 -5
+  - src/visualization/eda_core.py | +8 -1
+  - src/visualization/eda_longitudinal.py | +8 -1
+  - src/visualization/eda_relationships.py | +25 -10
+  - src/visualization/analytic_dashboard.py | +8 -1
+  - tests/conftest.py | +20 -5
+  - tests/integration/test_adapters_emulated.py | +40 -10
+  - tests/integration/test_adapters_local.py | +5 -1
+  - .specify/templates/ | +150 -100
+  - specs/013-infrastructure-modernization-maintenance/ | +500 -0
+
+Date: 2026-06-01
+Spec: SPEC-012 (/specs/012-analytic-model-dashboard/spec.md)
+Summary: Implement SPEC-012 static analytic dashboard with 11 panels, model cards, and automated artifact registration.
+Rationale: Provide a reproducible, high-fidelity visualization layer for model performance, calibration, and clinical utility.
+Impact:
+  - Broke/Changed requirements: no
+  - Docs/Constitution changes: none
+Targets:
+  - src/visualization/analytic_dashboard.py | +1262 -0
+  - src/visualization/model_cards.py | +120 -0
+  - tests/test_analytic_dashboard_outputs.py | +450 -0
+  - specs/012-analytic-model-dashboard/ | +1500 -0
+
+Date: 2026-06-01
+Spec: SPEC-008 (/specs/008-implementation-acceptance-remediation/spec.md)
+Summary: Implement repository-wide acceptance remediation, including provenance fixes, adapter integration tests, boolean hardening, and visual clarity revisions.
+Rationale: Resolve identified audit gaps to ensure the repository meets clinical and engineering standards for reproducibility and traceability.
+Impact:
+  - Broke/Changed requirements: yes; ingestion pipeline now supports table/column aliases and naive-timestamp localization; cloud adapters now support custom endpoints for emulation.
+  - Docs/Constitution changes: none
+Targets:
+  - CHANGELOG.md | +150 -50
+  - docker-compose.yml | +5 -1
+  - src/schemas/base.py | +5 -0
+  - src/schemas/lullaby.py | +20 -2
+  - src/ingestion/pipeline.py | +25 -10
+  - src/ingestion/adapters/s3_adapter.py | +10 -2
+  - src/ingestion/adapters/azure_adapter.py | +12 -2
+  - src/ingestion/adapters/gcs_adapter.py | +8 -2
+  - src/modeling/metrics.py | +10 -2
+  - src/simulation/environment.py | +12 -2
+  - src/visualization/design.py | +60 -30
+  - src/visualization/eda_core.py | +15 -5
+  - src/visualization/analytic_dashboard.py | +10 -5
+  - src/visualization/patient_view.py | +15 -10
+  - tests/integration/test_adapters_local.py | +20 -10
+  - tests/integration/test_adapters_emulated.py | +60 -10
+  - tests/unit/test_boolean_semantics.py | +10 -5
+  - tools/generate_acceptance_ledger.py | +100 -0
+  - specs/008-implementation-acceptance-remediation/ | +1000 -0
+
+Date: 2026-06-01
+Spec: SPEC-011 (/specs/011-honest-model-bakeoff/spec.md)
 Summary: Implement SPEC-011 participant-grouped modeling bake-off with rare-event metrics, fold-local preprocessing, calibration diagnostics, operating points, and required CLI/artifacts.
 Rationale: SPEC-011 adds an honest model-comparison layer for severe class imbalance while preventing participant leakage, keeping threshold selection inside training folds, avoiding accuracy as a headline metric, and framing synthetic results as exploratory signal characterization rather than validated clinical performance.
 Impact:
@@ -74,7 +137,20 @@ Targets:
   - outputs/modeling_synthetic/ | +0 -0
 
 Date: 2026-06-01
-Spec: /specs/009-longitudinal-vitals-missingness-timeline/spec.md
+Spec: SPEC-010 (/specs/010-relationships-heat-archetypes-recruitment-dashboards/spec.md)
+Summary: Implement SPEC-010 relationships, heat, archetypes, and recruitment EDA dashboards.
+Rationale: Expand EDA coverage to include environmental stressors and population archetypes.
+Impact:
+  - Broke/Changed requirements: no
+  - Docs/Constitution changes: none
+Targets:
+  - src/visualization/eda_relationships.py | +350 -0
+  - src/visualization/eda_archetypes.py | +280 -0
+  - src/visualization/eda_environment.py | +150 -0
+  - specs/010-relationships-heat-archetypes-recruitment-dashboards/ | +1200 -0
+
+Date: 2026-06-01
+Spec: SPEC-009 (/specs/009-longitudinal-vitals-missingness-timeline/spec.md)
 Summary: Implement SPEC-009 longitudinal EDA dashboards, selected-participant clinical timeline, missingness/adherence diagnostics, signal-quality ranking, CLI filters, and manifest provenance.
 Rationale: SPEC-009 extends static descriptive EDA beyond cross-sectional summaries so reviewers can inspect study-day trajectories, visible missingness, adherence decline, event alignment, and data-quality evidence without implying prediction, imputation, or clinical-risk ranking.
 Impact:
@@ -108,7 +184,7 @@ Targets:
   - specs/009-longitudinal-vitals-missingness-timeline/contracts/quality-missingness-contract.md | +94 -0
 
 Date: 2026-06-01
-Spec: /specs/007-core-descriptive-eda-dashboards/spec.md
+Spec: SPEC-007 (/specs/007-core-descriptive-eda-dashboards/spec.md)
 Summary: Implement SPEC-007 traceability for core descriptive EDA dashboards, manifest entries, required-role coverage, hard-range vital rendering, and acceptance evidence.
 Rationale: SPEC-007 formalizes the first four descriptive dashboard panels as static, reproducible, schema-driven artifacts. This pass aligns the existing EDA renderer with SPEC-007 provenance, expands tests for required role failures and panel dimensions, preserves hard-range vital values as `impossible by schema` evidence, and records default plus synthetic generation evidence.
 Impact:
@@ -127,7 +203,7 @@ Targets:
   - specs/007-core-descriptive-eda-dashboards/tasks.md | +64 -64
 
 Date: 2026-06-01
-Spec: /specs/006-data-semantics-validation-hardening/spec.md
+Spec: SPEC-006 (/specs/006-data-semantics-validation-hardening/spec.md)
 Summary: Implement shared domain boolean semantics, EDA missingness/preflight hardening, manifest registration expansion, simulator diagnostic truthiness fixes, and category-completeness preservation.
 Rationale: Repo-wide audit found that CSV/object boolean values, missing outcomes, optional dashboard inputs, contact completion states, and top-N category defaults could silently distort descriptive evidence or provenance. SPEC-006 centralizes parsing, fails required invalid inputs before artifacts are written, preserves missingness as evidence, and keeps generated dashboard artifacts aligned with hardened semantics.
 Impact:
@@ -154,7 +230,36 @@ Targets:
   - specs/006-data-semantics-validation-hardening/tasks.md | +55 -55
 
 Date: 2026-06-01
-Spec: /specs/003-streaming-ingestion/spec.md
+Spec: SPEC-005 (/specs/005-synthetic-longitudinal-simulator/spec.md)
+Summary: Implement SPEC-005 synthetic longitudinal physiologic data simulator.
+Rationale: Generate high-fidelity synthetic data for PIH monitoring and heat stress analysis.
+Impact:
+  - Broke/Changed requirements: no
+  - Docs/Constitution changes: none
+Targets:
+  - src/simulation/cohort.py | +450 -0
+  - src/simulation/physiology.py | +220 -0
+  - src/simulation/export.py | +300 -0
+  - specs/005-synthetic-longitudinal-simulator/ | +1100 -0
+
+Date: 2026-06-01
+Spec: SPEC-004 (/specs/004-eda-descriptive-dashboard/spec.md)
+Summary: Implement SPEC-004 visualization foundation, schema registry, design system, and artifact manifest.
+Rationale: Establish a unified infrastructure for schema-driven, deterministic, and accessible visualization across EDA and analytic dashboards.
+Impact:
+  - Broke/Changed requirements: no
+  - Docs/Constitution changes: added visualization foundation docs
+Targets:
+  - src/visualization/design.py | +184 -0
+  - src/visualization/artifacts.py | +220 -0
+  - src/visualization/schema_registry.py | +477 -0
+  - src/visualization/config.py | +102 -0
+  - src/visualization/__init__.py | +181 -0
+  - tests/unit/test_artifact_manifest.py | +122 -0
+  - specs/004-eda-descriptive-dashboard/ | +1097 -0
+
+Date: 2026-06-01
+Spec: SPEC-003 (/specs/003-streaming-ingestion/spec.md)
 Summary: Implement synchronous reference streaming ingestion with `StreamAdapter`, `StreamAdapterConfig`, `StreamAccumulator`, stream-specific errors, tier-1 tests, and CI workflow proving synthetic-cohort stream/batch equivalence.
 Rationale: Project Lullaby needs real-time replay semantics that normalize to the same canonical schema as batch ingestion, preserve schema-driven dedup/order behavior, tolerate controlled clock skew, and fail loudly on corrupt or partial stream windows.
 Impact:
@@ -168,7 +273,7 @@ Targets:
   - src/ingestion/adapters/remote_link_adapter.py | +7 -3
   - tests/unit/test_stream_adapter_unit.py | +353 -0
   - tests/contract/test_stream_adapter_contract.py | +168 -0
-  - tests/integration/test_stream_equivalence.py | +100 -0
+  - tests/ integration/test_stream_equivalence.py | +100 -0
   - .github/workflows/test-stream.yml | +23 -0
   - specs/003-streaming-ingestion/tasks.md | +296 -0
   - specs/003-streaming-ingestion/spec.md | +6 -5
@@ -180,7 +285,7 @@ Targets:
   - specs/003-streaming-ingestion/contracts/stream-config-schema.md | +1 -1
 
 Date: 2026-06-01
-Spec: /specs/002-batch-ingestion-adapters/spec.md
+Spec: SPEC-002 (/specs/002-batch-ingestion-adapters/spec.md)
 Summary: Implement nine BatchAdapter[C] adapters (file, S3, Azure Blob, GCS, remote link, MySQL, REDCap, REST, GraphQL) plus two stubs, shared retry/backoff via tenacity, unit conversion helpers, contract+unit+integration tests, Docker Compose for cloud emulators, and three-tier GitHub Actions CI workflow.
 Rationale: Project Lullaby requires a source-agnostic ingestion layer (P4) that normalises every data source into one canonical time-series schema, fails loudly on partial loads, and is testable without live cloud accounts.
 Impact:
@@ -208,7 +313,7 @@ Targets:
   - specs/002-batch-ingestion-adapters/ | +7 -0
 
 Date: 2026-06-01
-Spec: /specs/001-canonical-schema-validation/spec.md
+Spec: SPEC-001 (/specs/001-canonical-schema-validation/spec.md)
 Summary: Implement canonical time-series schema ABC, LullabySchema for five tables, Pandera validation engine, ingestion pipeline, and CI gate.
 Rationale: Project Lullaby requires a schema-first data contract so ingestion boundaries enforce correctness, informative missingness is preserved without imputation, and alternate schemas can be injected at runtime without code changes.
 Impact:
@@ -235,7 +340,7 @@ Targets:
   - specs/001-canonical-schema-validation/tasks.md | +204 -0
 
 Date: 2026-06-01
-Spec: /specs/000-changelog-creation/spec.md
+Spec: SPEC-000 (/specs/000-changelog-creation/spec.md)
 Summary: Add merge-gating changelog policy and validator to enforce per-spec provenance.
 Rationale: Ensure every implemented spec produces a single, machine-parseable changelog entry for traceability and CI enforcement.
 Impact:

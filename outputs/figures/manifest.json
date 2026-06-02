@@ -279,7 +279,7 @@
     },
     {
       "artifact_id": "eda_core_01_cohort_overview",
-      "created_at_utc": "2026-06-01T23:14:04.253573+00:00",
+      "created_at_utc": "2026-06-02T01:23:23.648950+00:00",
       "deterministic": true,
       "inputs": [
         "participants",
@@ -301,7 +301,7 @@
     },
     {
       "artifact_id": "eda_core_02_outcome_prevalence",
-      "created_at_utc": "2026-06-01T23:14:04.254397+00:00",
+      "created_at_utc": "2026-06-02T01:23:23.649970+00:00",
       "deterministic": true,
       "inputs": [
         "clinical_outcomes",
@@ -324,7 +324,7 @@
     },
     {
       "artifact_id": "eda_core_03_distribution_outliers",
-      "created_at_utc": "2026-06-01T23:14:04.254971+00:00",
+      "created_at_utc": "2026-06-02T01:23:23.650653+00:00",
       "deterministic": true,
       "inputs": [
         "daily_vitals",
@@ -354,7 +354,7 @@
     },
     {
       "artifact_id": "eda_core_04_alert_engagement_funnel",
-      "created_at_utc": "2026-06-01T23:14:04.255495+00:00",
+      "created_at_utc": "2026-06-02T01:23:23.651317+00:00",
       "deterministic": true,
       "inputs": [
         "alerts",
