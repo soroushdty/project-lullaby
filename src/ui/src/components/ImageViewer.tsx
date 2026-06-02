@@ -8,6 +8,17 @@ interface ImageViewerProps {
 export const ImageViewer: React.FC<ImageViewerProps> = ({ artifact }) => {
   const isAvailable = artifact.metadata.available !== false;
   
+  // Resolve the image path. 
+  // If the manifest path starts with 'outputs/figures/', we strip it because 
+  // the UI is typically served from within that directory.
+  const resolveImagePath = (path: string) => {
+    const prefix = 'outputs/figures/';
+    if (path.startsWith(prefix)) {
+      return `../${path.slice(prefix.length)}`;
+    }
+    return `../${path}`;
+  };
+
   return (
     <div className="flex-1 flex flex-col bg-slate-50 min-h-screen">
       <div className="p-8 max-w-6xl mx-auto w-full space-y-8">
@@ -29,7 +40,7 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({ artifact }) => {
           <div className="bg-white rounded-xl shadow-xl shadow-slate-200/50 border border-slate-200 overflow-hidden ring-1 ring-slate-900/5">
             {isAvailable ? (
               <img 
-                src={`../${artifact.path}`} 
+                src={resolveImagePath(artifact.path)} 
                 alt={artifact.title}
                 className="w-full h-auto block"
               />
