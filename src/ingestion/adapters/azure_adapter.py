@@ -25,6 +25,7 @@ class AzureAdapterConfig(AdapterConfig):
     container: str
     prefix: str = ""
     connection_string: SecretStr | None = None
+    account_url: str | None = None
     # If None, uses DefaultAzureCredential with account_url
 
 
@@ -42,6 +43,11 @@ class AzureAdapter(BatchAdapter[AzureAdapterConfig]):
                 if config.connection_string is not None:
                     client = BlobServiceClient.from_connection_string(
                         config.connection_string.get_secret_value()
+                    )
+                elif config.account_url is not None:
+                    client = BlobServiceClient(
+                        account_url=config.account_url,
+                        credential=DefaultAzureCredential(),
                     )
                 else:
                     raise AuthConfigError(

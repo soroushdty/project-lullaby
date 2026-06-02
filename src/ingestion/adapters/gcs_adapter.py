@@ -23,6 +23,7 @@ _SUPPORTED_SUFFIXES = frozenset({".csv", ".xlsx", ".xls"})
 class GCSAdapterConfig(AdapterConfig):
     bucket: str
     prefix: str = ""
+    api_endpoint: str | None = None
     # Credentials via Application Default Credentials (GOOGLE_APPLICATION_CREDENTIALS)
 
 
@@ -36,7 +37,7 @@ class GCSAdapter(BatchAdapter[GCSAdapterConfig]):
             from google.cloud import storage
 
             try:
-                gcs = storage.Client()
+                gcs = storage.Client(client_options={"api_endpoint": config.api_endpoint}) if config.api_endpoint else storage.Client()
             except DefaultCredentialsError as exc:
                 raise AuthConfigError(
                     adapter=self._name,

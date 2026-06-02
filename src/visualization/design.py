@@ -77,6 +77,13 @@ def configure_style(style: VisualizationStyle | None = None) -> None:
     )
 
 
+def adaptive_fontsize(n_elements: int, base_size: float = 9.0, min_size: float = 6.0) -> float:
+    """Scale font size down as the number of elements increases to prevent overlap."""
+    if n_elements <= 5:
+        return base_size
+    return max(min_size, round(base_size * (5 / max(n_elements, 1)) ** 0.4, 1))
+
+
 def add_dashboard_title(fig, title: str, subtitle: str | None = None) -> None:
     fig.suptitle(title, x=0.03, y=0.98, ha="left", va="top", fontsize=16, fontweight="bold")
     if subtitle:
@@ -109,6 +116,8 @@ def style_card(ax, title: str | None = None) -> None:
 
 def label_bars(ax, values: Iterable[float], total=None, unit: str | None = None) -> None:
     total_value = total if total is not None else sum(v for v in values if v is not None)
+    n_bars = len(ax.patches)
+    fs = adaptive_fontsize(n_bars, base_size=8.0, min_size=6.0)
     for patch, value in zip(ax.patches, values, strict=False):
         if value is None:
             continue
@@ -123,7 +132,7 @@ def label_bars(ax, values: Iterable[float], total=None, unit: str | None = None)
             label,
             ha="center",
             va="bottom",
-            fontsize=8,
+            fontsize=fs,
         )
 
 
@@ -173,6 +182,7 @@ __all__ = [
     "DEFAULT_STYLE",
     "FigureSizeError",
     "VisualizationStyle",
+    "adaptive_fontsize",
     "add_dashboard_title",
     "add_panel_label",
     "configure_style",

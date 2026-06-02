@@ -24,6 +24,7 @@ class S3AdapterConfig(AdapterConfig):
     bucket: str
     prefix: str = ""
     region: str = "us-east-1"
+    endpoint_url: str | None = None
     # Credentials via boto3 credential chain (env vars, IAM role, ~/.aws/credentials)
 
 
@@ -37,7 +38,11 @@ class S3Adapter(BatchAdapter[S3AdapterConfig]):
             from botocore.exceptions import ClientError, NoCredentialsError
 
             try:
-                s3 = boto3.client("s3", region_name=config.region)
+                s3 = boto3.client(
+                    "s3",
+                    region_name=config.region,
+                    endpoint_url=config.endpoint_url,
+                )
             except NoCredentialsError as exc:
                 raise AuthConfigError(
                     adapter=self._name, credential_env_var="AWS_ACCESS_KEY_ID"

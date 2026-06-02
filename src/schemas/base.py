@@ -24,6 +24,7 @@ class TableContract:
     primary_key: list[str]
     timestamp_column: str
     constraints: list[str] = field(default_factory=list)
+    column_aliases: dict[str, str] = field(default_factory=dict)
 
 
 class SchemaContract(ABC):
@@ -46,3 +47,7 @@ class SchemaContract(ABC):
 
     @abstractmethod
     def data_dictionary(self, table_name: str) -> dict[str, dict]: ...
+
+    def table_aliases(self) -> dict[str, str]:
+        """Return a mapping of alias names to canonical table names."""
+        return {}

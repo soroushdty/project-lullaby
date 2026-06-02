@@ -130,7 +130,23 @@ A maintainer needs a compact per-spec completion ledger that distinguishes imple
 1. **Given** specs 000 through 005, **when** the acceptance ledger is reviewed, **then** each spec has a status of complete, incomplete, or blocked with evidence.
 2. **Given** skipped tests remain, **when** the ledger is produced, **then** skips are listed with file path, test name, and reason.
 3. **Given** known bugs remain, **when** the ledger is produced, **then** each bug has a source file reference and remediation owner spec.
-4. **Given** all remediation work is completed, **when** the ledger is regenerated, **then** no implemented spec has missing changelog entries, skipped required acceptance tests, or known acceptance-blocking bugs.
+Given all remediation work is completed, when the ledger is regenerated, then no implemented spec has missing changelog entries, skipped required acceptance tests, or known acceptance-blocking bugs.
+
+---
+
+### User Story 6 - Improve Visual Clarity and Text Readability (Priority: P2)
+
+A dashboard reviewer needs to be able to read all text labels and annotations on generated PNG artifacts without squinting or deciphering overlapping elements.
+
+**Why this priority**: If dashboard text is unreadable or overlapping, the clinical and analytic evidence it presents cannot be reliably interpreted by stakeholders.
+
+**Independent Test**: Visually inspect all generated PNGs from SPEC-012 and EDA dashboards; verify no labels, titles, or annotations overlap and that font sizes are legible at 1600 × 900 resolution.
+
+**Acceptance Scenarios**:
+
+1. **Given** generated dashboard PNGs, **when** viewed at standard resolution, **then** all text labels, axis titles, and data annotations are fully legible.
+2. **Given** densely populated figures, **when** multiple labels are near each other, **then** the layout or label orientation prevents overlap.
+3. **Given** a major revision of visual elements, **when** dashboard-wide styles are applied, **then** text spacing and contrast meet readability standards.
 
 ### Edge Cases
 
@@ -140,6 +156,8 @@ A maintainer needs a compact per-spec completion ledger that distinguishes imple
 - A command may be implemented but drift from spec wording; documentation or alias support must resolve the mismatch.
 - Known semantic bugs must not be hidden by task checkboxes or green tests.
 - Generated artifacts may change timestamps during audit commands; acceptance evidence must avoid meaningless timestamp churn.
+- Highly dense datasets may require adaptive label thinning or larger figure dimensions to preserve readability.
+
 
 ## Requirements *(mandatory)*
 
@@ -160,6 +178,7 @@ A maintainer needs a compact per-spec completion ledger that distinguishes imple
 - **FR-013**: An acceptance ledger MUST summarize each prior spec's implementation status, tests run, skipped required tests, known defects, and provenance status.
 - **FR-014**: Full-suite test evidence MUST include pass, fail, skip, and warning counts.
 - **FR-015**: Any generated artifact changes introduced by remediation MUST be intentional and explained; timestamp-only churn MUST not be committed as evidence.
+- **FR-016**: The system MUST revise the visual elements of all generated PNGs to ensure text labels, titles, and annotations do not overlap and remain readable.
 
 ### Key Entities
 

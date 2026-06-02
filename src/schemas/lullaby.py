@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import pandas as pd
-import pandera as pa
+import pandera.pandas as pa
 
 from src.schemas.base import SchemaContract, SchemaTableMissingError, TableContract
 
@@ -29,6 +29,7 @@ _CONTRACTS: dict[str, TableContract] = {
         primary_key=["participant_id"],
         timestamp_column="enrollment_ts",
         constraints=["participant_id is unique"],
+        column_aliases={"enrollment_date": "enrollment_ts"},
     ),
     "daily_vitals": TableContract(
         table_name="daily_vitals",
@@ -36,6 +37,15 @@ _CONTRACTS: dict[str, TableContract] = {
         optional_columns=["heart_rate", "systolic_bp", "diastolic_bp", "temperature_c"],
         primary_key=["participant_id", "event_ts"],
         timestamp_column="event_ts",
+        column_aliases={
+            "date": "event_ts",
+            "study_day": "cadence",  # Mapping study_day to cadence as a placeholder if needed
+            "sbp_mean": "systolic_bp",
+            "dbp_mean": "diastolic_bp",
+            "hr_mean": "heart_rate",
+            "rr_mean": "respiratory_rate",
+            "skin_temp_mean_c": "temperature_c",
+        },
     ),
     "alerts": TableContract(
         table_name="alerts",
@@ -182,3 +192,6 @@ class LullabySchema(SchemaContract):
         if table_name not in CANONICAL_TABLES:
             raise SchemaTableMissingError(table_name)
         return _DATA_DICTIONARIES[table_name]
+
+    def table_aliases(self) -> dict[str, str]:
+        return {f"lullaby_{name}": name for name in CANONICAL_TABLES}

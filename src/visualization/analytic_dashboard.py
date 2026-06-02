@@ -87,10 +87,12 @@ def register_analytic_artifact(
     metadata: dict[str, Any] | None = None,
 ) -> None:
     if not _is_repo_relative(path):
-        log.warning(
-            "Analytic artifact %s is outside the repository and was not registered in %s",
-            path, manifest_path,
-        )
+        import os
+        if os.environ.get("LULLABY_TEST_MODE") != "1":
+            log.warning(
+                "Analytic artifact %s is outside the repository and was not registered in %s",
+                path, manifest_path,
+            )
         return
     extra: dict[str, Any] = {"type": "analytic", "available": available}
     if panel is not None:
@@ -220,9 +222,11 @@ def render_panel_1(model_dir: Path, out_dir: Path, manifest_path: Path) -> None:
             capsize=3, height=0.6,
         )
         ax.set_yticks(range(len(sorted_models)))
-        ax.set_yticklabels(sorted_models, fontsize=8)
+        from src.visualization.design import adaptive_fontsize
+        fs = adaptive_fontsize(len(sorted_models), base_size=8.0, min_size=5.0)
+        ax.set_yticklabels(sorted_models, fontsize=fs)
         ax.invert_yaxis()
-        ax.set_xlabel(metric_labels.get(metric, metric), fontsize=8)
+        ax.set_xlabel(metric_labels.get(metric, metric), fontsize=fs)
 
     plt.tight_layout(rect=[0, 0, 1, 0.90])
     save_figure(fig, out_path, min_width_px=1600, min_height_px=900, dpi=150)

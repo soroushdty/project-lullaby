@@ -117,13 +117,38 @@ def test_file_adapter_idempotent(tmp_path):
 
 
 # ---------------------------------------------------------------------------
-# MySQL tests — skipped until Docker Compose MySQL is available
+# MySQL tests
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.skip(reason="Requires Docker Compose MySQL (tier 2)")
+from tests.conftest import wait_for_service
+
 def test_mysql_adapter_happy_path():
-    pass
+    """MySQL adapter loads canonical tables via SQLAlchemy."""
+    if not wait_for_service("localhost", 3306, timeout=5.0):
+        pytest.skip("MySQL service not available at localhost:3306")
+        
+    from sqlalchemy import create_engine, text
+    from pydantic import SecretStr
+    from src.ingestion.adapters.mysql_adapter import MySQLAdapter, MySQLAdapterConfig
+
+    conn_str = "mysql+pymysql://lullaby:lullaby@localhost:3306/lullaby"
+    engine = create_engine(conn_str)
+    with engine.connect() as conn:
+        conn.execute(text("DROP TABLE IF EXISTS participants"))
+        conn.execute(text("CREATE TABLE participants (participant_id VARCHAR(50), age INT)"))
+        conn.execute(text("INSERT INTO participants VALUES ('LUL-001', 30)"))
+        conn.commit()
+
+    config = MySQLAdapterConfig(
+        connection_string=SecretStr(conn_str),
+        table_names=["participants"]
+    )
+    adapter = MySQLAdapter()
+    frames = adapter.load(config)
+    assert "participants" in frames
+    assert len(frames["participants"]) == 1
+    assert frames["participants"]["participant_id"].iloc[0] == "LUL-001"
 
 
 # ---------------------------------------------------------------------------

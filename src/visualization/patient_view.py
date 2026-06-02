@@ -192,15 +192,22 @@ def _events_panel(ax, alert_days: list[int], contact_days: list[int], outcome_da
     style_card(ax, "Alerts, Contacts, and Outcomes")
     ax.set_ylim(-0.5, 2.5)
     ax.set_yticks([0, 1, 2], ["Alerts", "Contacts", "Outcomes"])
+    from src.visualization.design import adaptive_fontsize
+    total_events = len(alert_days) + len(contact_days) + len(outcome_days)
+    fs = adaptive_fontsize(total_events, base_size=7.0, min_size=5.0)
+
     for day in alert_days:
         ax.scatter(day, 0, marker="^", color=DEFAULT_STYLE.warning_color, s=70)
-        ax.text(day, 0.12, "alert", fontsize=7, ha="center")
+        if total_events < 25:
+            ax.text(day, 0.12, "alert", fontsize=fs, ha="center")
     for day in contact_days:
         ax.scatter(day, 1, marker="s", color=DEFAULT_STYLE.palette[0], s=55)
-        ax.text(day, 1.12, "contact", fontsize=7, ha="center")
+        if total_events < 25:
+            ax.text(day, 1.12, "contact", fontsize=fs, ha="center")
     for day in outcome_days:
         ax.scatter(day, 2, marker="*", color=DEFAULT_STYLE.capture_worthy_color, s=95)
-        ax.text(day, 2.12, "outcome", fontsize=7, ha="center")
+        if total_events < 25:
+            ax.text(day, 2.12, "outcome", fontsize=fs, ha="center")
     ax.set_xlabel("Study day")
     ax.text(0.02, 0.04, "Event markers use required participant id and event-date roles.", transform=ax.transAxes, fontsize=8, color=DEFAULT_STYLE.muted_text_color)
 
@@ -318,7 +325,7 @@ def _with_study_day(daily: pd.DataFrame) -> pd.DataFrame:
 def _environment_study_day(env: pd.DataFrame) -> pd.Series:
     if "study_day" in env:
         return pd.to_numeric(env["study_day"], errors="coerce").astype("Int64")
-    dates = pd.to_datetime(env["date"], errors="coerce")
+    dates = pd.to_datetime(env["date"], errors="coerce", format="ISO8601")
     return (dates - dates.min()).dt.days.add(1).astype("Int64")
 
 

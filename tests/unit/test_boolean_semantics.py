@@ -89,8 +89,13 @@ def test_scalar_parser_never_uses_non_empty_string_truthiness():
 
 
 def test_domain_boolean_source_paths_do_not_use_generic_astype_bool():
-    checked_roots = [Path("src/ingestion"), Path("src/simulation"), Path("src/visualization")]
-    allowed = {Path("src/simulation/environment.py")}
+    checked_roots = [
+        Path("src/ingestion"),
+        Path("src/simulation"),
+        Path("src/visualization"),
+        Path("src/modeling"),
+    ]
+    allowed = set()
     offenders: list[str] = []
 
     for root in checked_roots:

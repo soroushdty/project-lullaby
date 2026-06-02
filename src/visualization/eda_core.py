@@ -369,7 +369,7 @@ def _subtitle(tables: EDATables, frames: list[pd.DataFrame]) -> str:
         for column in ("date", "event_ts", "enrollment_date", "observation_start_date", "contact_date", "cv_event_date"):
             if column not in frame:
                 continue
-            parsed = pd.to_datetime(frame[column], errors="coerce")
+            parsed = pd.to_datetime(frame[column], errors="coerce", format="ISO8601")
             dates.extend(parsed.dropna().tolist())
     source = tables.data_dir.as_posix()
     if dates:
@@ -441,6 +441,9 @@ def _count_bar(ax, frame: pd.DataFrame, column: str, title: str) -> list[str]:
     ax.set_xlabel("Count")
     ax.set_xlim(0, max(float(counts.max()) * 1.22, 1.0))
     total = int(counts.sum())
+    from src.visualization.design import adaptive_fontsize
+    fs = adaptive_fontsize(len(counts), base_size=8.0, min_size=6.0)
+    
     for bar, count in zip(bars, counts.values, strict=False):
         xmax = ax.get_xlim()[1]
         if bar.get_width() > xmax * 0.72:
@@ -450,11 +453,11 @@ def _count_bar(ax, frame: pd.DataFrame, column: str, title: str) -> list[str]:
                 f"{count:,} ({count / total:.0%})",
                 va="center",
                 ha="right",
-                fontsize=8,
+                fontsize=fs,
                 color="white",
             )
         else:
-            ax.text(bar.get_width(), bar.get_y() + bar.get_height() / 2, f" {count:,} ({count / total:.0%})", va="center", fontsize=8)
+            ax.text(bar.get_width(), bar.get_y() + bar.get_height() / 2, f" {count:,} ({count / total:.0%})", va="center", fontsize=fs)
     return []
 
 
@@ -879,7 +882,10 @@ def _completion_series(contacts: pd.DataFrame) -> tuple[pd.Series, list[str]]:
 
 
 def _register_results(results: list[PanelResult], manifest_path: str | Path, tables: EDATables, out_dir: Path) -> None:
+    import os
     if not _is_repo_relative(out_dir):
+        if os.environ.get("LULLABY_TEST_MODE") == "1":
+            return
         py_warnings.warn(
             f"Generated artifacts under {out_dir} are outside the repository and were not registered in {manifest_path}",
             RuntimeWarning,

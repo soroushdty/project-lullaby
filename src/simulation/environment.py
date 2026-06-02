@@ -42,13 +42,19 @@ def generate_environment(config: SimulationConfig) -> pd.DataFrame:
         "extreme",
         np.where(heat_index_c >= 35, "high", np.where(heat_index_c >= 30, "moderate", "low")),
     )
+    from src.validation.semantics import parse_domain_boolean_series, DomainBooleanParsePolicy
+
     return pd.DataFrame(
         {
             "date": [d.date().isoformat() for d in dates],
             "study_day": np.arange(1, config.study_days + 1),
             "ambient_temp_c": ambient_c,
             "heat_index_c": heat_index_c,
-            "heat_wave": heat_wave.astype(bool),
+            "heat_wave": parse_domain_boolean_series(
+                pd.Series(heat_wave),
+                DomainBooleanParsePolicy(role="environment.heat_wave", required=True),
+                source_column="heat_wave"
+            ).true_mask.to_numpy(),
             "heat_exposure_level": exposure,
             "synthetic_data": True,
         }

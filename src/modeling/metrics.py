@@ -155,9 +155,16 @@ def summarize_metrics(metrics_by_fold: pd.DataFrame, *, n_bootstrap: int, level:
     rng = np.random.default_rng(seed)
     grouped = metrics_by_fold.copy()
     grouped["value"] = pd.to_numeric(grouped["value"], errors="coerce")
+    from src.validation.semantics import parse_domain_boolean_series, DomainBooleanParsePolicy
+    
     for (model_id, metric), frame in grouped.groupby(["model_id", "metric"], sort=True):
         values = frame["value"].dropna().to_numpy(dtype=float)
-        primary = bool(frame["primary_metric"].astype(bool).any())
+        parsed_primary = parse_domain_boolean_series(
+            frame["primary_metric"],
+            DomainBooleanParsePolicy(role="model_metric.primary_metric", required=False),
+            source_column="primary_metric"
+        )
+        primary = bool(parsed_primary.true_mask.any())
         notes = "; ".join(sorted({str(v) for v in frame["notes"].dropna() if str(v)}))
         if len(values) == 0:
             rows.append(
