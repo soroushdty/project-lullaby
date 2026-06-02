@@ -1,5 +1,5 @@
 """Contract tests: SchemaContract interface from contracts/schema-interface.md."""
-import pandera as pa
+import pandera.pandas as pa
 import pytest
 
 from src.schemas.base import SchemaContract, SchemaContractError, TableContract

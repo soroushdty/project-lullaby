@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import pandas as pd
-import pandera as pa
+import pandera.pandas as pa
 
 from src.schemas.base import SchemaContract
 

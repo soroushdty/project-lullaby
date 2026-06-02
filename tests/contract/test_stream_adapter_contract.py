@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 
 import pandas as pd
-import pandera as pa
+import pandera.pandas as pa
 import pytest
 from pydantic import ValidationError
 

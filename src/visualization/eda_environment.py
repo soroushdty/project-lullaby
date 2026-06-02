@@ -273,7 +273,7 @@ def _join_daily_to_environment(daily: pd.DataFrame, env_frame: pd.DataFrame) -> 
     day_col = _role_column(daily, "vital.study_day", entity="daily_vitals")
     env_cols = ["date", "study_day", "high_heat", "ambient_temp_c", "heat_index_c"]
     if date_col and env_frame["date"].notna().any():
-        daily["__date"] = pd.to_datetime(daily[date_col], errors="coerce").dt.normalize()
+        daily["__date"] = pd.to_datetime(daily[date_col], errors="coerce", format="ISO8601").dt.normalize()
         env = env_frame[env_cols].dropna(subset=["date"]).rename(columns={"date": "__date"})
         return daily.merge(env.drop(columns=["study_day"]), on="__date", how="left")
     if day_col:

@@ -83,7 +83,8 @@ def test_manifest_allows_safe_repo_relative_alternate_paths(visualization_paths)
     assert manifest.entries[0]["path"] == "tmp_figures/eda/panel.png"
 
 
-def test_outside_repo_outputs_warn_and_do_not_register(tmp_path):
+def test_outside_repo_outputs_warn_and_do_not_register(tmp_path, monkeypatch):
+    monkeypatch.delenv("LULLABY_TEST_MODE", raising=False)
     data_dir = tmp_path / "data"
     data_dir.mkdir()
     _write_core_fixture(data_dir)

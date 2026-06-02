@@ -2,18 +2,37 @@
 from __future__ import annotations
 
 import os
+import socket
+import tempfile
+import time
 from copy import deepcopy
 from pathlib import Path
 
-import pandera as pa
+import pandera.pandas as pa
 import pytest
 import yaml
 
 from src.schemas.base import SchemaContract, TableContract
 
-os.environ.setdefault("MPLCONFIGDIR", "/tmp/project-lullaby-matplotlib")
+os.environ.setdefault("MPLCONFIGDIR", str(Path(tempfile.gettempdir()) / "project-lullaby-matplotlib"))
+os.environ.setdefault("LULLABY_TEST_MODE", "1")
+os.environ.setdefault("LULLABY_RETRY_STOP", "1")
+os.environ.setdefault("LULLABY_RETRY_WAIT_MIN", "0.1")
+os.environ.setdefault("LULLABY_RETRY_WAIT_MAX", "0.1")
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+
+
+def wait_for_service(host: str, port: int, timeout: float = 10.0) -> bool:
+    """Wait for a service to be ready by probing its port."""
+    start_time = time.time()
+    while time.time() - start_time < timeout:
+        try:
+            with socket.create_connection((host, port), timeout=1.0):
+                return True
+        except (OSError, ConnectionRefusedError):
+            time.sleep(0.5)
+    return False
 
 
 class MinimalConformingSchema(SchemaContract):

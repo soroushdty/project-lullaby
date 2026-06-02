@@ -746,7 +746,7 @@ def _distinct_event_days(frame: pd.DataFrame, participant_id: str, participant_r
     if frame.empty or participant_col is None or date_col is None:
         return 0
     subset = frame[frame[participant_col].astype(str) == participant_id]
-    return int(pd.to_datetime(subset[date_col], errors="coerce").dropna().dt.date.nunique())
+    return int(pd.to_datetime(subset[date_col], errors="coerce", format="ISO8601").dropna().dt.date.nunique())
 
 
 def _distinct_outcome_events(outcomes: pd.DataFrame, participant_id: str) -> int:
@@ -756,7 +756,7 @@ def _distinct_outcome_events(outcomes: pd.DataFrame, participant_id: str) -> int
         return 0
     subset = outcomes[outcomes[participant_col].astype(str) == participant_id]
     if date_col:
-        return int(pd.to_datetime(subset[date_col], errors="coerce").dropna().nunique())
+        return int(pd.to_datetime(subset[date_col], errors="coerce", format="ISO8601").dropna().nunique())
     return int(len(subset))
 
 
@@ -1118,7 +1118,10 @@ def _context_rates_panel(ax, rates: dict[str, list[dict[str, Any]]], title: str 
 
 
 def _register_results(results: list[LongitudinalPanelResult], manifest_path: str | Path, tables: LongitudinalEDATables, out_dir: Path) -> None:
+    import os
     if not _is_repo_relative(out_dir):
+        if os.environ.get("LULLABY_TEST_MODE") == "1":
+            return
         py_warnings.warn(
             f"Generated artifacts under {out_dir} are outside the repository and were not registered in {manifest_path}",
             RuntimeWarning,

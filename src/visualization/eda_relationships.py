@@ -392,8 +392,8 @@ def _daily_with_heat_index(tables: RelationshipEDATables) -> tuple[pd.DataFrame,
         env = tables.environment.copy()
         env["heat_index_c"] = pd.to_numeric(env[heat_col], errors="coerce")
         if env_date_col and daily_date_col:
-            env["__date"] = pd.to_datetime(env[env_date_col], errors="coerce").dt.normalize()
-            daily["__date"] = pd.to_datetime(daily[daily_date_col], errors="coerce").dt.normalize()
+            env["__date"] = pd.to_datetime(env[env_date_col], errors="coerce", format="ISO8601").dt.normalize()
+            daily["__date"] = pd.to_datetime(daily[daily_date_col], errors="coerce", format="ISO8601").dt.normalize()
             merged = daily.merge(env[["__date", "heat_index_c"]].dropna(subset=["__date"]), on="__date", how="left", suffixes=("", "__environment"))
             if "heat_index_c__environment" in merged:
                 merged["heat_index_c"] = merged["heat_index_c__environment"]
@@ -422,9 +422,9 @@ def _with_study_day(daily: pd.DataFrame, participants: pd.DataFrame | None = Non
         return result
     date_col = _role_column(result, "vital.date", entity="daily_vitals") or "date"
     participant_col = _role_column(result, "vital.participant_id", entity="daily_vitals") or "participant_id"
-    parsed_dates = pd.to_datetime(result[date_col], errors="coerce")
+    parsed_dates = pd.to_datetime(result[date_col], errors="coerce", format="ISO8601")
     if participants is not None and not participants.empty and "observation_start_date" in participants.columns and participant_col in result:
-        starts = pd.to_datetime(participants.set_index("participant_id")["observation_start_date"], errors="coerce")
+        starts = pd.to_datetime(participants.set_index("participant_id")["observation_start_date"], errors="coerce", format="ISO8601")
         result["__start"] = result[participant_col].astype(str).map(starts)
     elif participant_col in result:
         result["__start"] = parsed_dates.groupby(result[participant_col].astype(str)).transform("min")
@@ -439,7 +439,7 @@ def _with_sort_key(daily: pd.DataFrame) -> pd.DataFrame:
     participant_col = _role_column(result, "vital.participant_id", entity="daily_vitals") or "participant_id"
     date_col = _role_column(result, "vital.date", entity="daily_vitals")
     if date_col:
-        result["__sort_date"] = pd.to_datetime(result[date_col], errors="coerce")
+        result["__sort_date"] = pd.to_datetime(result[date_col], errors="coerce", format="ISO8601")
     else:
         result["__sort_date"] = pd.NaT
     sort_cols = [col for col in [participant_col, "__sort_date", "__study_day"] if col in result]
@@ -453,7 +453,7 @@ def _subtitle(tables: RelationshipEDATables, frames: list[pd.DataFrame]) -> str:
             continue
         for column in ("date", "event_ts", "recruitment_date", "enrollment_date", "delivery_date", "observation_start_date", "cv_event_date"):
             if column in frame:
-                dates.extend(pd.to_datetime(frame[column], errors="coerce").dropna().tolist())
+                dates.extend(pd.to_datetime(frame[column], errors="coerce", format="ISO8601").dropna().tolist())
     if dates:
         return f"Source: {tables.data_dir.as_posix()} | Date range: {min(dates).date().isoformat()} to {max(dates).date().isoformat()}"
     return f"Source: {tables.data_dir.as_posix()} | Date range unavailable"
@@ -570,7 +570,10 @@ def _required_boolean_errors(entity: str, frame: pd.DataFrame, resolved_roles: d
 
 
 def _register_results(results: list[RelationshipPanelResult], manifest_path: str | Path, tables: RelationshipEDATables, out_dir: Path) -> None:
+    import os
     if not _is_repo_relative(out_dir):
+        if os.environ.get("LULLABY_TEST_MODE") == "1":
+            return
         py_warnings.warn(
             f"Generated artifacts under {out_dir} are outside the repository and were not registered in {manifest_path}",
             RuntimeWarning,

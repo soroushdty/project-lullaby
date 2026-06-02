@@ -525,7 +525,7 @@ def _daily_date_bounds(daily: pd.DataFrame) -> tuple[dict[str, pd.Timestamp], di
     date_col = _role_column(daily, "vital.date", entity="daily_vitals")
     if daily.empty or participant_col is None or date_col is None:
         return {}, {}
-    dates = pd.to_datetime(daily[date_col], errors="coerce").dt.normalize()
+    dates = pd.to_datetime(daily[date_col], errors="coerce", format="ISO8601").dt.normalize()
     grouped = dates.groupby(daily[participant_col].astype(str))
     return grouped.min().dropna().to_dict(), grouped.max().dropna().to_dict()
 
@@ -623,7 +623,7 @@ def _daily_observation_density(daily: pd.DataFrame) -> pd.DataFrame:
     date_col = _role_column(daily, "vital.date", entity="daily_vitals")
     if daily.empty or date_col is None:
         return pd.DataFrame()
-    dates = pd.to_datetime(daily[date_col], errors="coerce").dt.normalize().dropna()
+    dates = pd.to_datetime(daily[date_col], errors="coerce", format="ISO8601").dt.normalize().dropna()
     if dates.empty:
         return pd.DataFrame()
     counts = dates.groupby(dates).size().sort_index()

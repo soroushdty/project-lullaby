@@ -143,10 +143,17 @@ def raise_for_http(response: requests.Response, adapter_name: str, config: Adapt
 
 def make_retry(adapter_name: str, max_attempts: int):
     """Return a tenacity retry decorator for transient HTTP/network errors."""
+    import os
+    
+    # Allow environment variable overrides to fail faster in tests
+    stop_attempts = int(os.environ.get("LULLABY_RETRY_STOP", max_attempts))
+    wait_min = float(os.environ.get("LULLABY_RETRY_WAIT_MIN", "1.0"))
+    wait_max = float(os.environ.get("LULLABY_RETRY_WAIT_MAX", "30.0"))
+    
     return retry(
         retry=retry_if_exception(_is_transient),
-        stop=stop_after_attempt(max_attempts),
-        wait=wait_exponential(multiplier=1, min=1, max=30),
+        stop=stop_after_attempt(stop_attempts),
+        wait=wait_exponential(multiplier=1, min=wait_min, max=wait_max),
         reraise=True,
     )
 

@@ -1,6 +1,6 @@
 """Unit tests for Pandera model field types, nullability, and constraints."""
 import pandas as pd
-import pandera as pa
+import pandera.pandas as pa
 import pytest
 
 from src.schemas.lullaby import LullabySchema

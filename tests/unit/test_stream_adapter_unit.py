@@ -5,7 +5,7 @@ from __future__ import annotations
 import logging
 
 import pandas as pd
-import pandera as pa
+import pandera.pandas as pa
 import pytest
 
 from src.ingestion.adapters.base import AdapterConfig, BatchAdapter
